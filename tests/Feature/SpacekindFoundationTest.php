@@ -326,7 +326,7 @@ class SpacekindFoundationTest extends TestCase
     {
         $this->postJson('/login', ['email' => ['unexpected-array'], 'password' => 'not-a-real-password'])->assertUnprocessable()->assertJsonValidationErrors('email');
         config(['spacekind.demo' => true]);
-        $this->postJson('/demo-login', ['role' => ['unexpected-array']])->assertUnprocessable()->assertJsonValidationErrors('role');
+        $this->postJson('/demo-login', ['role' => ['unexpected-array']])->assertNotFound();
     }
 
     public function test_development_recovery_never_snapshots_the_test_database(): void

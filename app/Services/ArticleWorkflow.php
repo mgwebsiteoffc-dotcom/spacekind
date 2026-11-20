@@ -41,13 +41,16 @@ class ArticleWorkflow
         abort_if($platform && $post?->business_id, 403);
         $rules = [
             'title' => 'required|string|max:140', 'excerpt' => 'required|string|min:30|max:400', 'body' => 'required|string|min:80|max:50000',
+            'faqs' => 'sometimes|array|max:12', 'faqs.*' => 'array:question,answer',
+            'faqs.*.question' => 'nullable|required_with:faqs.*.answer|string|max:240',
+            'faqs.*.answer' => 'nullable|required_with:faqs.*.question|string|max:2000', 'faq_editor' => 'sometimes|accepted',
             'category' => ['required', Rule::in(self::CATEGORIES)], 'tags' => 'nullable|string|max:160',
             'byline' => ['required', Rule::in(array_keys($this->authors($post)))],
             'seo_title' => 'nullable|string|max:70', 'seo_description' => 'nullable|string|max:170',
             'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072|dimensions:min_width=300,min_height=200,max_width=6000,max_height=6000',
             'cover_alt' => 'nullable|required_with:cover|string|max:180', 'rights' => 'accepted',
-            'intent' => ['required', Rule::in($platform ? ['draft', 'publish'] : ['draft', 'submit'])],
-            'publish_at' => 'nullable|date', 'base_revision_id' => 'nullable|integer|min:1',
+            'intent' => ['required', Rule::in($platform ? ['draft', 'publish', 'schedule'] : ['draft', 'submit', 'schedule'])],
+            'publish_at' => $r->input('intent') === 'schedule' ? 'required|date|after:now' : 'nullable|date', 'base_revision_id' => 'nullable|integer|min:1',
         ];
         if (! $post) {
             $rules['slug'] = ['required', 'string', 'min:3', 'max:160', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'unique:blog_posts,slug'];
@@ -71,6 +74,9 @@ class ArticleWorkflow
                     $latest = null;
                 }
                 $fields = Arr::only($v, ['title', 'excerpt', 'body', 'category', 'cover_alt', 'seo_title', 'seo_description']);
+                $fields['faqs'] = isset($v['faq_editor']) || isset($v['faqs'])
+                    ? array_values(array_filter($v['faqs'] ?? [], fn ($row) => filled($row['question'] ?? null)))
+                    : ($latest?->faqs ?? []);
                 $fields['cover_path'] = $path ?? $latest?->cover_path;
                 $fields['cover_alt'] = $v['cover_alt'] ?? $latest?->cover_alt;
                 $fields['tags'] = collect(explode(',', $v['tags'] ?? ''))->map(fn ($s) => trim($s))->filter()->unique()->take(5)->values()->all();
@@ -78,7 +84,7 @@ class ArticleWorkflow
                 $fields['byline_mode'] = str_starts_with($v['byline'], 'user:') ? 'person' : 'business';
                 $fields['author_id'] = $fields['byline_mode'] === 'person' ? (int) substr($v['byline'], 5) : null;
                 $fields['author_name'] = $fields['author_id'] ? User::findOrFail($fields['author_id'])->name : $post->publisher_name;
-                $fields['status'] = $platform ? ($v['intent'] === 'publish' ? 'approved' : 'draft') : ($v['intent'] === 'submit' ? 'submitted' : 'draft');
+                $fields['status'] = $v['intent'] === 'draft' ? 'draft' : ($platform ? 'approved' : 'submitted');
                 $fields['publish_at'] = ! empty($v['publish_at']) ? Carbon::parse($v['publish_at']) : ($fields['status'] === 'approved' ? now() : null);
                 if ($fields['status'] === 'approved') {
                     $fields['reviewed_by'] = auth()->id();

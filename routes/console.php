@@ -27,3 +27,23 @@ Artisan::command('spacekind:restore-preview', function (PreviewState $state) {
         return 1;
     }
 })->purpose('Recover the local development state into an empty migrated MySQL database');
+
+Artisan::command('spacekind:create-admin {email}', function () {
+    $email = strtolower(trim($this->argument('email')));
+    if (! filter_var($email, FILTER_VALIDATE_EMAIL) || $email === 'admin@spacekind.example' || \App\Models\User::where('email', $email)->exists()) {
+        $this->error('Choose a new, private administrator email. Existing accounts cannot be promoted by this command.');
+
+        return 1;
+    }
+    $password = $this->secret('New password (at least 14 characters)');
+    if (! is_string($password) || strlen($password) < 14 || strlen($password) > 72 || $password !== $this->secret('Confirm new password')) {
+        $this->error('Passwords must match and be 14–72 bytes. No account created.');
+
+        return 1;
+    }
+    $user = new \App\Models\User(['name' => 'Spacekind editorial', 'email' => $email, 'password' => $password]);
+    $user->forceFill(['role' => 'super_admin', 'is_active' => true])->save();
+    $this->info('Administrator created. Sign in using the normal password form.');
+
+    return 0;
+})->purpose('Provision a private administrator from a trusted server terminal');

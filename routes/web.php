@@ -41,7 +41,6 @@ Route::get('/media/{image}', [PublicController::class, 'media'])->whereNumber('i
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
-    Route::post('/demo-login', [AuthController::class, 'demo'])->middleware('throttle:login');
     Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
 });
@@ -108,6 +107,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/integrations', [IntegrationController::class, 'index']);
     Route::put('/integrations/razorpay/{mode}', [IntegrationController::class, 'gateway'])->whereIn('mode', ['test', 'live']);
     Route::delete('/integrations/razorpay/{mode}', [IntegrationController::class, 'removeGateway'])->whereIn('mode', ['test', 'live']);
+    Route::put('/integrations/email', [IntegrationController::class, 'emailDelivery']);
+    Route::delete('/integrations/email', [IntegrationController::class, 'removeEmailDelivery']);
     Route::put('/integrations/templates/{purpose}', [IntegrationController::class, 'template'])->whereIn('purpose', array_keys(\App\Models\EmailTemplate::PURPOSES));
     Route::get('/', [AdminController::class, 'index'])->name('admin');
     Route::get('/blog', [ArticleController::class, 'adminIndex']);

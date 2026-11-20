@@ -75,7 +75,7 @@ class PreviewState
         if (! is_file($this->path())) {
             throw new \RuntimeException('No saved development state exists. Use the demo seeder instead.');
         }
-        foreach ([...self::TABLES, 'razorpay_credentials'] as $table) {
+        foreach ([...self::TABLES, 'razorpay_credentials', 'email_delivery_settings'] as $table) {
             if (DB::table($table)->exists()) {
                 throw new \RuntimeException('Recovery requires empty application tables. It will not overwrite or merge existing data.');
             }

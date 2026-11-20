@@ -55,8 +55,8 @@ class DatabaseSeeder extends Seeder
         }
         $staff = User::firstOrCreate(['email' => 'team@aangan.example'], ['name' => 'Meera · Demo team', 'password' => 'Spacekind@2026']);
         $staff->forceFill(['business_id' => $owners[0]->business_id, 'role' => 'staff'])->save();
-        $admin = User::firstOrCreate(['email' => 'admin@spacekind.example'], ['name' => 'Spacekind · Demo admin', 'password' => 'Spacekind@2026']);
-        $admin->forceFill(['role' => 'super_admin', 'business_id' => null])->save();
+        $admin = User::firstOrCreate(['email' => 'admin@spacekind.example'], ['name' => 'Spacekind editorial', 'password' => Str::random(64)]);
+        $admin->forceFill(['role' => 'super_admin', 'business_id' => null, 'is_active' => false, 'remember_token' => null])->save();
         $pending = Business::firstOrCreate(['slug' => 'atelier-draft'], ['name' => 'Atelier Draft', 'city' => 'Ghaziabad', 'locality' => 'Vasundhara', 'bio' => 'A fictional studio awaiting its first listing review. This record demonstrates manual platform approval.']);
         if ($pending->wasRecentlyCreated) {
             $pending->forceFill(['is_demo' => true])->save();

@@ -57,6 +57,45 @@ class IntegrationAndPortfolioTest extends TestCase
         $this->assertDatabaseCount('razorpay_credentials', 0);
     }
 
+    public function test_passwordless_admin_access_is_gone_and_private_admin_password_login_works(): void
+    {
+        config(['spacekind.demo' => true]);
+        $this->get('/login')->assertDontSee('Super admin')->assertDontSee('/demo-login');
+        $this->post('/demo-login', ['role' => 'admin'])->assertNotFound();
+        $this->get('/admin/integrations')->assertRedirect('/login');
+        $retired = $this->account('super_admin');
+        $retired->forceFill(['email' => 'admin@spacekind.example', 'password' => 'a-test-password'])->save();
+        $this->post('/login', ['email' => $retired->email, 'password' => 'a-test-password'])->assertSessionHasErrors('email');
+        $this->assertGuest();
+        $this->actingAs($retired)->get('/admin')->assertForbidden();
+        auth()->logout();
+        $private = $this->account('super_admin');
+        $private->forceFill(['password' => 'another-private-password'])->save();
+        $this->post('/login', ['email' => $private->email, 'password' => 'incorrect'])->assertSessionHasErrors('email');
+        $this->post('/login', ['email' => $private->email, 'password' => 'another-private-password'])->assertRedirect();
+        $this->get('/admin/integrations')->assertOk();
+    }
+
+    public function test_email_connection_can_be_rotated_without_showing_or_flashing_the_password(): void
+    {
+        config(['spacekind.demo' => false]);
+        $url = '/admin/integrations/email';
+        $fields = ['host' => 'smtp.example.test', 'port' => 587, 'encryption' => 'starttls', 'username' => 'mailer', 'smtp_password' => 'secret-for-test', 'from_address' => 'support@example.test', 'from_name' => 'Spacekind'];
+        $this->actingAs($this->account('owner', $this->studio('smtp-test')))->put($url, $fields)->assertForbidden();
+        $this->actingAs($this->account('super_admin'))->put($url, ['port' => 0] + $fields)->assertSessionHasErrors('port');
+        $this->assertNull(session()->getOldInput('smtp_password'));
+        $this->put($url, $fields)->assertSessionHasNoErrors();
+        $this->assertNotSame('secret-for-test', DB::table('email_delivery_settings')->value('smtp_password'));
+        $this->get('/admin/integrations')->assertSee('smtp.example.test')->assertDontSee('secret-for-test');
+        $this->put($url, ['smtp_password' => '', 'from_name' => 'Editorial'] + $fields)->assertSessionHasNoErrors();
+        $this->put($url, ['smtp_password' => '', 'host' => 'another.example.test'] + $fields)->assertSessionHasErrors('smtp_password');
+        config(['spacekind.demo' => true]);
+        $this->delete($url)->assertForbidden();
+        config(['spacekind.demo' => false]);
+        $this->delete($url)->assertRedirect();
+        $this->assertDatabaseCount('email_delivery_settings', 0);
+    }
+
     public function test_published_testimonials_and_inspiration_are_scoped_to_the_approved_profile(): void
     {
         Storage::fake('local');

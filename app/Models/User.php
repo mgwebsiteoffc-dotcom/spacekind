@@ -30,6 +30,11 @@ class User extends Authenticatable
         return $this->role === 'owner';
     }
 
+    public function isRetiredAdmin(): bool
+    {
+        return $this->isAdmin() && strtolower($this->email) === 'admin@spacekind.example';
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'super_admin';

@@ -1,5 +1,13 @@
 # Spacekind
 
+## Administrator access, article editing and email settings
+
+There is no public role picker or passwordless sign-in. The historical shared administrator identity is retired; new and restored sessions for it cannot access admin routes. After backing up the installation, update the files and run `php artisan migrate`. Existing private administrators can continue signing in at `/login`. If you relied on the shared administrator, run `php artisan spacekind:create-admin <your-private-email>` **from a trusted server terminal** and enter a new password at the hidden prompts. The command refuses existing addresses rather than promoting a studio account. Never share private administrator credentials. Historical local browser QA requiring an administrator now uses `SPACEKIND_QA_ADMIN_EMAIL` and `SPACEKIND_QA_ADMIN_PASSWORD` for a dedicated disposable QA account.
+
+Under **Admin → Settings · Payments & email**, update Razorpay test/live keys or SMTP connection and sender details. Passwords and key secrets are write-only, encrypted with `APP_KEY`, and excluded from local recovery snapshots. Saving configuration neither connects to the SMTP host nor sends messages or processes payments. Credential changes remain blocked on shared installations.
+
+The journal editor supports Markdown formatting buttons and up to 12 FAQ pairs per revision. Published pages show expandable answers and server-rendered `BlogPosting` and (when applicable) `FAQPage` JSON-LD. To schedule a draft, reopen it, choose a future date/time in the displayed time zone, and select **Schedule publication** (platform) or **Request scheduled publication** (studio; approval required). Saving a draft alone never publishes it.
+
 ## Platform integrations and studio content
 
 Super admins: **Integrations & email** stores separate Razorpay test/live key pairs (write-only encrypted secrets) and plain-text welcome, enquiry and invoice email templates. Neither checkout nor mail delivery is activated by saving settings. Do not use real credentials in shared accounts. Preserve `APP_KEY` for encrypted records; gateway credentials are excluded from local recovery files and must be reconfigured after such a restore. Use provider-side rotation/revocation when needed.
@@ -82,14 +90,13 @@ This is a **development application, not commercial-launch approval**. Shared fi
 
 ## Running local preview
 
-Use Arena’s **Spacekind website & workspace** live preview. Public directory/journal/videos remain available. Studio login demo buttons are enabled only in a local fictional demo, blocked in production.
+Use Arena’s **Spacekind website & workspace** live preview. Public directory/journal/videos remain available. All web logins use the password form. Only local fictional studio accounts use the fixture passwords below.
 
 | Demo role | Email | Fictional demo password |
 |---|---|---|
 | Aangan owner | `owner@aangan.example` | `Spacekind@2026` |
 | Aangan staff | `team@aangan.example` | `Spacekind@2026` |
 | Other studio owner | `owner@form-grain.example` | `Spacekind@2026` |
-| Super-admin | `admin@spacekind.example` | `Spacekind@2026` |
 
 Never reuse these credentials or deploy shared demo records in production. Staff retain CRM/project permissions; content/configuration/finance/export are owner-only here. Finance settings start blank; the patch does not create fake invoices in an existing register.
 

@@ -90,9 +90,17 @@ class Discovery
         $v = $p->publicRevision;
         $author = ['@type' => $v->byline_mode === 'person' ? 'Person' : 'Organization', 'name' => $v->author_name];
 
-        return ['@context' => 'https://schema.org', '@graph' => [
-            ['@type' => 'BlogPosting', 'headline' => $v->title, 'description' => $v->excerpt, 'mainEntityOfPage' => url($p->public_url), 'url' => url($p->public_url), 'image' => url($v->cover_url), 'datePublished' => $v->publish_at->toIso8601String(), 'dateModified' => max($v->publish_at, $v->updated_at)->toIso8601String(), 'author' => $author, 'publisher' => $this->organisation()],
+        $graph = [
+            ['@type' => 'BlogPosting', 'headline' => $v->title, 'articleBody' => trim(html_entity_decode(strip_tags($v->rendered_body), ENT_QUOTES | ENT_HTML5, 'UTF-8')), 'description' => $v->excerpt, 'mainEntityOfPage' => url($p->public_url), 'url' => url($p->public_url), 'image' => url($v->cover_url), 'datePublished' => $v->publish_at->toIso8601String(), 'dateModified' => max($v->publish_at, $v->updated_at)->toIso8601String(), 'author' => $author, 'publisher' => $this->organisation()],
             $this->breadcrumbs(['Spacekind' => '/', 'The Spacekind journal' => '/blog', $v->title => $p->public_url]),
-        ]];
+        ];
+        if ($v->faqs) {
+            $graph[] = ['@type' => 'FAQPage', '@id' => url($p->public_url).'#faqs', 'mainEntity' => array_map(fn ($faq) => [
+                '@type' => 'Question', 'name' => $faq['question'],
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq['answer']],
+            ], $v->faqs)];
+        }
+
+        return ['@context' => 'https://schema.org', '@graph' => $graph];
     }
 }

@@ -9,7 +9,7 @@ class RequireAdmin
 {
     public function handle(Request $r, Closure $next)
     {
-        abort_unless($r->user()?->isAdmin() && $r->user()->is_active, 403);
+        abort_unless($r->user()?->isAdmin() && $r->user()->is_active && ! $r->user()->isRetiredAdmin(), 403);
 
         return $next($r);
     }
