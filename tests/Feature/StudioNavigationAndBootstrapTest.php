@@ -40,6 +40,19 @@ class StudioNavigationAndBootstrapTest extends TestCase
         $this->post('/login', ['email' => $email, 'password' => 'private-testing-only-123'])->assertRedirect('/admin');
     }
 
+    public function test_named_seeder_resolves_by_short_class_name_and_creates_a_login(): void
+    {
+        $args = ['--class' => 'SaniSuperAdminSeeder', '--force' => true];
+        $password = bin2hex(random_bytes(16));
+        $this->artisan('db:seed', $args)
+            ->expectsQuestion('Super admin password (10–72 bytes)', $password)
+            ->expectsQuestion('Confirm super admin password', $password)
+            ->assertSuccessful();
+        $this->artisan('db:seed', $args)->expectsOutput('Super admin already exists. Password unchanged.')->assertSuccessful();
+        $this->post('/login', ['email' => 'sani9431@gmail.com', 'password' => $password])->assertRedirect('/admin');
+        $this->get('/admin')->assertOk();
+    }
+
     public function test_seeder_rejects_unsafe_inputs_and_existing_studio_accounts(): void
     {
         $member = User::factory()->create();
