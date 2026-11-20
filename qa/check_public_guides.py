@@ -21,7 +21,7 @@ try:
     for width in (1440, 768, 390, 320):
         call(base + '/goog/cdp/execute', {'cmd': 'Emulation.setDeviceMetricsOverride', 'params':
             {'width': width, 'height': 900, 'deviceScaleFactor': 1, 'mobile': False}})
-        for path, marker in [('/', '#guides'), ('/guides/compare-interior-quotes', '#checklist')]:
+        for path, marker in [('/', '#guides'), ('/guides/compare-interior-quotes', '#checklist'), ('/reels', '.reel-card-player'), ('/reels/1', '.reel-watch-screen')]:
             call(base + '/url', {'url': SITE + path})
             result = call(base + '/execute/sync', {'args': [marker], 'script': '''
               const doc = document.documentElement;
@@ -29,6 +29,15 @@ try:
               const marker = document.querySelector(arguments[0]);
               if (!heading || !marker || marker.getBoundingClientRect().width === 0) return 'missing content';
               if (doc.scrollWidth > doc.clientWidth + 1) return 'horizontal overflow: ' + doc.scrollWidth;
+              const film = document.querySelector('.reel-card-player video, .reel-watch-screen video');
+              if (location.pathname === '/' || location.pathname.startsWith('/reels')) {
+                if (!film) return 'missing public film';
+                const r = film.getBoundingClientRect();
+                if (Math.abs(r.width/r.height - 9/16) > .005 || getComputedStyle(film).objectFit !== 'cover') return 'reel frame/crop mismatch';
+                film.controls = true;
+                if (getComputedStyle(film).objectFit !== 'cover') return 'letterbox with controls';
+              }
+              if (location.pathname === '/' && document.querySelector('#city')?.value !== 'Lucknow') return 'unexpected finder default';
               const box = document.querySelector('#checklist input');
               if (box) { box.click(); if (!box.checked) return 'checklist failed'; }
               return 'ok';'''})

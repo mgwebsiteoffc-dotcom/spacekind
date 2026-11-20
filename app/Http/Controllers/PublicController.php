@@ -56,6 +56,9 @@ class PublicController extends Controller
         $schema['@graph'][] = $discovery->faqSchema($answers, url('/').'#questions');
 
         return view('public.home', compact('studios', 'cities', 'guides', 'answers', 'filters', 'schema') + [
+            'clientVoices' => Testimonial::withoutGlobalScope('business')->where('is_visible', true)->where('show_on_home', true)
+                ->whereNotNull('permission_confirmed_at')->whereHas('business', fn ($q) => $q->published())
+                ->with('business:id,name,city,slug')->latest('id')->limit(3)->get(),
             'inspiration' => DB::table('inspiration_edits')->orderBy('position')->limit(3)->get(),
             'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(),
             'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(),

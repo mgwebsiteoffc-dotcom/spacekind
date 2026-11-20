@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             ['Mitti Living', 'Noida', 'Sector 75', 'renovation', 8, 25, 'm', ['Earthy & timeless', 'Thoughtful renovation'], ['airy', 'hero', 'office'], 'New possibilities for a space you already call home. A fictional renovation specialist with an earthy, practical and personal design approach. No reference image is claimed as completed studio work.'],
             ['Northline Spaces', 'New Delhi', 'Saket', 'commercial', 15, 60, 'N', ['Workspaces', 'Functional design'], ['office', 'classic', 'kitchenLight'], 'Spaces shaped around the way people work. This fictional commercial practice shows how workspace specialists can present their approach and connect with new clients. All images are visual references.'],
             ['Oak & Arc', 'Ghaziabad', 'Indirapuram', 'home', 10, 30, 'oa', ['Soft minimal', 'Family-first spaces'], ['soft', 'bedroom', 'kitchen'], 'A comfortable balance of everyday practicality and softer details. A fictional family-focused residential practice, using clearly labelled reference images for its material studies.'],
+            ['Avadh Courtyard', 'Lucknow', 'Gomti Nagar', 'home', 10, 30, 'Ac', ['Natural finishes', 'Family apartments'], ['living', 'kitchenLight', 'soft'], 'An illustrative Lucknow studio profile exploring family apartments, flexible storage and soft daylight. Gallery images are editorial references, not completed commissions.'],
         ];
         $owners = [];
         foreach ($studios as $i => $s) {

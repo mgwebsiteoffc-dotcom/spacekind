@@ -11,6 +11,17 @@ class ProjectGuideTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_lucknow_finder_matches_city_service_and_overlapping_budget(): void
+    {
+        foreach ([['fits', 'Lucknow', 8, 16], ['outside', 'Lucknow', 25, 40], ['elsewhere', 'Noida', 8, 16]] as [$slug, $city, $min, $max]) {
+            $studio = Business::create(['slug' => $slug, 'name' => 'Studio '.$slug, 'city' => $city, 'service' => 'home', 'budget_min' => $min, 'budget_max' => $max]);
+            $studio->forceFill(['approval_status' => 'approved'])->save();
+        }
+        $this->get('/?city=Lucknow&service=home&budget=20')->assertOk()->assertSee('Studio fits')->assertDontSee('Studio outside')->assertDontSee('Studio elsewhere')->assertSee('Studios that match your brief.');
+        $this->get('/')->assertSee(config('spacekind.positioning'));
+        $this->get('/for-businesses')->assertSee(config('spacekind.positioning'));
+    }
+
     public function test_guides_have_distinct_metadata_visible_answers_and_matching_json(): void
     {
         foreach (config('project_guides') as $slug => $guide) {

@@ -15,7 +15,7 @@ The application reuses the approved Spacekind HTML concept’s warm ivory/forest
 
 ## Phase 1B reference-motion studies
 
-`public/assets/reels/warm-reference.mp4` and `kitchen-reference.mp4` are four-second, 768 × 432 H.264/no-audio motion studies generated locally with FFmpeg from the existing living/kitchen references. Public players identify them as concept / motion studies. These are not camera footage or a claim of completed work by a studio. Reusing the underlying image does **not** resolve its licensing requirements.
+`public/assets/reels/warm-reference.mp4` and `kitchen-reference.mp4` are four-second, 540 × 960 portrait H.264/no-audio motion studies generated locally with FFmpeg from the existing living/kitchen references. Public players identify them as concept / motion studies. These are not camera footage or a claim of completed work by a studio. Reusing the underlying image does **not** resolve its licensing requirements.
 
 The seed captions explain the illustrative nature. The associated `https://en.wikipedia.org/wiki/Interior_design` is general reading only: it is not an image source attribution, endorsement or evidence that the video was published there. No remote fetching or Instagram publishing occurs.
 

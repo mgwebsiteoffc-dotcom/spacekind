@@ -109,6 +109,9 @@ class IntegrationAndPortfolioTest extends TestCase
         $url = '/workspace/testimonials/'.$id;
         $this->get('/studios/one')->assertDontSee($quote['quote']);
         $this->patch($url, $quote + ['permission' => 1, 'is_visible' => 1])->assertSessionHasNoErrors();
+        $this->get('/')->assertDontSee($quote['quote']);
+        $this->patch($url, $quote + ['permission' => 1, 'is_visible' => 1, 'show_on_home' => 1])->assertSessionHasNoErrors();
+        $this->get('/')->assertSee($quote['quote']);
         $this->post('/workspace/gallery', ['image' => UploadedFile::fake()->image('mood.jpg', 500, 400), 'kind' => 'inspiration', 'caption' => 'Earth tones moodboard', 'rights' => 1])->assertSessionHasNoErrors();
         $this->get('/studios/one')->assertOk()->assertSee($quote['quote'])->assertSee('Earth tones moodboard')->assertViewHas('gallery', fn ($g) => $g->isEmpty());
         $second = $this->studio('two');
@@ -118,5 +121,6 @@ class IntegrationAndPortfolioTest extends TestCase
         $this->actingAs($this->account('staff', $b))->get('/workspace/testimonials')->assertForbidden();
         $b->forceFill(['account_status' => 'suspended'])->save();
         $this->get('/studios/one')->assertNotFound();
+        $this->get('/')->assertDontSee($quote['quote']);
     }
 }

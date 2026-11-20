@@ -9,10 +9,15 @@ class Testimonial extends Model
 {
     use BelongsToBusiness;
 
-    protected $fillable = ['attribution', 'quote', 'permission_confirmed_at', 'is_visible'];
+    protected $fillable = ['attribution', 'quote', 'show_on_home', 'permission_confirmed_at', 'is_visible'];
+
+    public function business()
+    {
+        return $this->belongsTo(Business::class);
+    }
 
     protected function casts(): array
     {
-        return ['is_visible' => 'boolean'];
+        return ['is_visible' => 'boolean', 'show_on_home' => 'boolean'];
     }
 }

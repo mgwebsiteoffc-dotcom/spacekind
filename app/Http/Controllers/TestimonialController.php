@@ -25,8 +25,8 @@ class TestimonialController extends Controller
 
     private function save(Request $request, Testimonial $testimonial)
     {
-        $data = $request->validate(['attribution' => 'required|string|max:100', 'quote' => 'required|string|max:1000', 'permission' => 'accepted', 'is_visible' => 'nullable|boolean']);
-        $testimonial->fill(['attribution' => $data['attribution'], 'quote' => $data['quote'], 'is_visible' => $request->boolean('is_visible'), 'permission_confirmed_at' => now()])->save();
+        $data = $request->validate(['attribution' => 'required|string|max:100', 'quote' => 'required|string|max:1000', 'permission' => 'accepted', 'is_visible' => 'nullable|boolean', 'show_on_home' => 'nullable|boolean']);
+        $testimonial->fill(['attribution' => $data['attribution'], 'quote' => $data['quote'], 'is_visible' => $request->boolean('is_visible'), 'show_on_home' => $request->boolean('is_visible') && $request->boolean('show_on_home'), 'permission_confirmed_at' => now()])->save();
         Audit::record('testimonial.saved', $testimonial, ['visible' => $testimonial->is_visible]);
 
         return back()->with('success', 'Testimonial saved.');

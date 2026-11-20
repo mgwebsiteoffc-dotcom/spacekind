@@ -4,7 +4,7 @@ return [
     'demo' => (bool) env('SPACEKIND_DEMO', false) && env('APP_ENV', 'production') !== 'production',
     'positioning' => 'We help interior-design businesses generate qualified enquiries on WhatsApp, follow up consistently, and track which ads produce customers.',
     'services' => ['home' => 'Full-home interiors', 'kitchen' => 'Kitchens & wardrobes', 'renovation' => 'Home renovation', 'commercial' => 'Commercial interiors'],
-    'cities' => ['Noida', 'Gurugram', 'New Delhi', 'Ghaziabad'],
+    'cities' => ['Lucknow', 'Noida', 'Gurugram', 'New Delhi', 'Ghaziabad'],
     'budgets' => ['Under ₹10 lakh', '₹10–20 lakh', '₹20–35 lakh', '₹35 lakh & above', 'Need guidance'],
     'readiness' => ['Ready now', 'Within 1–3 months', 'Within 3–6 months', 'Exploring / no date yet'],
     'property_types' => ['Apartment', 'Independent home', 'Office', 'Retail / hospitality', 'Other'],
