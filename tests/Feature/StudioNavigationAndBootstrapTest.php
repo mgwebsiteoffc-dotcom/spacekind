@@ -59,7 +59,7 @@ class StudioNavigationAndBootstrapTest extends TestCase
     {
         $studio = Business::create(['slug' => 'nav-studio', 'name' => 'Nav studio', 'city' => 'Noida']);
         $member = User::factory()->create();
-        $member->forceFill(['business_id' => $studio->id, 'role' => 'owner'])->save();
+        $member->forceFill(['business_id' => $studio->id, 'role' => 'owner', 'is_active' => true])->save();
         $this->actingAs($member)->get('/workspace/labour/attendance')->assertOk()->assertSee('Quick create')->assertSee('Portfolio & marketing')->assertSee('/workspace/finance/documents/new?kind=quotation')->assertSee('/workspace/labour#add-worker');
         $member->forceFill(['role' => 'staff'])->save();
         $this->actingAs($member)->get('/workspace/enquiries')->assertOk()->assertSee('/workspace/enquiries/new')->assertDontSee('Quick create')->assertDontSee('/workspace/finance/documents/new')->assertDontSee('Portfolio & marketing');
