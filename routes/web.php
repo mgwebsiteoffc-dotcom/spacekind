@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CampaignLinkController;
 use App\Http\Controllers\DiscoveryController;
+use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicContentController;
@@ -71,6 +73,10 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
         Route::get('/labour/{worker}/ledger', [WorkerLedgerController::class, 'show'])->whereNumber('worker')->name('worker.ledger');
         Route::post('/labour/{worker}/ledger', [WorkerLedgerController::class, 'store'])->whereNumber('worker');
         Route::post('/labour/{worker}/ledger/{payment}/reverse', [WorkerLedgerController::class, 'reverse'])->whereNumber(['worker', 'payment'])->name('worker.ledger.reverse');
+        Route::get('/testimonials', [TestimonialController::class, 'index']);
+        Route::post('/testimonials', [TestimonialController::class, 'store']);
+        Route::patch('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->whereNumber('testimonial');
+        Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->whereNumber('testimonial');
         Route::view('/tools', 'workspace.tools');
         Route::get('/blog', [ArticleController::class, 'index']);
         Route::get('/blog/new', [ArticleController::class, 'create']);
@@ -99,6 +105,10 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
     });
 });
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/integrations', [IntegrationController::class, 'index']);
+    Route::put('/integrations/razorpay/{mode}', [IntegrationController::class, 'gateway'])->whereIn('mode', ['test', 'live']);
+    Route::delete('/integrations/razorpay/{mode}', [IntegrationController::class, 'removeGateway'])->whereIn('mode', ['test', 'live']);
+    Route::put('/integrations/templates/{purpose}', [IntegrationController::class, 'template'])->whereIn('purpose', array_keys(\App\Models\EmailTemplate::PURPOSES));
     Route::get('/', [AdminController::class, 'index'])->name('admin');
     Route::get('/blog', [ArticleController::class, 'adminIndex']);
     Route::get('/blog/new', [ArticleController::class, 'create']);

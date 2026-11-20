@@ -51,3 +51,4 @@ html{scroll-padding-top:105px}body{overflow-wrap:break-word}a,button{transition:
 .worker-payment-history{min-width:0;overflow-wrap:anywhere}
 
 .worker-statement-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));align-items:end;gap:1rem}.worker-statement-filters .field{min-width:0;margin:0}.worker-statement-filters select{max-width:100%}
+.studio-testimonial{margin:1rem 0;padding:1.2rem 1.5rem;border-left:3px solid var(--rust);background:#fffdfa;overflow-wrap:anywhere}.studio-testimonial blockquote{font:1.3rem var(--serif);margin:0 0 .75rem;white-space:pre-line}.studio-testimonial figcaption{font-size:.85rem}

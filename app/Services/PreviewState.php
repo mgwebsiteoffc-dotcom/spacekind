@@ -17,7 +17,10 @@ class PreviewState
 
     private const V5_TABLES = [...self::V4_TABLES, 'worker_attendances'];
 
-    private const TABLES = [...self::V5_TABLES, 'worker_payments'];
+    private const V6_TABLES = [...self::V5_TABLES, 'worker_payments'];
+
+    // Gateway credentials are never included in portable recovery files.
+    private const TABLES = [...self::V6_TABLES, 'testimonials', 'email_templates'];
 
     public function enabled(): bool
     {
@@ -52,7 +55,7 @@ class PreviewState
                     $data[$table] = DB::table($table)->orderBy('id')->get()->map(fn ($r) => (array) $r)->all();
                 }
 
-                return ['format' => 6, 'purpose' => 'Spacekind local development recovery; contains private studio records', 'saved_at' => now()->toIso8601String(), 'tables' => $data];
+                return ['format' => 7, 'purpose' => 'Spacekind local development recovery; contains private studio records', 'saved_at' => now()->toIso8601String(), 'tables' => $data];
             });
             $temporary = $path.'.'.getmypid().'.tmp';
             file_put_contents($temporary, json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), LOCK_EX);
@@ -72,7 +75,7 @@ class PreviewState
         if (! is_file($this->path())) {
             throw new \RuntimeException('No saved development state exists. Use the demo seeder instead.');
         }
-        foreach (self::TABLES as $table) {
+        foreach ([...self::TABLES, 'razorpay_credentials'] as $table) {
             if (DB::table($table)->exists()) {
                 throw new \RuntimeException('Recovery requires empty application tables. It will not overwrite or merge existing data.');
             }
@@ -80,7 +83,7 @@ class PreviewState
         $state = json_decode(file_get_contents($this->path()), true, 512, JSON_THROW_ON_ERROR);
         $expected = match ($state['format'] ?? null) {
             1 => self::LEGACY_TABLES, 2 => self::V2_TABLES, 3 => self::V3_TABLES,
-            4 => self::V4_TABLES, 5 => self::V5_TABLES, 6 => self::TABLES, default => null,
+            4 => self::V4_TABLES, 5 => self::V5_TABLES, 6 => self::V6_TABLES, 7 => self::TABLES, default => null,
         };
         if ($expected === null || array_keys($state['tables'] ?? []) !== $expected) {
             throw new \RuntimeException('Unrecognised recovery format.');

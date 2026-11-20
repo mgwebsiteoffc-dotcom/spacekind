@@ -65,6 +65,10 @@
         window.fbq('consent', 'grant');
         window.fbq('track', 'PageView');
         script('https://connect.facebook.net/en_US/fbevents.js');
+      } else if (tag.provider === 'clarity') {
+        const clarity = window.clarity = window.clarity || function () { (clarity.q = clarity.q || []).push(arguments); };
+        clarity('consentv2', { analytics_Storage: 'granted', ad_Storage: 'denied' });
+        script('https://www.clarity.ms/tag/' + encodeURIComponent(tag.id));
       } else if (tag.provider === 'custom') {
         script(tag.url);
       }
@@ -76,7 +80,7 @@
     for (let i = 0; i < parts.length - 1; i++) domains.push('.' + parts.slice(i).join('.'));
     document.cookie.split(';').forEach(pair => {
       const name = pair.split('=')[0].trim();
-      if (!/^(_ga(?:_|$)|_gid$|_gat(?:_|$)|_fbp$|_fbc$)/.test(name)) return;
+      if (!/^(_ga(?:_|$)|_gid$|_gat(?:_|$)|_fbp$|_fbc$|_clck$|_clsk$)/.test(name)) return;
       for (const domain of domains) document.cookie = name + '=; Max-Age=0; Path=/; SameSite=Lax' + (domain ? '; Domain=' + domain : '') + (location.protocol === 'https:' ? '; Secure' : '');
     });
   };
@@ -86,6 +90,7 @@
     try { localStorage.setItem(key, JSON.stringify(choice)); } catch {}
     banner.hidden = true;
     if (dialog.open) dialog.close();
+    if (!choice.analytics && installed.has('clarity')) window.clarity?.('consentv2', { analytics_Storage: 'denied', ad_Storage: 'denied' });
     if (!choice.analytics || !choice.marketing) clearKnownCookies();
     if (loaded && (before.analytics !== choice.analytics || before.marketing !== choice.marketing)) { location.reload(); return; }
     apply();

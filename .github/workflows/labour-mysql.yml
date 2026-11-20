@@ -1,4 +1,4 @@
-name: Labour and recovery · MySQL 8
+name: Application regression · MySQL 8
 
 on:
   push:
@@ -38,15 +38,29 @@ jobs:
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '8.4'
-          extensions: pdo_mysql, mbstring, bcmath, dom, xml, curl, zip, intl
+          extensions: pdo_mysql, mbstring, bcmath, dom, xml, curl, zip, intl, gd
           tools: composer:v2
           coverage: none
       - name: Install locked dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
-      - name: Verify the disposable database and test labour and recovery
+      - name: Ensure uploaded video verification is available
+        run: command -v ffprobe || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+      - name: Verify the disposable database and run the PHP suite
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
         run: |
           export APP_KEY="base64:$(openssl rand -base64 32)"
           php scripts/check-labour-test-db.php
-          vendor/bin/phpunit --fail-on-empty-test-suite --filter='Worker(Register|Attendance|Ledger|Statement)Test|SpacekindRecoveryTest'
+          vendor/bin/phpunit --fail-on-empty-test-suite --log-junit "$RUNNER_TEMP/test-results.xml"
+      - name: Annotate failed tests
+        if: failure()
+        run: |
+          python - <<'PY'
+          import os, pathlib, xml.etree.ElementTree as ET
+          path = pathlib.Path(os.environ['RUNNER_TEMP']) / 'test-results.xml'
+          if path.exists():
+              for case in ET.parse(path).iter('testcase'):
+                  for item in case:
+                      if item.tag in ('failure', 'error'):
+                          print('::error::' + case.get('name', '') + ': ' + (item.text or '').strip().splitlines()[0][:400])
+          PY

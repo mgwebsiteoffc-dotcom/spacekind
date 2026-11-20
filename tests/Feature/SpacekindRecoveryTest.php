@@ -46,7 +46,7 @@ class SpacekindRecoveryTest extends TestCase
         };
     }
 
-    public function test_format_six_round_trips_all_tables_with_foreign_keys_enabled(): void
+    public function test_format_seven_round_trips_all_tables_with_foreign_keys_enabled(): void
     {
         config(['spacekind.demo' => true]);
         $this->seed(DatabaseSeeder::class);
@@ -63,8 +63,9 @@ class SpacekindRecoveryTest extends TestCase
         try {
             $service->save();
             $saved = json_decode(file_get_contents($service->path()), true, 512, JSON_THROW_ON_ERROR);
-            $this->assertSame(6, $saved['format']);
-            $this->assertCount(31, $saved['tables']);
+            $this->assertSame(7, $saved['format']);
+            $this->assertCount(33, $saved['tables']);
+            $this->assertArrayNotHasKey('razorpay_credentials', $saved['tables']);
             $this->assertSame(0600, fileperms($service->path()) & 0777);
             foreach (['businesses', 'blog_posts', 'blog_revisions', 'reels', 'tracking_versions', 'site_settings', 'leads', 'clients', 'projects', 'worker_attendances', 'worker_payments'] as $table) {
                 $this->assertNotEmpty($saved['tables'][$table]);

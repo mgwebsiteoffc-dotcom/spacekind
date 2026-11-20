@@ -405,6 +405,22 @@ class SpacekindContentTest extends TestCase
         $this->get('/admin/tracking')->assertOk()->assertSee('Version history')->assertSee('deployment-locked');
     }
 
+    public function test_clarity_needs_a_valid_public_id_and_uses_the_analytics_gate(): void
+    {
+        $payload = $this->tracking(['clarity_id' => 'ab123cdef', 'ga4_id' => null, 'meta_pixel_id' => null]);
+        $this->actingAs($this->admin())->postJson('/admin/tracking', ['clarity_id' => 'https://example.test'] + $payload)->assertJsonValidationErrors('clarity_id');
+        $this->postJson('/admin/tracking', ['gtm_id' => 'GTM-TEST123'] + $payload)->assertJsonValidationErrors('gtm_id');
+        $this->post('/admin/tracking', $payload)->assertSessionHasNoErrors();
+        $this->guest();
+        $this->get('/')->assertDontSee('ab123cdef');
+        config(['spacekind.demo' => false, 'spacekind.tracking_allowed' => true]);
+        $this->app['env'] = 'production';
+        $home = $this->get('/')->assertOk()->assertSee('ab123cdef');
+        $this->assertStringContainsString('https://www.clarity.ms', $home->headers->get('Content-Security-Policy'));
+        $this->get('/?q=private')->assertDontSee('ab123cdef');
+        $this->get('/login')->assertDontSee('ab123cdef');
+    }
+
     public function test_duplicate_or_unapproved_tracking_scripts_cannot_be_saved(): void
     {
         $this->actingAs($this->admin())->postJson('/admin/tracking', $this->tracking(['gtm_id' => 'GTM-TEST123']))->assertUnprocessable()->assertJsonValidationErrors('gtm_id');

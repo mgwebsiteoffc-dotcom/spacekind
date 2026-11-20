@@ -1,5 +1,15 @@
 # Spacekind
 
+## Platform integrations and studio content
+
+Super admins: **Integrations & email** stores separate Razorpay test/live key pairs (write-only encrypted secrets) and plain-text welcome, enquiry and invoice email templates. Neither checkout nor mail delivery is activated by saving settings. Do not use real credentials in shared accounts. Preserve `APP_KEY` for encrypted records; gateway credentials are excluded from local recovery files and must be reconfigured after such a restore. Use provider-side rotation/revocation when needed.
+
+**Tracking & consent** handles Google Analytics 4 (gtag.js), Meta Pixel and Microsoft Clarity, or a GTM container, using provider IDs rather than pasted HTML. Existing publication, deployment, visitor consent and page restrictions still apply. Configure Clarity masking and validate provider payloads before allowing production delivery.
+
+Studio owners: **More → Works & inspiration** uploads rights-confirmed images and manages captions, visibility, ordering and removal. Inspiration is a separate collection on the approved studio profile, never a portfolio cover. **More → Client testimonials** manages permission-confirmed feedback and attribution; new entries are hidden unless explicitly made public. No testimonials or provider settings are seeded.
+
+After updating files, back up the installation and run `php artisan migrate` to add the configuration and testimonial tables. No reset or general seeder is required.
+
 ## Current branch: public films, site attendance and worker statements
 
 **Studio owners:** open **More → Worker register** to add a worker, their trade, daily wage and the date it takes effect. Add later rates without editing earlier ones. Select **Mark attendance**, open the work date, then choose the project worked in each half of the day. One half earns half the daily rate (rounded to the nearest paise, half up); two halves earn the full rate. Two projects can share one day, not claim two wages. An explicit absence earns zero; an untouched worker is not absent. The first worked entry freezes the applicable rate. Save each page before navigating; corrections retain a before/after audit and stale edits are rejected.
@@ -17,9 +27,9 @@ php artisan migrate
 php artisan db:seed --class=InspirationSeeder
 ```
 
-The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 6 and accepts formats 1–5; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
+The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 7 and accepts formats 1–6; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
 
-**MySQL acceptance:** the 14 worker register, attendance, ledger, statement and recovery tests [passed on an isolated MySQL 8.4 service](https://github.com/mgwebsiteoffc-dotcom/spacekind/actions/runs/44694298591). The [CI workflow](.github/workflows/labour-mysql.yml) repeats the check on pushes. It creates a disposable `spacekind_test` database, checks that it is empty with foreign keys enabled, and runs only these suites. Never point the test suite at an installed database. This is not a production deployment or a full-platform regression run.
+**MySQL acceptance:** the 14 worker register, attendance, ledger, statement and recovery tests [passed on an isolated MySQL 8.4 service](https://github.com/mgwebsiteoffc-dotcom/spacekind/actions/runs/44694298591). The [CI workflow](.github/workflows/labour-mysql.yml) repeats the check on pushes. It creates a disposable `spacekind_test` database, checks that it is empty with foreign keys enabled, and runs the PHP regression suite. Never point the test suite at an installed database. This is not a production deployment or a full-platform regression run.
 
 The release, ZIP and validation counts below describe the **previous Phase 2 handoff**, not validation of this branch.
 

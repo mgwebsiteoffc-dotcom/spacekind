@@ -35,7 +35,7 @@ class StudioController extends Controller
 
     public function upload(Request $r)
     {
-        $v = $r->validate(['image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120|dimensions:min_width=300,min_height=200,max_width=6000,max_height=6000', 'caption' => 'required|string|max:180', 'kind' => ['required', Rule::in(['completed', 'render', 'concept'])], 'rights' => ['accepted']]);
+        $v = $r->validate(['image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120|dimensions:min_width=300,min_height=200,max_width=6000,max_height=6000', 'caption' => 'required|string|max:180', 'kind' => ['required', Rule::in(['completed', 'render', 'concept', 'inspiration'])], 'rights' => ['accepted']]);
         $path = $r->file('image')->store('gallery/'.app(Tenant::class)->id(), 'local');
         try {
             $image = GalleryImage::create(['path' => $path, 'caption' => $v['caption'], 'kind' => $v['kind'], 'position' => (GalleryImage::max('position') ?? 0) + 1, 'rights_confirmed_at' => now()]);
@@ -45,7 +45,7 @@ class StudioController extends Controller
             throw $e;
         }
 
-        return back()->with('success', 'Gallery image uploaded. The first visible image is your studio cover.');
+        return back()->with('success', $image->kind === 'inspiration' ? 'Image added to studio inspiration.' : 'Portfolio image uploaded.');
     }
 
     public function updateImage(Request $r, GalleryImage $image)
