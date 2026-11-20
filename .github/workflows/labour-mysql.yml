@@ -69,6 +69,8 @@ jobs:
           curl -fsS --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:9515/status >/dev/null
           curl -fsS --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:8160/up >/dev/null
           python3 qa/check_public_guides.py
+          php qa/enable_test_capture.php
+          python3 qa/check_public_guides.py --capture
       - name: Annotate failed tests
         if: failure()
         run: |

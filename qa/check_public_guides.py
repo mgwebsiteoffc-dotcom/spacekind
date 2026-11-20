@@ -1,5 +1,6 @@
 """Local-only browser checks for the public directory and handbook (ChromeDriver)."""
 import json
+import sys
 import urllib.request
 
 DRIVER = 'http://127.0.0.1:9515'
@@ -17,8 +18,37 @@ def call(path, data=None, method=None):
 sid = call('/session', {'capabilities': {'alwaysMatch': {'browserName': 'chrome',
     'goog:chromeOptions': {'args': ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage']}}}})['sessionId']
 base = '/session/' + sid
+def js(code, *args):
+    return call(base + '/execute/sync', {'args': list(args), 'script': code})
+
+
+def capture_checks():
+    call(base + '/url', {'url': SITE + '/'})
+    assert js("return !!document.querySelector('[data-open-project]')?.getBoundingClientRect().width"), 'floating button missing'
+    opened = call(base + '/execute/async', {'args': [], 'script': """
+        const done = arguments[0], d = document.querySelector('.project-dialog');
+        if (d.open) return done(true);
+        const observer = new MutationObserver(() => {if (d.open) {observer.disconnect(); clearTimeout(timer); done(true);}});
+        const timer = setTimeout(() => {observer.disconnect(); done(false);}, 8000);
+        observer.observe(d, {attributes:true, attributeFilter:['open']});"""})
+    assert opened, 'delayed entry prompt missing'
+    js("document.querySelector('.project-dialog [data-close]').click()")
+    assert not js("return document.querySelector('.project-dialog').open"), 'dismissal failed'
+    js("document.querySelector('[data-open-project]').click()")
+    assert js("return document.querySelector('.project-dialog').open"), 'floating button failed to reopen'
+    # Fresh visitor tab state; test the desktop exit before the entry delay.
+    js('sessionStorage.clear()')
+    call(base + '/url', {'url': SITE + '/'})
+    assert js("document.documentElement.dispatchEvent(new MouseEvent('mouseleave', {clientY:0})); return document.querySelector('.project-dialog').open"), 'desktop exit prompt missing'
+    js("document.querySelector('.project-dialog').close(); document.documentElement.dispatchEvent(new MouseEvent('mouseleave', {clientY:0}))")
+    assert not js("return document.querySelector('.project-dialog').open"), 'exit prompt repeated in same session'
+    print('Signed-out entry, exit, dismissal and floating reopen passed')
+
+
 try:
-    for width in (1440, 768, 390, 320):
+    if '--capture' in sys.argv:
+        capture_checks()
+    for width in (() if '--capture' in sys.argv else (1440, 768, 390, 320)):
         call(base + '/goog/cdp/execute', {'cmd': 'Emulation.setDeviceMetricsOverride', 'params':
             {'width': width, 'height': 900, 'deviceScaleFactor': 1, 'mobile': False}})
         for path, marker in [('/', '#guides'), ('/for-businesses', '#compare'), ('/guides/compare-interior-quotes', '#checklist'), ('/studios/studio-aangan', '.profile-meta'), ('/inspiration', '#motion'), ('/reels', '.reel-card-player'), ('first-published-film', '.reel-watch-screen')]:

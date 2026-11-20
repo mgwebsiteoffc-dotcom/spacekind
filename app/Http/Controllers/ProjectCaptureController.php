@@ -20,10 +20,11 @@ class ProjectCaptureController extends Controller
 
     public function settings(Request $r)
     {
-        $s = $r->validate(['heading' => 'required|string|max:80', 'button' => 'required|string|max:32', 'delay' => 'required|integer|between:3,120', 'entry' => 'nullable|boolean', 'exit' => 'nullable|boolean', 'floating' => 'nullable|boolean']);
+        $s = $r->validate(['preset' => 'sometimes|in:all', 'heading' => 'required|string|max:80', 'button' => 'required|string|max:32', 'delay' => 'required|integer|between:3,120', 'entry' => 'nullable|boolean', 'exit' => 'nullable|boolean', 'floating' => 'nullable|boolean']);
         foreach (['entry', 'exit', 'floating'] as $key) {
-            $s[$key] = $r->boolean($key);
+            $s[$key] = ($s['preset'] ?? null) === 'all' || $r->boolean($key);
         }
+        unset($s['preset']);
         $row = SiteSetting::find(1) ?? (new SiteSetting)->forceFill(['id' => 1, 'seo' => []]);
         $row->capture = $s;
         $row->save();

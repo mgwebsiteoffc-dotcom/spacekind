@@ -21,11 +21,11 @@ class PublicCaptureTest extends TestCase
         $u = User::factory()->create();
         $this->actingAs($u)->put('/admin/project-capture', [])->assertForbidden();
         $u->forceFill(['role' => 'super_admin', 'is_active' => true])->save();
-        $settings = ['entry' => 1, 'exit' => 1, 'floating' => 1, 'heading' => 'Your project shortlist', 'button' => 'Ask Spacekind', 'delay' => 4];
+        $settings = ['preset' => 'all', 'heading' => 'Your project shortlist', 'button' => 'Ask Spacekind', 'delay' => 4];
         $this->put('/admin/project-capture', $settings)->assertSessionHasNoErrors();
         $this->get('/')->assertDontSee('id="project-capture"', false);
         auth()->logout();
-        $this->get('/')->assertSee('id="project-capture"', false)->assertSee('Ask Spacekind');
+        $this->get('/')->assertSee('id="project-capture"', false)->assertSee('Ask Spacekind')->assertSee('data-entry="1"', false)->assertSee('data-exit="1"', false);
         $this->get('/login')->assertDontSee('id="project-capture"', false);
         $brief = ['submission_key' => (string) Str::uuid(), 'name' => 'Private contact', 'phone' => '+919876543210', 'city' => 'Lucknow', 'floor_area' => 900, 'budget' => config('spacekind.budgets')[0], 'scope' => config('spacekind.services.home')];
         $this->post('/project-brief', $brief)->assertSessionHasErrors('consent')->assertRedirect('/project-brief');

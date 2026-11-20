@@ -14,7 +14,14 @@
     dialog.showModal();
   }
   root.querySelector('[data-open-project]')?.addEventListener('click', event => { event.preventDefault(); open(false); });
-  if (root.dataset.entry === '1') setTimeout(() => open(true), Number(root.dataset.delay) * 1000);
+  // A delayed prompt can become due in a background tab or mid-form. Retry when
+  // the visitor is available instead of losing the one scheduled attempt.
+  function entryWhenAvailable() {
+    if (seen) return;
+    open(true);
+    if (!seen) setTimeout(entryWhenAvailable, 3000);
+  }
+  if (root.dataset.entry === '1') setTimeout(entryWhenAvailable, Number(root.dataset.delay) * 1000);
   if (root.dataset.exit === '1' && matchMedia('(hover:hover) and (pointer:fine)').matches) {
     document.documentElement.addEventListener('mouseleave', event => { if (event.clientY <= 0 && !event.relatedTarget) open(true); });
   }
