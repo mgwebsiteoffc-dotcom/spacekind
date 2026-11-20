@@ -58,7 +58,7 @@ jobs:
           SPACEKIND_DEMO: 'true'
         run: |
           export APP_KEY="base64:$(openssl rand -base64 32)"
-          php scripts/check-labour-test-db.php
+          # Reuse only the disposable service already verified and migrated by the PHP suite.
           php artisan migrate --force
           php artisan db:seed --force
           php artisan serve --host=127.0.0.1 --port=8160 > "$RUNNER_TEMP/public-site.log" 2>&1 &

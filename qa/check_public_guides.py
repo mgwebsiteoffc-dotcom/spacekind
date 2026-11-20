@@ -32,7 +32,8 @@ try:
               const box = document.querySelector('#checklist input');
               if (box) { box.click(); if (!box.checked) return 'checklist failed'; }
               return 'ok';'''})
-            assert result == 'ok', (path, width, result)
+            if result != 'ok':
+                raise RuntimeError(f'{path} at {width}px: {result}')
         print('Public directory and planning guide:', width, 'px passed')
 finally:
     call(base, method='DELETE')
