@@ -35,7 +35,7 @@ try:
               if (location.pathname === '/' || location.pathname.startsWith('/reels')) {
                 if (!film) return 'missing public film';
                 const r = film.getBoundingClientRect();
-                if (Math.abs(r.width/r.height - 9/16) > .005 || getComputedStyle(film).objectFit !== 'cover') return 'reel frame/crop mismatch';
+                if (Math.abs(r.width/r.height - 9/16) > .005 || getComputedStyle(film).objectFit !== 'cover') return `reel frame/crop mismatch: ${r.width}x${r.height} ${getComputedStyle(film).objectFit}`;
                 film.controls = true;
                 if (getComputedStyle(film).objectFit !== 'cover') return 'letterbox with controls';
               }
@@ -46,5 +46,8 @@ try:
             if result != 'ok':
                 raise RuntimeError(f'{path} at {width}px: {result}')
         print('Public directory and planning guide:', width, 'px passed')
+except Exception as exc:
+    print(f'::error::Public browser check: {exc}', flush=True)
+    raise
 finally:
     call(base, method='DELETE')
