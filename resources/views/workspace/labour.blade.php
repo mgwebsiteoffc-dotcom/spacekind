@@ -4,7 +4,7 @@
 @section('content')
 <div class="page-heading"><div><div class="eyebrow section-kicker">LABOUR MANAGEMENT</div><h1>Worker register.</h1><p>Record each worker’s trade and agreed daily rate. A new rate starts on its effective date; earlier entries stay on file.</p></div><a class="button dark" href="{{ route('attendance') }}">Mark attendance</a></div>
 <div class="detail-columns">
-<section class="app-panel form-panel"><h2>Add a worker</h2>
+<section class="app-panel form-panel" id="add-worker"><h2>Add a worker</h2>
 <form method="post" action="/workspace/labour">@csrf
 <label class="field"><span>Worker name</span><input name="name" required maxlength="100" value="{{ old('name') }}"></label>
 <label class="field"><span>Trade</span><input name="trade" required maxlength="80" value="{{ old('trade') }}"></label>

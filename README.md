@@ -4,6 +4,15 @@
 
 There is no public role picker or passwordless sign-in. The historical shared administrator identity is retired; new and restored sessions for it cannot access admin routes. After backing up the installation, update the files and run `php artisan migrate`. Existing private administrators can continue signing in at `/login`. If you relied on the shared administrator, run `php artisan spacekind:create-admin <your-private-email>` **from a trusted server terminal** and enter a new password at the hidden prompts. The command refuses existing addresses rather than promoting a studio account. Never share private administrator credentials. Historical local browser QA requiring an administrator now uses `SPACEKIND_QA_ADMIN_EMAIL` and `SPACEKIND_QA_ADMIN_PASSWORD` for a dedicated disposable QA account.
 
+**Non-interactive alternative — `SuperAdminSeeder`:** Deploy this revision, then run the following from the Laravel installation directory (the one containing `artisan`). First set `SPACEKIND_ADMIN_EMAIL` to your actual private email and `SPACEKIND_ADMIN_PASSWORD` to a unique 14–72 byte password as temporary **server/CLI environment secrets**. Do not paste a password into the command itself, commit it, or use literal angle brackets. With Laravel config cached, use actual process environment variables, not just a new `.env` entry.
+
+```sh
+php artisan migrate --force
+php artisan db:seed --class=SuperAdminSeeder --force
+```
+
+Remove the two secrets from the server environment after success, then sign in at `/login`. No reset or full demo seed is needed. Re-running leaves an existing active private administrator and their password unchanged. It refuses to promote an existing studio user, reactivate disabled users, or provision the retired shared address. If the class cannot be found, verify that `database/seeders/SuperAdminSeeder.php` is on the deployed release and rebuild the Composer autoloader (`composer dump-autoload -o`).
+
 Under **Admin → Settings · Payments & email**, update Razorpay test/live keys or SMTP connection and sender details. Passwords and key secrets are write-only, encrypted with `APP_KEY`, and excluded from local recovery snapshots. Saving configuration neither connects to the SMTP host nor sends messages or processes payments. Credential changes remain blocked on shared installations.
 
 The journal editor supports Markdown formatting buttons and up to 12 FAQ pairs per revision. Published pages show expandable answers and server-rendered `BlogPosting` and (when applicable) `FAQPage` JSON-LD. To schedule a draft, reopen it, choose a future date/time in the displayed time zone, and select **Schedule publication** (platform) or **Request scheduled publication** (studio; approval required). Saving a draft alone never publishes it.
