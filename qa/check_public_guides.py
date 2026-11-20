@@ -61,9 +61,9 @@ def studio_tour_checks():
     call(base + '/refresh', {})
     assert not js("return document.querySelector('#studio-tour').open"), 'tour repeated after signup'
     js("document.querySelector('#studio-tour-launch').click(); document.querySelector('[data-tour-next]').click(); document.querySelector('a[href=\"#studio-upload\"]').click()")
-    assert js("return document.activeElement.id === 'studio-upload'"), 'tour did not open uploader'
+    assert call(base + '/execute/async', {'args': [], 'script': "requestAnimationFrame(() => requestAnimationFrame(() => arguments[0](document.activeElement.id === 'studio-upload')) )"}), 'tour did not open uploader'
     js("document.querySelector('#studio-tour-launch').click(); for(let i=0;i<4;i++) document.querySelector('[data-tour-next]').click()")
-    assert js("return !document.querySelector('#studio-tour').open && document.activeElement.id === 'studio-introduction'"), 'cannot finish tour'
+    assert call(base + '/execute/async', {'args': [], 'script': "requestAnimationFrame(() => requestAnimationFrame(() => arguments[0](!document.querySelector('#studio-tour').open && document.activeElement.id === 'studio-introduction')) )"}), 'cannot finish tour'
     print('New studio signup, tour navigation, skip, replay and finish passed')
 
 
