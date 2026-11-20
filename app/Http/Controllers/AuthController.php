@@ -67,6 +67,7 @@ class AuthController extends Controller
             $user = new User(Arr::only($data, ['name', 'email', 'password']));
             $user->business_id = $business->id;
             $user->role = 'owner';
+            $user->is_active = true;
             $user->save();
             app(Tenant::class)->run($business, function () use ($business) {
                 Subscription::create(['starts_at' => today(), 'status' => 'pilot']);
