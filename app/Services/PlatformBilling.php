@@ -57,6 +57,7 @@ final class PlatformBilling
         DB::transaction(function () use ($d, $v) {
             PlatformBillingSetting::whereKey(1)->lockForUpdate()->firstOrFail();
             $d = PlatformInvoice::lockForUpdate()->findOrFail($d->id);
+            PlatformCheckoutService::requireClosed($d);
             $amount = Money::scaled($v['amount']);
             if ($p = PlatformPayment::where('submission_key', $v['submission_key'])->first()) {
                 if ($p->platform_invoice_id !== $d->id || $p->amount_minor !== $amount || $p->paid_on->toDateString() !== $v['paid_on'] || $p->reference !== $v['reference']) {

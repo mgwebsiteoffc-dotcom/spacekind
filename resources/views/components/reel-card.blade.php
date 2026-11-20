@@ -10,6 +10,6 @@
     </div>
     <div class="reel-card-copy">
         <span class="eyebrow">{{ $reel->business->name }} · {{ $reel->category }}</span>
-        <h3><a href="{{ $reel->public_url }}{{ \App\Support\CampaignLabels::query(request()) }}">{{ $reel->title }} <x-icon name="arrow"/></a></h3>
+        <h3><a href="{{ $reel->public_url }}{{ \App\Support\CampaignLabels::query(request()) }}"><span class="reel-card-title">{{ $reel->title }}</span> <x-icon name="arrow"/></a></h3>
     </div>
 </article>

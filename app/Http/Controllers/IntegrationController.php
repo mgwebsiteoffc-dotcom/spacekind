@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmailDeliverySetting;
 use App\Models\EmailTemplate;
 use App\Models\RazorpayCredential;
+use App\Models\PlatformCheckout;
 use App\Support\Audit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,9 @@ class IntegrationController extends Controller
         ]);
         DB::transaction(function () use ($data, $mode) {
             $record = RazorpayCredential::lockForUpdate()->firstOrNew(['mode' => $mode]);
+            if ($record->key_id !== $data['key_id']) {
+                $this->noPendingCheckouts($mode);
+            }
             if ($record->key_id !== $data['key_id'] && empty($data['key_secret'])) {
                 throw ValidationException::withMessages(['key_secret' => 'Supply the matching secret when setting or changing the key ID.']);
             }
@@ -41,16 +45,27 @@ class IntegrationController extends Controller
             Audit::record('admin.razorpay_saved', $record, ['mode' => $mode]);
         }, 3);
 
-        return back()->with('success', 'Razorpay details saved. Checkout is not enabled.');
+        return back()->with('success', 'Razorpay details saved. Review the configured checkout mode before issuing bills.');
     }
 
     public function removeGateway(string $mode)
     {
         abort_if(config('spacekind.demo'), 403);
-        RazorpayCredential::where('mode', $mode)->delete();
+        DB::transaction(function () use ($mode) {
+            $record = RazorpayCredential::where('mode', $mode)->lockForUpdate()->first();
+            $this->noPendingCheckouts($mode);
+            $record?->delete();
+        });
         Audit::record('admin.razorpay_removed', null, ['mode' => $mode]);
 
         return back()->with('success', 'Stored credential removed. Revoke it at Razorpay if needed.');
+    }
+
+    private function noPendingCheckouts(string $mode): void
+    {
+        if (PlatformCheckout::where('mode', $mode)->where('state', 'pending')->exists()) {
+            throw ValidationException::withMessages(['gateway' => 'Resolve pending invoice checkouts before replacing or removing this merchant key.']);
+        }
     }
 
     public function emailDelivery(Request $request)

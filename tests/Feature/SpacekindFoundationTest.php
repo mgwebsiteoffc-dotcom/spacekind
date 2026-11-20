@@ -48,6 +48,21 @@ class SpacekindFoundationTest extends TestCase
         return $admin;
     }
 
+    public function test_enquiry_alert_uses_studio_owner_and_sends_no_homeowner_details_on_retry(): void
+    {
+        config(['spacekind.enquiry_email' => true, 'spacekind.demo' => false]);
+        [$studio, $owner] = $this->studio();
+        \App\Models\EmailDeliverySetting::forceCreate(['id' => 1, 'host' => 'mail.example.test', 'port' => 587, 'encryption' => 'starttls', 'username' => 'sender', 'smtp_password' => 'fake', 'from_name' => 'Test', 'from_address' => 'sender@example.test']);
+        $payload = $this->payload();
+        $this->partialMock(\App\Services\EnquiryAlert::class)->shouldReceive('deliver')->once()->withArgs(function ($smtp, $message) use ($payload, $owner) {
+            return $message->getTo()[0]->getAddress() === $owner->email && ! str_contains($message->getTextBody(), $payload['phone']) && ! str_contains($message->getTextBody(), $payload['brief']);
+        });
+        for ($i = 0; $i < 2; $i++) {
+            $this->post('/studios/'.$studio->slug.'/enquire', $payload)->assertRedirect('/studios/'.$studio->slug.'/enquire/thanks');
+        }
+        $this->assertDatabaseCount('leads', 1);
+    }
+
     public function test_application_runs_on_actual_mysql_and_models_fail_closed_without_a_tenant(): void
     {
         [$business,$owner] = $this->studio();

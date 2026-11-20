@@ -19,3 +19,13 @@
 .reel-watch-screen{position:relative;width:min(100%,42dvh);height:auto;aspect-ratio:9/16;max-height:none;margin-inline:auto}.reel-watch-screen>video{position:absolute;inset:0;width:100%;height:100%;max-height:none;object-fit:cover}
 .editor-format-tools:not([hidden]){display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0}.editor-format-tools button{min-height:36px;padding:.35rem .75rem}.faq-fields{min-width:0;margin:1rem 0;padding:1rem;border:1px solid var(--line);border-radius:8px}.article-faqs details{border-bottom:1px solid var(--line);padding:.8rem 0;overflow-wrap:anywhere}.article-faqs summary{display:flex;justify-content:space-between;gap:1rem;cursor:pointer;font-weight:600;list-style:none}.article-faqs summary::-webkit-details-marker{display:none}.article-faqs summary::after{content:'+'}.article-faqs details[open] summary::after{content:'−'}
 .profile-page .profile-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:1rem}.profile-page .profile-meta small,.studio-track-record small{font-size:.75rem}.profile-page .profile-meta strong{font-size:1rem}.studio-track-record article{padding:1rem 1.2rem;margin:.75rem 0;border:1px solid var(--line);border-radius:10px;overflow-wrap:anywhere}.studio-track-record article h3{font-family:var(--serif);font-size:1.4rem;margin:.4rem 0}.studio-track-record article p{line-height:1.6}.studio-proof-editor{border-bottom:1px solid var(--line);padding:.65rem 0}.studio-proof-editor summary{cursor:pointer;font-weight:600}.studio-proof-editor[open] summary{margin-bottom:.75rem}.profile-page .studio-testimonial{overflow-wrap:anywhere}
+/* Keep the portrait the focus, with a uniform caption slot on every card. */
+.reel-collection,.profile-video-grid{align-items:stretch}
+.reel-card .reel-card-copy{padding:14px 16px}
+.reel-card .reel-card-copy>.eyebrow{display:block;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.reel-card .reel-card-copy h3{margin:6px 0 0;font:600 14px/20px var(--sans,sans-serif);letter-spacing:normal}
+.reel-card .reel-card-copy h3 a{height:40px;gap:8px}
+.reel-card-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lightbox-stage{position:relative}.lightbox-stage img{display:block}
+#lightboxNav button{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border:1px solid white;border-radius:50%;background:#203329;color:white;font-size:20px;cursor:pointer}
+#lightboxNav button:first-child{left:10px}#lightboxNav button:last-child{right:10px}

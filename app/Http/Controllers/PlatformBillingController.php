@@ -7,6 +7,7 @@ use App\Models\PlatformBillingSetting;
 use App\Models\PlatformInvoice;
 use App\Models\PlatformPayment;
 use App\Services\FinancialPdf;
+use App\Services\PlatformCheckoutService;
 use App\Services\PlatformBilling;
 use App\Support\Audit;
 use App\Support\BillingDetails;
@@ -87,7 +88,7 @@ return view('finance.platform-show', ['invoice' => $invoice->load(['business', '
         abort_unless($payment->platform_invoice_id === $invoice->id, 404);
         $v = $r->validate(['reason' => 'required|string|min:5|max:500']);
         DB::transaction(function () use ($payment, $invoice, $v) {
-            PlatformInvoice::lockForUpdate()->findOrFail($invoice->id);
+            PlatformCheckoutService::requireClosed(PlatformInvoice::lockForUpdate()->findOrFail($invoice->id));
             $p = PlatformPayment::lockForUpdate()->findOrFail($payment->id);
             if (! $p->reversed_at) {
                 $p->update(['reversed_at' => now(), 'reversal_reason' => $v['reason']]);
@@ -103,6 +104,7 @@ return view('finance.platform-show', ['invoice' => $invoice->load(['business', '
         $v = $r->validate(['reason' => 'required|string|min:5|max:500']);
         DB::transaction(function () use ($invoice, $v) {
             $d = PlatformInvoice::lockForUpdate()->findOrFail($invoice->id);
+            PlatformCheckoutService::requireClosed($d);
             if ($d->status === 'void') {
                 return;
             }if ($d->paid_minor > 0) {
@@ -112,6 +114,19 @@ return view('finance.platform-show', ['invoice' => $invoice->load(['business', '
         });
 
         return back()->with('success', 'Platform invoice voided; history retained.');
+    }
+
+    public function checkout(int $invoice, string $action, PlatformCheckoutService $checkout)
+    {
+        $bill = PlatformInvoice::where('business_id', app(Tenant::class)->id())->where('status', 'issued')->findOrFail($invoice);
+        $url = $checkout->handle($bill, $action === 'pay');
+        return $url ? redirect()->away($url, 303) : back()->with('success', 'Razorpay status refreshed. Review the checkout status and balance below.');
+    }
+
+    public function refreshCheckout(PlatformInvoice $invoice, PlatformCheckoutService $checkout)
+    {
+        $checkout->handle($invoice, false);
+        return back()->with('success', 'Razorpay status refreshed.');
     }
 
     public function ownerIndex()

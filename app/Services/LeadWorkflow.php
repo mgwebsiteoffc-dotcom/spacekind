@@ -67,6 +67,11 @@ class LeadWorkflow
                 $this->activity($lead, 'created', $public ? 'Qualified project brief submitted through the studio profile. No WhatsApp message sent.' : 'Enquiry added by the studio.', $public ? null : auth()->id());
                 Audit::record('enquiry.created', $lead, ['channel' => $public ? 'public-form' : 'workspace']);
 
+                if ($public) {
+                    $studio = app(Tenant::class)->business();
+                    DB::afterCommit(fn () => app(EnquiryAlert::class)->notify($studio, $lead));
+                }
+
                 return $lead;
             });
         } catch (UniqueConstraintViolationException $e) {

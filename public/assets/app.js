@@ -50,6 +50,24 @@
     store.remove('spacekind:showSaved');
     renderSaved();
   };
+  const viewer = $('#imageLightbox');
+  let gallery = [], imageIndex = 0;
+  const showImage = index => {
+    imageIndex = (index + gallery.length) % gallery.length;
+    const item = gallery[imageIndex];
+    const caption = item.dataset.caption || 'A closer look at the space.';
+    $('#lightboxImage').src = item.dataset.lightbox;
+    $('#lightboxImage').alt = item.querySelector('img')?.alt || caption;
+    $('#lightboxTitle').textContent = caption;
+    $('#lightboxNav').hidden = gallery.length < 2;
+    $('#lightboxCount').textContent = gallery.length > 1 ? `Image ${imageIndex + 1} of ${gallery.length}` : '';
+  };
+  viewer?.addEventListener('keydown', event => {
+    if (['ArrowLeft','ArrowRight'].includes(event.key)) {
+      event.preventDefault();
+      showImage(imageIndex + (event.key === 'ArrowLeft' ? -1 : 1));
+    }
+  });
   document.addEventListener('click', async event => {
     const save = event.target.closest('[data-save]');
     if (save) {
@@ -72,17 +90,15 @@
     if (event.target.closest('[data-clear-saved-filter]')) clearSavedFilter();
     if (event.target.closest('[data-reset-saved]')) clearSavedFilter();
     const image = event.target.closest('[data-lightbox]');
-    if (image) {
-      const dialog = $('#imageLightbox');
-      if (dialog) {
-        const caption = image.dataset.caption || 'A closer look at the space.';
-        $('#lightboxImage').src = image.dataset.lightbox;
-        $('#lightboxImage').alt = caption;
-        $('#lightboxTitle').textContent = caption;
-        dialog.showModal();
-        document.body.style.overflow = 'hidden';
-      }
+    if (image && viewer) {
+      const collection = image.closest('.inspiration-library');
+      gallery = collection ? $$('[data-lightbox]', collection) : [image];
+      showImage(gallery.indexOf(image));
+      viewer.showModal();
+      document.body.style.overflow = 'hidden';
     }
+    const step = event.target.closest('[data-gallery-step]');
+    if (step && viewer?.open) showImage(imageIndex + Number(step.dataset.galleryStep));
     const close = event.target.closest('[data-close]');
     if (close) close.closest('dialog')?.close();
     const copy = event.target.closest('[data-copy]');

@@ -546,6 +546,45 @@ class SpacekindFinanceTest extends TestCase
         $this->assertDatabaseCount('subscriptions', 0);
     }
 
+    public function test_hosted_checkout_verifies_provider_and_credits_only_own_live_platform_bill_once(): void
+    {
+        config(['spacekind.demo' => false]);
+        [$b,$owner,$client,$project] = $this->studio();
+        [, $other] = $this->studio('Other');
+        PlatformBillingSetting::create(['id' => 1, 'data' => $this->seller('none') + ['default_tax_bps' => 0]]);
+        $bill = PlatformInvoice::create(['business_id' => $b->id, 'submission_key' => (string) Str::uuid(), 'service' => 'campaign_monthly', 'quantity' => 1, 'document_date' => today(), 'due_date' => today(), 'period_start' => today(), 'period_end' => today()->addMonth(), 'customer' => $this->payload($client, $project)['customer'], 'place_of_supply' => '09']);
+        $billing = app(PlatformBilling::class);
+        $billing->issue($bill, $billing->preview($bill)['hash']);
+        $path = '/workspace/billing/'.$bill->id.'/checkout/';
+        $this->actingAs($other)->post($path.'pay')->assertNotFound();
+        $url = 'https://rzp.io/l/testLink';
+        $link = [];
+        \Illuminate\Support\Facades\Http::fake(function ($request) use (&$link, $url) {
+            if ($request->method() === 'POST') {
+                $link = ['id' => 'plink_demo', 'amount' => $request['amount'], 'currency' => 'INR', 'reference_id' => $request['reference_id'], 'short_url' => $url, 'status' => 'created'];
+                return \Illuminate\Support\Facades\Http::response($link);
+            }
+            return \Illuminate\Support\Facades\Http::response(str_contains($request->url(), '/plink_demo') ? $link : ['payment_links' => []]);
+        });
+        foreach (['test','live'] as $mode) {
+            config(['spacekind.razorpay_mode' => $mode]);
+            \App\Models\RazorpayCredential::create(['mode' => $mode, 'key_id' => 'testid', 'key_secret' => 'testsecret']);
+            $this->actingAs($owner)->post($path.'pay', ['amount' => 1])->assertRedirect($url);
+            $this->assertSame(299900, $link['amount']);
+            $this->post($path.'pay')->assertRedirect($url);
+            $link['status'] = 'paid';
+            $link['amount_paid'] = 1;
+            $this->post($path.'refresh')->assertSessionHasErrors('checkout');
+            $this->assertSame(0, PlatformPayment::count());
+            $link['amount_paid'] = $link['amount'];
+            $this->post($path.'refresh')->assertSessionHasNoErrors();
+            $this->assertSame($mode === 'live' ? 1 : 0, PlatformPayment::count());
+        }
+        $this->post($path.'refresh')->assertStatus(409);
+        $this->assertSame(0, $bill->fresh()->balance_minor);
+        $this->assertDatabaseCount('customer_payments', 0);
+    }
+
     public function test_platform_settings_review_race_and_payment_reversal_and_fixed_campaign_rate(): void
     {
         [$b,$u,$c,$p] = $this->studio();

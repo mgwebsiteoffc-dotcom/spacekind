@@ -3,7 +3,7 @@
 @section('content')
 <div class="page-heading"><div><div class="eyebrow section-kicker">PLATFORM SETTINGS</div><h1>Integrations &amp; email.</h1><p>Manage payment credentials, email copy and measurement settings for Spacekind.</p></div></div>
 <section class="app-panel form-panel"><h2>Website measurement</h2><p>Set up Google Analytics (GA4 / gtag.js), Google Tag Manager, Meta Pixel and Microsoft Clarity by ID. Eligible pages and visitor consent are managed together.</p><a class="button outline" href="/admin/tracking">Manage tracking &amp; consent</a></section>
-<h2>Razorpay gateway</h2><p>Test and live credentials are separate. Secrets are encrypted and never displayed. Saving them does not verify the account, start checkout or enable webhooks.</p>
+<h2>Razorpay gateway</h2><p>Test and live credentials are separate. Secrets are encrypted and never displayed. Hosted checkout mode: <strong>{{ config('spacekind.razorpay_mode') }}</strong>. Set SPACEKIND_RAZORPAY_MODE to test or live after adding the matching keys. Applies only to issued Spacekind service invoices, never homeowner payments.</p>
 @if(config('spacekind.demo'))<div class="notice subtle">Credential changes are disabled in shared workspaces.</div>@endif
 <div class="detail-columns">@foreach(['test','live'] as $mode)
 <section class="app-panel form-panel"><h3>{{ ucfirst($mode) }} credentials</h3><p>{{ isset($credentials[$mode])?'Stored · not verified':'Not configured' }}</p>
@@ -12,7 +12,7 @@
 <label class="field"><span>Key secret</span><input type="password" name="key_secret" maxlength="256" autocomplete="new-password" @required(!isset($credentials[$mode]))><small>Leave blank to retain the secret for an unchanged key ID.</small></label>
 <button class="button dark">Save {{ $mode }} credentials</button></form>
 @if(isset($credentials[$mode]))<form method="post" action="/admin/integrations/razorpay/{{ $mode }}" data-confirm="Remove the stored credential?"><br>@csrf @method('DELETE')<button class="button outline">Remove {{ $mode }} credential</button></form>@endif @endif</section>@endforeach</div>
-<section class="app-panel form-panel"><h2>Email delivery settings</h2><p>{{ $smtp?'SMTP details stored':'No SMTP details stored' }}. These settings do not activate mail delivery.</p>
+<section class="app-panel form-panel"><h2>Email delivery settings</h2><p>{{ $smtp?'SMTP details stored':'No SMTP details stored' }}. New enquiry alerts: <strong>{{ config('spacekind.enquiry_email') ? 'enabled' : 'off' }}</strong>. Set SPACEKIND_ENQUIRY_EMAIL=true on the host to notify the selected studio’s active owner. Saving credentials alone sends nothing.</p>
 @if(!config('spacekind.demo'))<form method="post" action="/admin/integrations/email">@csrf @method('PUT')
 <div class="form-grid"><label class="field"><span>SMTP hostname</span><input name="host" maxlength="253" value="{{ $smtp?->host }}" required></label>
 <label class="field"><span>Port</span><input type="number" name="port" min="1" max="65535" value="{{ $smtp?->port ?? 587 }}" required></label></div>

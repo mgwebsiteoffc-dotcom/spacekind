@@ -68,6 +68,21 @@ try:
                 if (!detail.open || !detail.querySelector('p').getBoundingClientRect().height) return 'studio decision guide does not expand';
                 if (document.querySelector('#compare .compare-next a')?.pathname !== '/register') return 'missing comparison signup';
               }
+              if (location.pathname === '/inspiration') {
+                const items = document.querySelectorAll('.inspiration-library [data-lightbox]');
+                if (items.length < 2) return 'missing image navigation fixtures';
+                items[0].click();
+                const viewer = document.querySelector('#imageLightbox');
+                viewer.querySelector('[data-gallery-step="1"]').click();
+                if (!viewer.open || viewer.querySelector('img').getAttribute('src') !== items[1].dataset.lightbox) return 'next image failed';
+                viewer.dispatchEvent(new KeyboardEvent('keydown', {key:'ArrowLeft'}));
+                if (viewer.querySelector('img').getAttribute('src') !== items[0].dataset.lightbox) return 'previous image failed';
+                viewer.close();
+              }
+              if (['/reels','/inspiration'].includes(location.pathname)) {
+                const cards = [...document.querySelectorAll('.reel-collection .reel-card')];
+                if (cards.length < 2 || Math.abs(cards[0].offsetHeight - cards[1].offsetHeight) > 1 || getComputedStyle(cards[0].querySelector('h3')).fontSize !== '14px') return 'uneven reel cards or oversized titles';
+              }
               const film = document.querySelector('.reel-card-player video, .reel-watch-screen video');
               if (location.pathname === '/' || location.pathname.startsWith('/reels')) {
                 if (!film) return 'missing public film';

@@ -2,6 +2,8 @@
 
 return [
     'demo' => (bool) env('SPACEKIND_DEMO', false) && env('APP_ENV', 'production') !== 'production',
+    'enquiry_email' => (bool) env('SPACEKIND_ENQUIRY_EMAIL', false),
+    'razorpay_mode' => env('SPACEKIND_RAZORPAY_MODE', 'off'),
     'positioning' => 'We help interior-design businesses generate qualified enquiries on WhatsApp, follow up consistently, and track which ads produce customers.',
     'services' => ['home' => 'Full-home interiors', 'kitchen' => 'Kitchens & wardrobes', 'renovation' => 'Home renovation', 'commercial' => 'Commercial interiors'],
     'cities' => ['Lucknow', 'Noida', 'Gurugram', 'New Delhi', 'Ghaziabad'],
