@@ -30,7 +30,7 @@ try:
               const heading = document.querySelector('h1');
               const marker = document.querySelector(arguments[0]);
               if (!heading || !marker || marker.getBoundingClientRect().width === 0) return 'missing content';
-              if (doc.scrollWidth > doc.clientWidth + 1) return 'horizontal overflow: ' + doc.scrollWidth;
+              if (doc.scrollWidth > doc.clientWidth + 1) return 'horizontal overflow: ' + doc.scrollWidth + ' at ' + [...document.querySelectorAll('main *')].filter(el=>el.getBoundingClientRect().right > doc.clientWidth + 1 && !el.closest('.reel-collection, .categories')).slice(0,5).map(el=>el.className).join(', ');
               const film = document.querySelector('.reel-card-player video, .reel-watch-screen video');
               if (location.pathname === '/' || location.pathname.startsWith('/reels')) {
                 if (!film) return 'missing public film';
