@@ -13,7 +13,9 @@ class PreviewState
 
     private const V3_TABLES = ['businesses', 'users', 'subscriptions', 'leads', 'lead_activities', 'clients', 'projects', 'gallery_images', 'blog_posts', 'blog_revisions', 'reels', 'campaign_links', 'site_settings', 'tracking_versions', 'billing_settings', 'catalogue_items', 'document_sequences', 'financial_documents', 'customer_payments', 'payment_allocations', 'document_shares', 'platform_billing_settings', 'platform_sequences', 'platform_invoices', 'platform_payments', 'audit_events'];
 
-    private const TABLES = [...self::V3_TABLES, 'inspiration_edits', 'workers', 'worker_rates'];
+    private const V4_TABLES = [...self::V3_TABLES, 'inspiration_edits', 'workers', 'worker_rates'];
+
+    private const TABLES = [...self::V4_TABLES, 'worker_attendances'];
 
     public function enabled(): bool
     {
@@ -48,7 +50,7 @@ class PreviewState
                     $data[$table] = DB::table($table)->orderBy('id')->get()->map(fn ($r) => (array) $r)->all();
                 }
 
-                return ['format' => 4, 'purpose' => 'Spacekind local development recovery; contains private studio records', 'saved_at' => now()->toIso8601String(), 'tables' => $data];
+                return ['format' => 5, 'purpose' => 'Spacekind local development recovery; contains private studio records', 'saved_at' => now()->toIso8601String(), 'tables' => $data];
             });
             $temporary = $path.'.'.getmypid().'.tmp';
             file_put_contents($temporary, json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), LOCK_EX);
@@ -74,14 +76,15 @@ class PreviewState
             }
         }
         $state = json_decode(file_get_contents($this->path()), true, 512, JSON_THROW_ON_ERROR);
-        $legacy = ($state['format'] ?? null) === 1 && array_keys($state['tables'] ?? []) === self::LEGACY_TABLES;
-        $v2 = ($state['format'] ?? null) === 2 && array_keys($state['tables'] ?? []) === self::V2_TABLES;
-        $v3 = ($state['format'] ?? null) === 3 && array_keys($state['tables'] ?? []) === self::V3_TABLES;
-        if (! $legacy && ! $v2 && ! $v3 && (($state['format'] ?? null) !== 4 || array_keys($state['tables'] ?? []) !== self::TABLES)) {
+        $expected = match ($state['format'] ?? null) {
+            1 => self::LEGACY_TABLES, 2 => self::V2_TABLES, 3 => self::V3_TABLES,
+            4 => self::V4_TABLES, 5 => self::TABLES, default => null,
+        };
+        if ($expected === null || array_keys($state['tables'] ?? []) !== $expected) {
             throw new \RuntimeException('Unrecognised recovery format.');
         }
 
-        if ($legacy || $v2 || $v3) {
+        if ($expected !== self::TABLES) {
             $tables = [];
             foreach (self::TABLES as $table) {
                 $tables[$table] = $state['tables'][$table] ?? [];

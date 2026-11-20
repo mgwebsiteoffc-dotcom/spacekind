@@ -16,7 +16,7 @@ class WorkerRegisterTest extends TestCase
     private function member(Business $business, string $role): User
     {
         $user = User::factory()->create();
-        $user->forceFill(['business_id' => $business->id, 'role' => $role])->save();
+        $user->forceFill(['business_id' => $business->id, 'role' => $role, 'is_active' => true])->save();
 
         return $user;
     }

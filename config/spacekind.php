@@ -24,6 +24,6 @@ return [
         ['name' => 'Instant Quotation', 'description' => 'Materials, labour, branded estimates and secure sharing.', 'phase' => 'Available', 'ready' => true, 'icon' => 'image'],
         ['name' => 'Invoice Software', 'description' => 'Customer invoice register, GST-ready details and PDFs.', 'phase' => 'Available', 'ready' => true, 'icon' => 'wallet'],
         ['name' => 'Receipt Management', 'description' => 'Recorded customer payments and linked receipts.', 'phase' => 'Available', 'ready' => true, 'icon' => 'check'],
-        ['name' => 'Labour Management', 'description' => 'Worker register and dated daily rates. Attendance and wage balances are next.', 'phase' => 'Worker register available', 'ready' => false, 'icon' => 'roller'],
+        ['name' => 'Labour Management', 'description' => 'Workers, daily rates and project attendance. Advances and wage payments are next.', 'phase' => 'Attendance available', 'ready' => false, 'icon' => 'roller'],
     ],
 ];

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CampaignLinkController;
 use App\Http\Controllers\DiscoveryController;
 use App\Http\Controllers\LeadController;
@@ -59,6 +60,8 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
     Route::get('/modules', [WorkspaceController::class, 'modules']);
     Route::middleware('owner')->group(function () {
         Route::get('/labour', [WorkerController::class, 'index']);
+        Route::get('/labour/attendance', [AttendanceController::class, 'index'])->name('attendance');
+        Route::post('/labour/attendance', [AttendanceController::class, 'store']);
         Route::post('/labour', [WorkerController::class, 'store']);
         Route::post('/labour/{worker}/rates', [WorkerController::class, 'rate'])->whereNumber('worker');
         Route::view('/tools', 'workspace.tools');

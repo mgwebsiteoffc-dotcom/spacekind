@@ -1,17 +1,19 @@
 # Spacekind
 
-## Current branch: public films and the first labour workflow
+## Current branch: public films, worker register and site attendance
 
-**Studio owners:** open **More → Worker register** to add a worker, their trade, daily wage and the date it takes effect. Add later rates without editing earlier ones. Attendance/site allocation, advances, wage payments, balances and statements are still pending. This register does not calculate payroll or send money.
+**Studio owners:** open **More → Worker register** to add a worker, their trade, daily wage and the date it takes effect. Add later rates without editing earlier ones. Select **Mark attendance**, open the work date, then choose the project worked in each half of the day. One half earns half the daily rate (rounded to the nearest paise, half up); two halves earn the full rate. Two projects can share one day, not claim two wages. An explicit absence earns zero; an untouched worker is not absent. The first worked entry freezes the applicable rate. Save each page before navigating; corrections retain a before/after audit and stale edits are rejected. Advances, wage payments, outstanding balances and statements are still pending. This register does not calculate payroll or send money.
 
-**Existing installation:** back up MySQL and uploads, then run the following against the intended installation after updating the files. Keep `.env`, `APP_KEY`, accounts and uploads. Do **not** run `migrate:fresh` or the general demo seeder.
+**Already on the worker-register update?** Back up MySQL and uploads, update the files and run `php artisan migrate`. Attendance starts empty; no seeder is needed for this step.
+
+**Updating from Phase 2:** back up MySQL and uploads, then run the following against the intended installation after updating the files. Keep `.env`, `APP_KEY`, accounts and uploads. Do **not** run `migrate:fresh` or the general demo seeder.
 
 ```sh
 php artisan migrate
 php artisan db:seed --class=InspirationSeeder
 ```
 
-The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 4 and accepts formats 1–3; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
+The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 5 and accepts formats 1–4; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
 
 The release, ZIP and validation counts below describe the **previous Phase 2 handoff**, not validation of this branch.
 

@@ -2,7 +2,7 @@
 @section('title','Worker register')
 @section('workspace-label','Labour management')
 @section('content')
-<div class="page-heading"><div><div class="eyebrow section-kicker">LABOUR MANAGEMENT</div><h1>Worker register.</h1><p>Record each worker’s trade and agreed daily rate. A new rate starts on its effective date; earlier entries stay on file.</p></div></div>
+<div class="page-heading"><div><div class="eyebrow section-kicker">LABOUR MANAGEMENT</div><h1>Worker register.</h1><p>Record each worker’s trade and agreed daily rate. A new rate starts on its effective date; earlier entries stay on file.</p></div><a class="button dark" href="{{ route('attendance') }}">Mark attendance</a></div>
 <div class="detail-columns">
 <section class="app-panel form-panel"><h2>Add a worker</h2>
 <form method="post" action="/workspace/labour">@csrf

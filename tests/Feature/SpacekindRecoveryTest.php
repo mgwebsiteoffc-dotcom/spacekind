@@ -2,12 +2,17 @@
 
 namespace Tests\Feature;
 
+use App\Models\Business;
 use App\Models\PlatformBillingSetting;
+use App\Models\Project;
 use App\Models\SiteSetting;
 use App\Models\TrackingVersion;
 use App\Models\User;
+use App\Models\Worker;
+use App\Services\AttendanceSheet;
 use App\Services\Discovery;
 use App\Services\PreviewState;
+use App\Support\Tenant;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -40,20 +45,26 @@ class SpacekindRecoveryTest extends TestCase
         };
     }
 
-    public function test_format_four_round_trips_all_tables_with_foreign_keys_enabled(): void
+    public function test_format_five_round_trips_all_tables_with_foreign_keys_enabled(): void
     {
         config(['spacekind.demo' => true]);
         $this->seed(DatabaseSeeder::class);
+        $studio = Business::findOrFail(DB::table('projects')->value('business_id'));
+        app(Tenant::class)->run($studio, function () {
+            $worker = Worker::create(['name' => 'Recovery worker', 'trade' => 'Painting']);
+            $worker->rates()->create(['effective_from' => today()->toDateString(), 'daily_paise' => 90000]);
+            app(AttendanceSheet::class)->save(today()->toDateString(), [$worker->id => ['revision' => 0, 'first_project_id' => Project::firstOrFail()->id]]);
+        });
         SiteSetting::create(['seo' => Discovery::DEFAULTS]);
         TrackingVersion::create(['user_id' => User::where('role', 'super_admin')->value('id'), 'status' => 'draft', 'note' => 'Synthetic recovery test only', 'settings' => ['enabled' => false, 'scopes' => []]]);
         $service = $this->snapshotter();
         try {
             $service->save();
             $saved = json_decode(file_get_contents($service->path()), true, 512, JSON_THROW_ON_ERROR);
-            $this->assertSame(4, $saved['format']);
-            $this->assertCount(29, $saved['tables']);
+            $this->assertSame(5, $saved['format']);
+            $this->assertCount(30, $saved['tables']);
             $this->assertSame(0600, fileperms($service->path()) & 0777);
-            foreach (['businesses', 'blog_posts', 'blog_revisions', 'reels', 'tracking_versions', 'site_settings', 'leads', 'clients', 'projects'] as $table) {
+            foreach (['businesses', 'blog_posts', 'blog_revisions', 'reels', 'tracking_versions', 'site_settings', 'leads', 'clients', 'projects', 'worker_attendances'] as $table) {
                 $this->assertNotEmpty($saved['tables'][$table]);
             }
             $this->assertSame(1, (int) DB::selectOne('SELECT @@FOREIGN_KEY_CHECKS AS enabled')->enabled);
