@@ -27,7 +27,7 @@ class ProjectGuideTest extends TestCase
         foreach (config('project_guides') as $slug => $guide) {
             $url = '/guides/'.$slug;
             $page = $this->get($url)->assertOk()->assertSee('href="'.url($url).'"', false)
-                ->assertSee('<h1>'.$guide['title'].'.</h1>', false)->assertSee('Your checklist');
+                ->assertSee('<h1>'.$guide['title'].'.</h1>', false)->assertSee('Your checklist')->assertSee($guide['example_title'])->assertSee($guide['description'])->assertSee('Download my checklist');
             preg_match('~<script type="application/ld\+json">(.*?)</script>~s', $page->getContent(), $matches);
             $nodes = collect(json_decode($matches[1], true, flags: JSON_THROW_ON_ERROR)['@graph'])->keyBy('@type');
             $this->assertArrayHasKey('BreadcrumbList', $nodes);

@@ -77,6 +77,12 @@ try:
                 if (getComputedStyle(film).objectFit !== 'cover') return 'letterbox with controls';
               }
               if (location.pathname === '/' && document.querySelector('#city')?.value !== 'Lucknow') return 'unexpected finder default';
+              if (location.pathname === '/' || location.pathname.startsWith('/guides/')) {
+                const link = document.querySelector('a.project-float');
+                if (!link || link.pathname !== '/project-brief') return 'missing project link';
+                const r = link.getBoundingClientRect();
+                if (!r.width || !r.height || r.top < 0 || r.bottom > innerHeight || r.left < 0 || r.right > innerWidth || !link.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))) return 'floating link hidden or covered';
+              }
               const rail = document.querySelector('#home-reels');
               if (rail) {
                 const heading = document.querySelector('.home-films .section-top').getBoundingClientRect();
@@ -84,7 +90,7 @@ try:
                 if (doc.clientWidth < 400 && rail.scrollWidth <= rail.clientWidth) return 'mobile reel shelf cannot scroll';
               }
               const box = document.querySelector('#checklist input');
-              if (box) { box.click(); if (!box.checked) return 'checklist failed'; }
+              if (box) { box.click(); if (!box.checked || document.querySelector('[data-download-guide]')?.hidden !== false) return 'checklist failed'; }
               return 'ok';'''})
             if result != 'ok':
                 raise RuntimeError(f'{path} at {width}px: {result}')

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ProjectCapture
 {
-    public const DEFAULTS = ['entry' => false, 'exit' => false, 'floating' => false, 'delay' => 12, 'heading' => 'Find a studio for your space', 'button' => 'Plan my project'];
+    public const DEFAULTS = ['entry' => false, 'exit' => false, 'floating' => true, 'delay' => 12, 'heading' => 'Find a studio for your space', 'button' => 'Plan my project'];
 
     private ?array $settings = null;
 
@@ -23,8 +23,18 @@ class ProjectCapture
         return $s['entry'] || $s['exit'] || $s['floating'];
     }
 
-    public function widget(Request $r): bool
+    public function embedsForm(Request $r): bool
     {
-        return ! $r->user() && $r->routeIs('home', 'inspiration', 'reels') && $this->enabled();
+        if ($r->user() || ! $r->routeIs('home', 'inspiration', 'reels')) {
+            return false;
+        }
+        $settings = $this->settings();
+
+        return $settings['entry'] || $settings['exit'];
+    }
+
+    public function floatingLink(Request $r): bool
+    {
+        return ! $r->user() && $r->routeIs('home', 'inspiration', 'reels', 'project.guide') && $this->settings()['floating'];
     }
 }

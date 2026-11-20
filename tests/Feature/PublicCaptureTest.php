@@ -13,10 +13,12 @@ class PublicCaptureTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_platform_capture_is_opt_in_private_validated_and_idempotent(): void
+    public function test_floating_link_defaults_on_but_automatic_capture_is_opt_in_private_and_idempotent(): void
     {
         $this->get('/')->assertOk()->assertDontSee('id="project-capture"', false);
-        $this->get('/project-brief')->assertNotFound();
+        $this->get('/')->assertSee('data-open-project', false)->assertDontSee('class="project-dialog"', false);
+        $this->get('/guides/compare-interior-quotes')->assertSee('data-open-project', false);
+        $this->get('/project-brief')->assertOk()->assertSee('Send my project brief');
         $this->get('/admin/project-capture')->assertRedirect('/login');
         $u = User::factory()->create();
         $this->actingAs($u)->put('/admin/project-capture', [])->assertForbidden();
@@ -26,7 +28,7 @@ class PublicCaptureTest extends TestCase
         $this->get('/')->assertDontSee('id="project-capture"', false);
         auth()->logout();
         $this->get('/')->assertSee('id="project-capture"', false)->assertSee('Ask Spacekind')->assertSee('data-entry="1"', false)->assertSee('data-exit="1"', false);
-        $this->get('/login')->assertDontSee('id="project-capture"', false);
+        $this->get('/login')->assertDontSee('id="project-capture"', false)->assertDontSee('data-open-project', false);
         $brief = ['submission_key' => (string) Str::uuid(), 'name' => 'Private contact', 'phone' => '+919876543210', 'city' => 'Lucknow', 'floor_area' => 900, 'budget' => config('spacekind.budgets')[0], 'scope' => config('spacekind.services.home')];
         $this->post('/project-brief', $brief)->assertSessionHasErrors('consent')->assertRedirect('/project-brief');
         $this->post('/project-brief', $brief + ['consent' => 1])->assertSessionHas('brief_received');
@@ -37,8 +39,9 @@ class PublicCaptureTest extends TestCase
         $this->actingAs($u)->get('/admin/project-capture')->assertOk()->assertSee('Private contact');
         $this->delete('/admin/project-capture/'.DB::table('platform_briefs')->value('id'))->assertRedirect();
         $this->assertDatabaseCount('platform_briefs', 0);
-        $this->put('/admin/project-capture', ProjectCapture::DEFAULTS)->assertSessionHasNoErrors();
+        $this->put('/admin/project-capture', ['floating' => false] + ProjectCapture::DEFAULTS)->assertSessionHasNoErrors();
         auth()->logout();
+        $this->get('/')->assertDontSee('data-open-project', false);
         $this->post('/project-brief', $brief + ['consent' => 1])->assertNotFound();
     }
 }
