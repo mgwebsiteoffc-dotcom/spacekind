@@ -1,0 +1,596 @@
+{
+  "complete": true,
+  "journey_checks": [
+    {
+      "check": "Owner saves explicit billing/GST setup and private JPG logo",
+      "passed": true
+    },
+    {
+      "check": "Reusable catalogue material saved",
+      "passed": true
+    },
+    {
+      "check": "Catalogue adds a dynamic line without JavaScript errors",
+      "passed": true
+    },
+    {
+      "check": "Server-calculated quotation draft retains exact CGST/SGST total",
+      "passed": true
+    },
+    {
+      "check": "Issue allocates a permanent quotation number and removes edit action",
+      "passed": true
+    },
+    {
+      "check": "Quotation sent status is explicitly studio-recorded",
+      "passed": true
+    },
+    {
+      "check": "Accepted quotation converts to reviewable draft invoice",
+      "passed": true
+    },
+    {
+      "check": "Guest private link has no-store and no-referrer",
+      "passed": true
+    },
+    {
+      "check": "Private branded PDF contains frozen identity, scope and tax",
+      "passed": true
+    },
+    {
+      "check": "Other studio cannot read or download this invoice",
+      "passed": true
+    },
+    {
+      "check": "Manual partial payment creates a separate numbered receipt",
+      "passed": true
+    },
+    {
+      "check": "Repeating the exact payment POST returns the original receipt",
+      "passed": true
+    },
+    {
+      "check": "Partial invoice balance is derived as \u20b91,832.00",
+      "passed": true
+    },
+    {
+      "check": "Identified client advance receives its own receipt",
+      "passed": true
+    },
+    {
+      "check": "Advance allocation reduces outstanding without a new receipt",
+      "passed": true
+    },
+    {
+      "check": "Reversal retains and visibly voids the original receipt",
+      "passed": true
+    },
+    {
+      "check": "Reversal restores balance while keeping the advance allocation",
+      "passed": true
+    },
+    {
+      "check": "Revoked token immediately denies guest access",
+      "passed": true
+    },
+    {
+      "check": "Permissioned filtered CSV contains the customer invoice",
+      "passed": true
+    },
+    {
+      "check": "Platform bill draft shows fixed \u20b94,999 fee and explicit total",
+      "passed": true
+    },
+    {
+      "check": "Admin records platform payment separately",
+      "passed": true
+    },
+    {
+      "check": "Owner can read own Spacekind bill but not edit it",
+      "passed": true
+    },
+    {
+      "check": "Other business cannot read platform bill",
+      "passed": true
+    },
+    {
+      "check": "All financial routes fit desktop, tablet and small phones",
+      "passed": true
+    },
+    {
+      "check": "No runtime JavaScript errors",
+      "passed": true
+    },
+    {
+      "check": "No third-party requests, payment gateways or messaging calls",
+      "passed": true
+    }
+  ],
+  "responsive_checks": [
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance?kind=quotation",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance?kind=receipt",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance/settings",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance/catalogue",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance/payments",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance/documents/new?kind=invoice&project_id=13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance/documents/5",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance/documents/6",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/finance/documents/7",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/projects/13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "role": "guest",
+      "path": "/document-share/Yx0rKRcWGCHtaznHcHUY560OwyeVys6FnkL3lNdUijPu0juUVpYlIlIKdkyhKYpE",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance?kind=quotation",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance?kind=receipt",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance/settings",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance/catalogue",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance/payments",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance/documents/new?kind=invoice&project_id=13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance/documents/5",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance/documents/6",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/finance/documents/7",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/projects/13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "role": "guest",
+      "path": "/document-share/Yx0rKRcWGCHtaznHcHUY560OwyeVys6FnkL3lNdUijPu0juUVpYlIlIKdkyhKYpE",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance?kind=quotation",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance?kind=receipt",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance/settings",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance/catalogue",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance/payments",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance/documents/new?kind=invoice&project_id=13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance/documents/5",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance/documents/6",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/finance/documents/7",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/projects/13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "role": "guest",
+      "path": "/document-share/Yx0rKRcWGCHtaznHcHUY560OwyeVys6FnkL3lNdUijPu0juUVpYlIlIKdkyhKYpE",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance?kind=quotation",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance?kind=receipt",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance/settings",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance/catalogue",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance/payments",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance/documents/new?kind=invoice&project_id=13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance/documents/5",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance/documents/6",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/finance/documents/7",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/projects/13",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/billing",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/billing/2",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "role": "guest",
+      "path": "/document-share/Yx0rKRcWGCHtaznHcHUY560OwyeVys6FnkL3lNdUijPu0juUVpYlIlIKdkyhKYpE",
+      "status": 200,
+      "overflow": false
+    }
+  ],
+  "runtime_errors": [],
+  "external_requests": [],
+  "fixture_document_ids": {
+    "quotation": 5,
+    "invoice": 6,
+    "receipt": 7,
+    "advance_receipt": 8,
+    "platform_invoice": 2
+  }
+}

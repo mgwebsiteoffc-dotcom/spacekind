@@ -1,0 +1,29 @@
+<?php
+
+return [
+    'demo' => (bool) env('SPACEKIND_DEMO', false) && env('APP_ENV', 'production') !== 'production',
+    'positioning' => 'We help interior-design businesses generate qualified enquiries on WhatsApp, follow up consistently, and track which ads produce customers.',
+    'services' => ['home' => 'Full-home interiors', 'kitchen' => 'Kitchens & wardrobes', 'renovation' => 'Home renovation', 'commercial' => 'Commercial interiors'],
+    'cities' => ['Noida', 'Gurugram', 'New Delhi', 'Ghaziabad'],
+    'budgets' => ['Under ₹10 lakh', '₹10–20 lakh', '₹20–35 lakh', '₹35 lakh & above', 'Need guidance'],
+    'readiness' => ['Ready now', 'Within 1–3 months', 'Within 3–6 months', 'Exploring / no date yet'],
+    'property_types' => ['Apartment', 'Independent home', 'Office', 'Retail / hospitality', 'Other'],
+    'configurations' => ['1 BHK', '2 BHK', '3 BHK', '4+ BHK', 'Villa', 'Commercial', 'Other'],
+    'sources' => ['Unknown', 'Marketplace', 'Studio profile', 'Campaign link', 'Referral', 'Phone call', 'WhatsApp (manual)', 'Walk-in', 'Other'],
+    'cover_keys' => ['hero', 'living', 'classic', 'airy', 'soft', 'kitchen', 'kitchenLight', 'bedroom', 'office'],
+    'allow_indexing' => (bool) env('SPACEKIND_ALLOW_INDEXING', false),
+    'tracking_allowed' => (bool) env('SPACEKIND_TRACKING_ALLOWED', false),
+    'approved_script_hosts' => array_values(array_filter(array_map(fn ($host) => strtolower(trim($host)), explode(',', (string) env('SPACEKIND_APPROVED_SCRIPT_HOSTS', ''))))),
+    'ffprobe_binary' => env('FFPROBE_BINARY', 'ffprobe'),
+    'video_max_kb' => 20480,
+    'video_max_seconds' => 90,
+    'video_count_limit' => 10,
+    'video_bytes_limit' => 104857600,
+    'modules' => [
+        ['name' => 'CRM', 'description' => 'Qualified enquiries, pipeline, notes and in-app follow-ups.', 'phase' => 'Available in this build', 'ready' => true, 'icon' => 'people'],
+        ['name' => 'Instant Quotation', 'description' => 'Materials, labour, branded estimates and secure sharing.', 'phase' => 'Available · Development build', 'ready' => true, 'icon' => 'image'],
+        ['name' => 'Invoice Software', 'description' => 'Customer invoice register, GST-ready details and PDFs.', 'phase' => 'Available · Development build', 'ready' => true, 'icon' => 'wallet'],
+        ['name' => 'Receipt Management', 'description' => 'Recorded customer payments and linked receipts.', 'phase' => 'Available · Development build', 'ready' => true, 'icon' => 'check'],
+        ['name' => 'Labour Management', 'description' => 'Attendance, advances, historical rates and wages.', 'phase' => 'Upcoming · Phase 3', 'ready' => false, 'icon' => 'roller'],
+    ],
+];

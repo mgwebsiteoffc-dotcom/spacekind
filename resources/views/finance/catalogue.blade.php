@@ -1,0 +1,7 @@
+@extends('layouts.workspace')
+@section('title','Good details, ready to reuse')
+@section('workspace-label','Material & labour catalogue')
+@section('content')@include('finance.nav')
+<div class="page-heading"><div><div class="eyebrow section-kicker">START WITH THE DETAILS YOU KNOW</div><h1>Good details,<br><em>ready to reuse.</em></h1><p>Save common materials, labour and services. Using an item copies its current values; later catalogue edits never rewrite a document.</p></div><a class="button dark" href="#new-catalogue">Add an item <x-icon name="plus"/></a></div>
+<div class="finance-catalogue-list">@foreach($items as $item)<details class="app-panel"><summary><strong>{{ $item->name }}</strong><span>{{ \App\Support\Money::format($item->rate_minor) }}/{{ $item->unit }} · {{ $item->is_active?'Active':'Archived' }}</span></summary><form class="form-panel" method="post" action="/workspace/finance/catalogue">@csrf<input type="hidden" name="id" value="{{ $item->id }}">@include('finance.catalogue-fields',['item'=>$item])<button class="button outline">Save item</button></form></details>@endforeach</div><section class="app-panel form-panel" id="new-catalogue"><h2>A useful starting point.</h2><form method="post" action="/workspace/finance/catalogue">@csrf @include('finance.catalogue-fields',['item'=>null])<button class="button dark">Add catalogue item <x-icon name="plus"/></button></form></section>
+@endsection

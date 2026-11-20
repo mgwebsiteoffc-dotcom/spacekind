@@ -1,0 +1,1160 @@
+{
+  "complete": true,
+  "checks": 144,
+  "failures": [],
+  "external_requests": [],
+  "results": [
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/for-businesses",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/studios/studio-aangan",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/studios/studio-aangan/enquire",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/blog/before-the-moodboard",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/studios/studio-aangan/articles/warm-materials-everyday-life",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/reels/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/privacy",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/login",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "public",
+      "path": "/register",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/enquiries",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/enquiries?view=board",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/enquiries/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/enquiries/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/projects",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/projects/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/clients",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/studio",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/team",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/modules",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/blog/3/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "owner",
+      "path": "/workspace/campaign-links",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/blog/1/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/discovery",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "role": "admin",
+      "path": "/admin/tracking",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/for-businesses",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/studios/studio-aangan",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/studios/studio-aangan/enquire",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/blog/before-the-moodboard",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/studios/studio-aangan/articles/warm-materials-everyday-life",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/reels/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/privacy",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/login",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "public",
+      "path": "/register",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/enquiries",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/enquiries?view=board",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/enquiries/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/enquiries/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/projects",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/projects/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/clients",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/studio",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/team",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/modules",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/blog/3/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "owner",
+      "path": "/workspace/campaign-links",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/blog/1/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/discovery",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 768,
+      "role": "admin",
+      "path": "/admin/tracking",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/for-businesses",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/studios/studio-aangan",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/studios/studio-aangan/enquire",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/blog/before-the-moodboard",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/studios/studio-aangan/articles/warm-materials-everyday-life",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/reels/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/privacy",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/login",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "public",
+      "path": "/register",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/enquiries",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/enquiries?view=board",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/enquiries/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/enquiries/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/projects",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/projects/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/clients",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/studio",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/team",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/modules",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/blog/3/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "owner",
+      "path": "/workspace/campaign-links",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/blog/1/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/discovery",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "role": "admin",
+      "path": "/admin/tracking",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/for-businesses",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/studios/studio-aangan",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/studios/studio-aangan/enquire",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/blog/before-the-moodboard",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/studios/studio-aangan/articles/warm-materials-everyday-life",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/reels/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/privacy",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/login",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "public",
+      "path": "/register",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/enquiries",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/enquiries?view=board",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/enquiries/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/enquiries/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/projects",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/projects/1",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/clients",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/studio",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/team",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/modules",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/tools",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/blog/3/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "owner",
+      "path": "/workspace/campaign-links",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/blog",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/blog/new",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/blog/1/edit",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/reels",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/discovery",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "role": "admin",
+      "path": "/admin/tracking",
+      "status": 200,
+      "overflow": false,
+      "errors": []
+    }
+  ]
+}

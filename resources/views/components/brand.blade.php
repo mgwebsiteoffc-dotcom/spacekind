@@ -1,0 +1,1 @@
+<a href="/" {{ $attributes->class(['brand']) }} aria-label="Spacekind home"><svg class="brand-mark" viewBox="0 0 30 36" aria-hidden="true"><path d="M3 33V15a12 12 0 0 1 24 0v18H3Zm6 0V15a6 6 0 0 1 12 0v18M15 9v24"/></svg><span>spacekind<span class="brand-dot">.</span></span></a>

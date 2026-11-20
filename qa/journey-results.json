@@ -1,0 +1,112 @@
+{
+  "checks": 25,
+  "passed": true,
+  "results": [
+    {
+      "check": "Qualified form is server rendered",
+      "passed": true
+    },
+    {
+      "check": "Two-step qualification advances",
+      "passed": true
+    },
+    {
+      "check": "Brief is saved and a reference returned",
+      "passed": true,
+      "reference": "SK-00014"
+    },
+    {
+      "check": "Public brief reaches the selected studio inbox",
+      "passed": true,
+      "lead_id": 14
+    },
+    {
+      "check": "Permitted UTM source is retained",
+      "passed": true
+    },
+    {
+      "check": "Private plan is downloadable by its studio",
+      "passed": true
+    },
+    {
+      "check": "Stage assignment and follow-up persist",
+      "passed": true
+    },
+    {
+      "check": "Notes persist without executing HTML",
+      "passed": true
+    },
+    {
+      "check": "Follow-up can be completed",
+      "passed": true
+    },
+    {
+      "check": "Confirmed enquiry converts to client/project",
+      "passed": true,
+      "project_id": 4
+    },
+    {
+      "check": "Project reaches handover with a saved timestamp",
+      "passed": true
+    },
+    {
+      "check": "Authorised gallery image uploads",
+      "passed": true
+    },
+    {
+      "check": "Hidden gallery media is not public",
+      "passed": true
+    },
+    {
+      "check": "Gallery image can be removed",
+      "passed": true
+    },
+    {
+      "check": "Real HTTP form without CSRF is rejected",
+      "passed": true,
+      "status": 419
+    },
+    {
+      "check": "Sanctum issues an expiring device token",
+      "passed": true
+    },
+    {
+      "check": "Another studio cannot read or update this enquiry",
+      "passed": true
+    },
+    {
+      "check": "Device token can be revoked",
+      "passed": true
+    },
+    {
+      "check": "Registration creates an owner with a pending public listing",
+      "passed": true
+    },
+    {
+      "check": "Super-admin console is authenticated",
+      "passed": true
+    },
+    {
+      "check": "Admin approval publishes the studio profile",
+      "passed": true
+    },
+    {
+      "check": "Newly registered owner can sign back in",
+      "passed": true
+    },
+    {
+      "check": "Suspension blocks workspace and public listing",
+      "passed": true
+    },
+    {
+      "check": "Restoring the workspace re-enables access",
+      "passed": true
+    },
+    {
+      "check": "No admin JavaScript runtime errors",
+      "passed": true,
+      "errors": []
+    }
+  ],
+  "note": "The browser CRM journey and its continuation admin flow were run in separate processes; no production data was used."
+}

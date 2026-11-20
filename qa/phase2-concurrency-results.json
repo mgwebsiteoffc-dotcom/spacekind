@@ -1,0 +1,40 @@
+{
+  "complete": true,
+  "database": "spacekind_test",
+  "parallel_issue_workers": 6,
+  "parallel_payment_retries": 6,
+  "parallel_allocation_retries": 4,
+  "checks": {
+    "six_simultaneous_issues_are_unique": true,
+    "simultaneous_retry_returns_same_payment": true,
+    "six_numbers_allocated_without_gaps": true,
+    "one_receipt_per_recorded_payment": true,
+    "one_allocation_per_retry_key": true,
+    "derived_invoice_balance": true,
+    "advance_balance": true,
+    "all_allocation_retries_succeed": true,
+    "multipage_pdf": true,
+    "all_fifty_lines_in_pdf": true,
+    "pdf_terms_notes_and_tax_preserved": true,
+    "draft_pdf_clearly_marked": true
+  },
+  "pdf_pages": 6,
+  "result": {
+    "invoice_count": 6,
+    "invoice_numbers": [
+      "INV/2627/00001",
+      "INV/2627/00002",
+      "INV/2627/00003",
+      "INV/2627/00004",
+      "INV/2627/00005",
+      "INV/2627/00006"
+    ],
+    "invoice_sequence": 6,
+    "receipt_count": 2,
+    "payment_count": 2,
+    "allocation_count": 2,
+    "paid_minor": 15000,
+    "balance_minor": 103000,
+    "available_advance_minor": 5000
+  }
+}

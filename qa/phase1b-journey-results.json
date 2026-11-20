@@ -1,0 +1,149 @@
+{
+  "complete": true,
+  "checks": 29,
+  "results": [
+    {
+      "check": "Owner saves a private article draft",
+      "passed": true
+    },
+    {
+      "check": "Guest cannot retrieve the draft",
+      "passed": true
+    },
+    {
+      "check": "Owner preview renders safe Markdown",
+      "passed": true
+    },
+    {
+      "check": "Draft cover is not public",
+      "passed": true
+    },
+    {
+      "check": "Studio submits a reviewable revision",
+      "passed": true
+    },
+    {
+      "check": "Admin approval publishes the named-author article",
+      "passed": true
+    },
+    {
+      "check": "Published article contains parseable structured data",
+      "passed": true
+    },
+    {
+      "check": "Editing a live article does not bypass review",
+      "passed": true
+    },
+    {
+      "check": "Future approved revision does not replace current content early",
+      "passed": true
+    },
+    {
+      "check": "Admin can unpublish an article",
+      "passed": true
+    },
+    {
+      "check": "A 13 MiB video and cover upload as a private draft",
+      "passed": true
+    },
+    {
+      "check": "Uploaded video actually decodes and plays in Chromium",
+      "passed": true,
+      "playback": {
+        "time": 0.28,
+        "width": 432,
+        "duration": 4
+      }
+    },
+    {
+      "check": "Video streaming supports byte ranges",
+      "passed": true
+    },
+    {
+      "check": "Moderation hold blocks the public video",
+      "passed": true
+    },
+    {
+      "check": "Admin can restore eligible playback",
+      "passed": true
+    },
+    {
+      "check": "UTM preset fills source and medium",
+      "passed": true
+    },
+    {
+      "check": "Saved UTM link targets the owned video",
+      "passed": true
+    },
+    {
+      "check": "UTM and video context reach the qualified form",
+      "passed": true
+    },
+    {
+      "check": "Qualified submission succeeds without any tracking provider",
+      "passed": true
+    },
+    {
+      "check": "CRM retains permitted UTM labels and the owning video context",
+      "passed": true
+    },
+    {
+      "check": "Enquiry converts into a client/project",
+      "passed": true
+    },
+    {
+      "check": "Saved campaign summary shows recorded enquiry and Won counts",
+      "passed": true,
+      "counts": [
+        "1",
+        "1"
+      ]
+    },
+    {
+      "check": "Admin saves a non-executing tracking draft",
+      "passed": true
+    },
+    {
+      "check": "Publishing configuration cannot override the preview delivery lock",
+      "passed": true
+    },
+    {
+      "check": "Visitor can save separate optional consent categories",
+      "passed": true
+    },
+    {
+      "check": "Visitor can withdraw optional consent",
+      "passed": true
+    },
+    {
+      "check": "Admin disable and explicit rollback create versioned history",
+      "passed": true
+    },
+    {
+      "check": "No application JavaScript runtime errors",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "check": "No third-party network requests during the full journey",
+      "passed": true,
+      "requests": []
+    }
+  ],
+  "fixtures": {
+    "article_slug": "qa-phase1b-article",
+    "tracking_versions": [
+      13,
+      14,
+      15,
+      16
+    ],
+    "article_id": 11,
+    "reel_id": 8,
+    "campaign_link_id": 6,
+    "lead_id": 19,
+    "project_id": 8
+  },
+  "external_requests": [],
+  "runtime_errors": []
+}

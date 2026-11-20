@@ -1,0 +1,3 @@
+@props(['post'])
+@php($v=$post->publicRevision)
+<article class="journal-card"><a class="journal-card-cover" href="{{ $post->public_url }}"><img src="{{ $v->cover_url }}" alt="{{ $v->cover_alt?:'Spacekind interior visual reference' }}" loading="lazy" width="720" height="480"><span>{{ $v->category }}</span></a><div class="journal-card-body"><div class="article-card-meta"><span>{{ $post->publisher_name }}</span><span>{{ $v->reading_minutes }} min read</span></div><h3><a href="{{ $post->public_url }}">{{ $v->title }}</a></h3><p>{{ $v->excerpt }}</p><div class="journal-card-footer"><span>{{ $v->byline }}</span><a href="{{ $post->public_url }}" aria-label="Read {{ $v->title }}"><x-icon name="arrow"/></a></div></div></article>

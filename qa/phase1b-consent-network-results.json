@@ -1,0 +1,123 @@
+{
+  "complete": true,
+  "checks": 28,
+  "mode": "offline request interception; inert provider SDK stubs; no live SDK/payload verification",
+  "unhandled_requests": [],
+  "runtime_errors": [],
+  "results": [
+    {
+      "check": "No optional provider request precedes a choice",
+      "passed": true
+    },
+    {
+      "check": "Analytics-only consent injects GA4, not Meta or a marketing script",
+      "passed": true
+    },
+    {
+      "check": "Google starts denied; analytics choice does not grant ad data",
+      "passed": true
+    },
+    {
+      "check": "GA4 configuration uses canonical context and disables signals",
+      "passed": true
+    },
+    {
+      "check": "Provider script request exposes only origin as referrer",
+      "passed": true
+    },
+    {
+      "check": "Saving unchanged choices does not duplicate a loaded provider",
+      "passed": true
+    },
+    {
+      "check": "Saved valid consent persists without a repeated banner",
+      "passed": true
+    },
+    {
+      "check": "Marketing choice permits only the configured Meta/custom requests",
+      "passed": true
+    },
+    {
+      "check": "Meta automatic configuration is disabled; no advanced-matching fields are queued",
+      "passed": true
+    },
+    {
+      "check": "Withdrawal reloads without reinjecting any optional provider",
+      "passed": true
+    },
+    {
+      "check": "Withdrawal clears known vendor cookies, not necessary app cookies",
+      "passed": true
+    },
+    {
+      "check": "Invalid expired preference cannot enable providers",
+      "passed": true
+    },
+    {
+      "check": "Invalid changed-version preference cannot enable providers",
+      "passed": true
+    },
+    {
+      "check": "Invalid invalid-future preference cannot enable providers",
+      "passed": true
+    },
+    {
+      "check": "GPC overrides stored consent and disables category controls",
+      "passed": true
+    },
+    {
+      "check": "DNT overrides stored consent and disables category controls",
+      "passed": true
+    },
+    {
+      "check": "Sensitive query context suppresses all optional requests",
+      "passed": true
+    },
+    {
+      "check": "Sensitive fragment context suppresses all optional requests",
+      "passed": true
+    },
+    {
+      "check": "Sensitive query-referrer context suppresses all optional requests",
+      "passed": true
+    },
+    {
+      "check": "Sensitive private-workspace-referrer context suppresses all optional requests",
+      "passed": true
+    },
+    {
+      "check": "Sensitive enquiry-referrer context suppresses all optional requests",
+      "passed": true
+    },
+    {
+      "check": "A server-inactive payload cannot be bypassed by stored consent",
+      "passed": true
+    },
+    {
+      "check": "Permitted referrer is stripped to origin in GA4 configuration",
+      "passed": true
+    },
+    {
+      "check": "Blocked browser storage degrades safely without provider requests",
+      "passed": true
+    },
+    {
+      "check": "GTM does not load on analytics-only consent",
+      "passed": true
+    },
+    {
+      "check": "Marketing consent permits the configured GTM container once",
+      "passed": true
+    },
+    {
+      "check": "Cross-tab withdrawal reloads both tabs without provider reinjection",
+      "passed": true
+    },
+    {
+      "check": "No unhandled request or JavaScript runtime error in offline fixtures",
+      "passed": true,
+      "unhandled": [],
+      "errors": []
+    }
+  ]
+}

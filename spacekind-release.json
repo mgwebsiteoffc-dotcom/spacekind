@@ -1,0 +1,12 @@
+{
+  "product": "Spacekind",
+  "release": "phase-2-finance-pilot.1",
+  "requires_release": "phase-1B",
+  "delivery": "incremental-patch-only",
+  "financial_schema_migrations": [
+    "2026_11_17_000003_add_financial_workflows",
+    "2026_11_17_000004_add_allocation_retry_keys",
+    "2026_11_17_000005_add_quotation_delivery_record"
+  ],
+  "live_integrations_enabled_by_patch": false
+}
