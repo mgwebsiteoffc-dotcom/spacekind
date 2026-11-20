@@ -3,8 +3,12 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CampaignLinkController;
 use App\Http\Controllers\DiscoveryController;
+use App\Http\Controllers\FirstAdminController;
+use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicContentController;
@@ -12,6 +16,9 @@ use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReelController;
 use App\Http\Controllers\StudioController;
 use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\WorkerController;
+use App\Http\Controllers\WorkerLedgerController;
+use App\Http\Controllers\WorkerStatementController;
 use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,9 +40,10 @@ Route::get('/studios/{business}/enquire/thanks', [PublicController::class, 'than
 Route::get('/studios/{business}', [PublicController::class, 'profile'])->name('studio');
 Route::get('/media/{image}', [PublicController::class, 'media'])->whereNumber('image');
 Route::middleware('guest')->group(function () {
+    Route::get('/admin/setup', [FirstAdminController::class, 'show']);
+    Route::post('/admin/setup', [FirstAdminController::class, 'store'])->middleware('throttle:5,1');
     Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
-    Route::post('/demo-login', [AuthController::class, 'demo'])->middleware('throttle:login');
     Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:register');
 });
@@ -57,6 +65,20 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
     Route::patch('/projects/{project}', [ProjectController::class, 'update']);
     Route::get('/modules', [WorkspaceController::class, 'modules']);
     Route::middleware('owner')->group(function () {
+        Route::get('/labour', [WorkerController::class, 'index']);
+        Route::get('/labour/attendance', [AttendanceController::class, 'index'])->name('attendance');
+        Route::post('/labour/attendance', [AttendanceController::class, 'store']);
+        Route::post('/labour', [WorkerController::class, 'store']);
+        Route::post('/labour/{worker}/rates', [WorkerController::class, 'rate'])->whereNumber('worker');
+        Route::get('/labour/{worker}/statement', WorkerStatementController::class)->whereNumber('worker')->name('worker.statement');
+        Route::get('/labour/{worker}/statement.csv', WorkerStatementController::class)->whereNumber('worker')->name('worker.statement.csv');
+        Route::get('/labour/{worker}/ledger', [WorkerLedgerController::class, 'show'])->whereNumber('worker')->name('worker.ledger');
+        Route::post('/labour/{worker}/ledger', [WorkerLedgerController::class, 'store'])->whereNumber('worker');
+        Route::post('/labour/{worker}/ledger/{payment}/reverse', [WorkerLedgerController::class, 'reverse'])->whereNumber(['worker', 'payment'])->name('worker.ledger.reverse');
+        Route::get('/testimonials', [TestimonialController::class, 'index']);
+        Route::post('/testimonials', [TestimonialController::class, 'store']);
+        Route::patch('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->whereNumber('testimonial');
+        Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->whereNumber('testimonial');
         Route::view('/tools', 'workspace.tools');
         Route::get('/blog', [ArticleController::class, 'index']);
         Route::get('/blog/new', [ArticleController::class, 'create']);
@@ -85,6 +107,12 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
     });
 });
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/integrations', [IntegrationController::class, 'index']);
+    Route::put('/integrations/razorpay/{mode}', [IntegrationController::class, 'gateway'])->whereIn('mode', ['test', 'live']);
+    Route::delete('/integrations/razorpay/{mode}', [IntegrationController::class, 'removeGateway'])->whereIn('mode', ['test', 'live']);
+    Route::put('/integrations/email', [IntegrationController::class, 'emailDelivery']);
+    Route::delete('/integrations/email', [IntegrationController::class, 'removeEmailDelivery']);
+    Route::put('/integrations/templates/{purpose}', [IntegrationController::class, 'template'])->whereIn('purpose', array_keys(\App\Models\EmailTemplate::PURPOSES));
     Route::get('/', [AdminController::class, 'index'])->name('admin');
     Route::get('/blog', [ArticleController::class, 'adminIndex']);
     Route::get('/blog/new', [ArticleController::class, 'create']);

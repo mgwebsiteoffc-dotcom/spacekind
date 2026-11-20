@@ -305,6 +305,7 @@ class SpacekindFoundationTest extends TestCase
 
     public function test_https_embedded_preview_uses_secure_partitioned_session_cookies(): void
     {
+        config(['spacekind.demo' => true]); // This policy applies only to shared, embedded sessions.
         $response = $this->get('https://8000-test.e2b.app/login');
         $response->assertOk();
         $cookies = collect($response->headers->getCookies())->keyBy(fn ($cookie) => $cookie->getName());
@@ -325,7 +326,7 @@ class SpacekindFoundationTest extends TestCase
     {
         $this->postJson('/login', ['email' => ['unexpected-array'], 'password' => 'not-a-real-password'])->assertUnprocessable()->assertJsonValidationErrors('email');
         config(['spacekind.demo' => true]);
-        $this->postJson('/demo-login', ['role' => ['unexpected-array']])->assertUnprocessable()->assertJsonValidationErrors('role');
+        $this->postJson('/demo-login', ['role' => ['unexpected-array']])->assertNotFound();
     }
 
     public function test_development_recovery_never_snapshots_the_test_database(): void

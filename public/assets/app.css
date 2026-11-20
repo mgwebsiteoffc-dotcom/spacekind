@@ -37,3 +37,18 @@ html{scroll-padding-top:105px}body{overflow-wrap:break-word}a,button{transition:
 .data-table-wrap,.pipeline-scroller,.app-nav{position:relative}
 .business-hero>div{min-width:0}
 @media(max-width:400px){.business-hero h1{font-size:48px;letter-spacing:-1.5px}}
+
+/* Site attendance: paired time slots share a row when space permits. */
+.attendance-summary,.attendance-summary form{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.attendance-summary{justify-content:space-between;margin-bottom:1.25rem}.attendance-summary form{align-items:end}
+.attendance-summary .field,.attendance-summary p{margin:0}.attendance-summary p{max-width:36ch}
+.attendance-row{min-width:0;margin:0 0 1rem}.attendance-row legend{font-weight:600;max-width:100%;overflow-wrap:anywhere;padding:0 .5rem}
+.attendance-halves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1rem}
+.attendance-halves .field,.attendance-halves select{min-width:0;max-width:100%}
+.attendance-absence{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;cursor:pointer}
+@media(max-width:560px){.attendance-halves{grid-template-columns:1fr}.attendance-summary .field{max-width:100%}}
+
+.worker-payment-history{min-width:0;overflow-wrap:anywhere}
+
+.worker-statement-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));align-items:end;gap:1rem}.worker-statement-filters .field{min-width:0;margin:0}.worker-statement-filters select{max-width:100%}
+.studio-testimonial{margin:1rem 0;padding:1.2rem 1.5rem;border-left:3px solid var(--rust);background:#fffdfa;overflow-wrap:anywhere}.studio-testimonial blockquote{font:1.3rem var(--serif);margin:0 0 .75rem;white-space:pre-line}.studio-testimonial figcaption{font-size:.85rem}

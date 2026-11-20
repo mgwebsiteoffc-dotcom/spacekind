@@ -1,6 +1,20 @@
 'use strict';
 (() => {
   const videos = [...document.querySelectorAll('[data-reel-video]')];
+  document.querySelectorAll('.reel-card-player').forEach(player => {
+    const video = player.querySelector('video');
+    const button = player.querySelector('.reel-play');
+    if (!video || !button) return;
+    video.controls = false;
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      button.hidden = true;
+      video.controls = true;
+      video.focus();
+      // Keep native controls available for retry and browser playback errors.
+      video.play().catch(() => {});
+    });
+  });
   videos.forEach(video => video.addEventListener('play', () => {
     videos.forEach(other => { if (other !== video) other.pause(); });
   }));

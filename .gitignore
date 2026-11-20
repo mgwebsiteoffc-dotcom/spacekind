@@ -30,3 +30,6 @@ Thumbs.db
 /storage/app/private/*
 !/storage/app/private/.gitignore
 /qa/*-progress.json
+
+# Python browser checks
+__pycache__/

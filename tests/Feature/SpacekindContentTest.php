@@ -129,6 +129,34 @@ class SpacekindContentTest extends TestCase
         $this->assertDatabaseHas('audit_events', ['action' => 'admin.article_approved', 'business_id' => $b->id]);
     }
 
+    public function test_scheduled_revision_faqs_match_visible_answers_and_json_ld_only_when_due(): void
+    {
+        [$studio, $owner] = $this->studio();
+        $pair = ['question' => 'Which finish?', 'answer' => 'Oak & oil, not <paint>.'];
+        $future = now()->addDay();
+        $payload = $this->articleData(['intent' => 'schedule', 'publish_at' => $future->format('Y-m-d\TH:i'), 'faqs' => [$pair], 'faq_editor' => 1]);
+        $this->actingAs($owner)->get('/workspace/blog/new')->assertOk()->assertSee('Add FAQ')->assertSee('Request scheduled publication');
+        $this->postJson('/workspace/blog', ['faqs' => [['question' => 'Incomplete']]] + $payload)->assertJsonValidationErrors('faqs.0.answer');
+        $this->postJson('/workspace/blog', ['publish_at' => null] + $payload)->assertJsonValidationErrors('publish_at');
+        $post = $this->submit($studio, $owner, $payload);
+        $this->assertSame('submitted', $post->latestRevision->status);
+        $this->assertEquals([$pair], $post->latestRevision->faqs);
+        $this->approve($post);
+        $this->guest();
+        $this->get($post->public_url)->assertNotFound();
+        $this->travelTo($future->addMinute());
+        $page = $this->get($post->public_url)->assertOk()->assertSee('<summary>Which finish?</summary>', false)->assertSee($pair['answer']);
+        preg_match('~<script type="application/ld\+json">(.*?)</script>~s', $page->getContent(), $matches);
+        $nodes = collect(json_decode($matches[1], true, flags: JSON_THROW_ON_ERROR)['@graph'])->keyBy('@type');
+        $this->assertSame($pair['question'], $nodes['FAQPage']['mainEntity'][0]['name']);
+        $this->assertSame($pair['answer'], $nodes['FAQPage']['mainEntity'][0]['acceptedAnswer']['text']);
+        $this->assertStringContainsString('Ask a useful question.', $nodes['BlogPosting']['articleBody']);
+        $this->actingAs($owner)->patch('/workspace/blog/'.$post->id, ['base_revision_id' => $post->latestRevision->id, 'intent' => 'draft', 'faqs' => []] + $payload)->assertSessionHasNoErrors();
+        $this->assertSame([], $post->revisions()->latest('id')->firstOrFail()->faqs);
+        $this->guest();
+        $this->get($post->public_url)->assertSee('Which finish?');
+    }
+
     public function test_unapproved_edits_do_not_replace_a_live_article_and_scheduling_is_automatic_when_due(): void
     {
         [$b,$owner] = $this->studio();
@@ -403,6 +431,22 @@ class SpacekindContentTest extends TestCase
         $this->post('/admin/tracking/'.$published->id.'/restore')->assertRedirect();
         $this->assertTrue(TrackingVersion::latest('id')->first()->settings['enabled']);
         $this->get('/admin/tracking')->assertOk()->assertSee('Version history')->assertSee('deployment-locked');
+    }
+
+    public function test_clarity_needs_a_valid_public_id_and_uses_the_analytics_gate(): void
+    {
+        $payload = $this->tracking(['clarity_id' => 'ab123cdef', 'ga4_id' => null, 'meta_pixel_id' => null]);
+        $this->actingAs($this->admin())->postJson('/admin/tracking', ['clarity_id' => 'https://example.test'] + $payload)->assertJsonValidationErrors('clarity_id');
+        $this->postJson('/admin/tracking', ['gtm_id' => 'GTM-TEST123'] + $payload)->assertJsonValidationErrors('gtm_id');
+        $this->post('/admin/tracking', $payload)->assertSessionHasNoErrors();
+        $this->guest();
+        $this->get('/')->assertDontSee('ab123cdef');
+        config(['spacekind.demo' => false, 'spacekind.tracking_allowed' => true]);
+        $this->app['env'] = 'production';
+        $home = $this->get('/')->assertOk()->assertSee('ab123cdef');
+        $this->assertStringContainsString('https://www.clarity.ms', $home->headers->get('Content-Security-Policy'));
+        $this->get('/?q=private')->assertDontSee('ab123cdef');
+        $this->get('/login')->assertDontSee('ab123cdef');
     }
 
     public function test_duplicate_or_unapproved_tracking_scripts_cannot_be_saved(): void

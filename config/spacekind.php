@@ -20,10 +20,10 @@ return [
     'video_count_limit' => 10,
     'video_bytes_limit' => 104857600,
     'modules' => [
-        ['name' => 'CRM', 'description' => 'Qualified enquiries, pipeline, notes and in-app follow-ups.', 'phase' => 'Available in this build', 'ready' => true, 'icon' => 'people'],
-        ['name' => 'Instant Quotation', 'description' => 'Materials, labour, branded estimates and secure sharing.', 'phase' => 'Available · Development build', 'ready' => true, 'icon' => 'image'],
-        ['name' => 'Invoice Software', 'description' => 'Customer invoice register, GST-ready details and PDFs.', 'phase' => 'Available · Development build', 'ready' => true, 'icon' => 'wallet'],
-        ['name' => 'Receipt Management', 'description' => 'Recorded customer payments and linked receipts.', 'phase' => 'Available · Development build', 'ready' => true, 'icon' => 'check'],
-        ['name' => 'Labour Management', 'description' => 'Attendance, advances, historical rates and wages.', 'phase' => 'Upcoming · Phase 3', 'ready' => false, 'icon' => 'roller'],
+        ['name' => 'CRM', 'description' => 'Qualified enquiries, pipeline, notes and in-app follow-ups.', 'phase' => 'Available', 'ready' => true, 'icon' => 'people'],
+        ['name' => 'Instant Quotation', 'description' => 'Materials, labour, branded estimates and secure sharing.', 'phase' => 'Available', 'ready' => true, 'icon' => 'image'],
+        ['name' => 'Invoice Software', 'description' => 'Customer invoice register, GST-ready details and PDFs.', 'phase' => 'Available', 'ready' => true, 'icon' => 'wallet'],
+        ['name' => 'Receipt Management', 'description' => 'Recorded customer payments and linked receipts.', 'phase' => 'Available', 'ready' => true, 'icon' => 'check'],
+        ['name' => 'Labour Management', 'description' => 'Worker rates, attendance, advances, wage payments and outstanding balances.', 'phase' => 'Worker ledger available', 'ready' => true, 'icon' => 'roller'],
     ],
 ];

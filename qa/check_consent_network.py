@@ -21,7 +21,7 @@ SOURCE = (ROOT.parent/'public/assets/consent.js').read_text()
 with urllib.request.urlopen(os.getenv('SPACEKIND_BASE_URL','http://127.0.0.1:8000') + '/', timeout=15) as response:
     live_html = response.read().decode()
 component = re.search(r'<div id="privacyPreferencesRoot".*?</dialog></div><script src="/assets/consent.js" defer></script>',live_html,re.S).group(0)
-CSP = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://reviewed.invalid; connect-src 'self'; object-src 'none'; base-uri 'self'"
+CSP = "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://reviewed.invalid https://www.clarity.ms; connect-src 'self'; object-src 'none'; base-uri 'self'"
 DIRECT = [
     {'provider':'ga4','id':'G-TEST12345','category':'analytics','debug':True},
     {'provider':'meta','id':'123456789012345','category':'marketing'},
@@ -57,7 +57,7 @@ async def main():
                     await route.fulfill(status=200,content_type='application/javascript',body=SOURCE)
                 elif url.startswith(ORIGIN+'/'):
                     await route.fulfill(status=200,content_type='text/html',headers={'Content-Security-Policy':CSP,'Referrer-Policy':'strict-origin-when-cross-origin'},body=body)
-                elif url.startswith(('https://www.googletagmanager.com/','https://connect.facebook.net/','https://reviewed.invalid/')):
+                elif url.startswith(('https://www.googletagmanager.com/','https://connect.facebook.net/','https://reviewed.invalid/','https://www.clarity.ms/')):
                     requests.append({'url':url,'referrer':route.request.headers.get('referer','')})
                     await route.fulfill(status=200,content_type='application/javascript',body='window.__qaSdkLoads=(window.__qaSdkLoads||0)+1;')
                 else:
@@ -135,6 +135,15 @@ async def main():
             ctx,page,requests=await fixture(storage_blocked=True)
             await page.locator('[data-consent-reject]').first.click()
             check('Blocked browser storage degrades safely without provider requests',not requests and not await page.locator('#optionalConsentBanner').is_visible());await ctx.close()
+            ctx,page,requests=await fixture(tags=[{'provider':'clarity','id':'abc123def','category':'analytics'}])
+            await choose(page,False,True)
+            check('Marketing-only permission does not load Clarity',not requests)
+            await choose(page,True,False)
+            await page.wait_for_function('() => window.__qaSdkLoads===1')
+            check('Analytics consent loads only the configured Clarity project',len(requests)==1 and requests[0]['url']=='https://www.clarity.ms/tag/abc123def')
+            commands=await page.evaluate('() => clarity.q.map(args=>Array.from(args))')
+            check('Clarity analytics permission never grants ad storage',['consentv2',{'analytics_Storage':'granted','ad_Storage':'denied'}] in commands)
+            await ctx.close()
             ctx,page,requests=await fixture(tags=[{'provider':'gtm','id':'GTM-TEST123','category':'marketing'}])
             await choose(page,True,False)
             check('GTM does not load on analytics-only consent',not requests)

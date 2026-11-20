@@ -1,0 +1,2 @@
+<label class="field"><span>Daily wage (₹)</span><input name="daily_rate" type="number" min="0.01" max="999999.99" step="0.01" required value="{{ $initial && old('name') ? old('daily_rate') : '' }}"></label>
+<label class="field"><span>Effective from</span><input name="effective_from" type="date" required value="{{ $initial && old('name') ? old('effective_from') : today()->toDateString() }}"></label>

@@ -1,6 +1,7 @@
 """Read-only desktop/mobile smoke tests. Requires Python Playwright + Chromium."""
 import asyncio, json, os
 from pathlib import Path
+from password_login import password_login
 from playwright.async_api import async_playwright
 
 ROOT = Path(__file__).resolve().parent
@@ -35,7 +36,7 @@ async def main():
                     await page.screenshot(path=str(ROOT / ('workspace-desktop.png' if path == '/workspace' else 'business-desktop.png')), full_page=True)
             for path in PUBLIC: await check(path)
             await page.goto(BASE + '/login', wait_until='domcontentloaded')
-            await page.locator('form:has(input[name="role"][value="owner"]) button').click()
+            await password_login(page, 'owner')
             await page.wait_for_url('**/workspace')
             for path in WORKSPACE: await check(path)
             print(f'Completed {width}px: {len(results)} checks', flush=True)

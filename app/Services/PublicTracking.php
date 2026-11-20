@@ -48,6 +48,9 @@ return $this->published;
         if (! empty($s['gtm_id']) && preg_match('/^GTM-[A-Z0-9]{4,12}$/', $s['gtm_id'])) {
             $tags[] = ['provider' => 'gtm', 'id' => $s['gtm_id'], 'category' => 'marketing'];
         } else {
+            if (! empty($s['clarity_id']) && preg_match('/^[a-z0-9]{5,20}$/D', $s['clarity_id'])) {
+                $tags[] = ['provider' => 'clarity', 'id' => $s['clarity_id'], 'category' => 'analytics'];
+            }
             if (! empty($s['ga4_id']) && preg_match('/^G-[A-Z0-9]{5,15}$/', $s['ga4_id'])) {
                 $tags[] = ['provider' => 'ga4', 'id' => $s['ga4_id'], 'category' => 'analytics', 'debug' => (bool) ($s['debug_mode'] ?? false)];
             }
@@ -81,6 +84,12 @@ return $this->published;
                 $result['script'][] = 'https://connect.facebook.net';
                 $result['connect'][] = 'https://www.facebook.com';
                 $result['image'][] = 'https://www.facebook.com';
+            }
+            if ($tag['provider'] === 'clarity') {
+                $result['script'][] = 'https://www.clarity.ms';
+                $result['script'][] = 'https://scripts.clarity.ms';
+                $result['connect'][] = 'https://*.clarity.ms';
+                $result['image'][] = 'https://*.clarity.ms';
             }
             if ($tag['provider'] === 'custom') {
                 $origin = 'https://'.parse_url($tag['url'], PHP_URL_HOST);

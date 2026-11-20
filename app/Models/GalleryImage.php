@@ -30,6 +30,6 @@ class GalleryImage extends Model
 
     public function getKindLabelAttribute(): string
     {
-        return ['completed' => 'Completed project', 'render' => '3D render', 'concept' => 'Concept', 'reference' => 'Reference image'][$this->kind] ?? 'Portfolio image';
+        return ['completed' => 'Completed project', 'render' => '3D render', 'concept' => 'Concept', 'reference' => 'Reference image', 'inspiration' => 'Inspiration'][$this->kind] ?? 'Portfolio image';
     }
 }

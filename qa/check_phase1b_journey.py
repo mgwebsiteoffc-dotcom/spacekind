@@ -9,6 +9,7 @@ import struct
 from datetime import datetime, timedelta
 from pathlib import Path
 from PIL import Image, ImageDraw
+from password_login import password_login
 from playwright.async_api import async_playwright
 
 ROOT = Path(__file__).resolve().parent
@@ -49,7 +50,7 @@ async def main():
             async with button.page.expect_navigation(wait_until='domcontentloaded'): await button.click()
         async def login(ctx, role):
             page = await ctx.new_page(); page.set_default_timeout(15000); page.on('dialog', lambda d: d.accept())
-            await goto(page, '/login'); await submit(page.locator(f'form:has(input[name="role"][value="{role}"]) button'))
+            await goto(page, '/login'); await password_login(page, role)
             return page
         try:
             owner_ctx = await context('127.0.20.2'); admin_ctx = await context('127.0.20.3'); guest_ctx = await context('127.0.20.4')

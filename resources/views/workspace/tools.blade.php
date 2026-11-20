@@ -3,7 +3,9 @@
 @section('workspace-label','Studio tools')
 @section('content')
 <div class="notice subtle"><x-icon name="wallet"/><span><a href="/workspace/finance"><strong>Quotations, invoices & receipts</strong></a> · <a href="/workspace/finance/payments">Payments & advances</a> · <a href="/workspace/finance/catalogue">Catalogue</a> · <a href="/workspace/finance/settings">Billing setup</a> · <a href="/workspace/billing">Your Spacekind bills</a></span></div><div class="page-heading"><div><div class="eyebrow section-kicker">YOUR STUDIO / A MORE CONNECTED PRESENCE</div><h1>A little more<br> room to grow.</h1><p>Useful tools for the way your studio is discovered, remembered and followed up.</p></div></div><div class="studio-tools-grid">@foreach([
-['/workspace/studio','image','Profile & gallery','Your introduction, project range and authorised portfolio images.'],
+['/workspace/studio#gallery','image','Works & inspiration','Upload completed work, renders, concepts or a separate inspiration collection.'],
+['/workspace/testimonials','chat','Client testimonials','Manage approved client quotes and choose which are public.'],
+['/workspace/labour','people','Worker register','Record attendance, advances and wage payments, and check worker balances.'],
 ['/workspace/reels','image','Spaces in motion','Upload a short video, choose a cover and add an associated URL.'],
 ['/workspace/blog','file','Studio journal','Write, preview and submit a useful, clearly attributed article.'],
 ['/workspace/campaign-links','chart','Campaign links','Build an owned-destination UTM link and see matching-label outcomes.'],

@@ -1,6 +1,7 @@
 """Continue the synthetic QA journey's registered-studio/admin flow."""
 import asyncio,json,os
 from pathlib import Path
+from password_login import password_login
 from playwright.async_api import async_playwright
 ROOT=Path(__file__).resolve().parent
 BASE=os.getenv('SPACEKIND_BASE_URL','http://127.0.0.1:8000')
@@ -15,7 +16,7 @@ async def main():
     async with async_playwright() as p:
         browser=await p.chromium.launch(headless=True,args=['--no-sandbox'])
         ctx=await browser.new_context(viewport={'width':1440,'height':1000});admin=await ctx.new_page();admin.on('pageerror',lambda e:errors.append(str(e)));admin.on('dialog',lambda d:d.accept())
-        await admin.goto(BASE+'/login',wait_until='domcontentloaded');await admin.locator('form:has(input[name="role"][value="admin"]) button').click();await admin.wait_for_url('**/admin',wait_until='domcontentloaded')
+        await admin.goto(BASE+'/login',wait_until='domcontentloaded');await password_login(admin, 'admin');await admin.wait_for_url('**/admin',wait_until='domcontentloaded')
         record('Super-admin console is authenticated',await admin.locator('h1').inner_text()=='Good studios.\nClear boundaries.')
         row=admin.locator('tr').filter(has=admin.locator('strong',has_text='QA Synthetic Studio'));await row.locator('[name="decision"]').select_option('approved');await row.get_by_role('button',name='Save',exact=True).click();await admin.wait_for_load_state('domcontentloaded')
         response=await ctx.request.get(BASE+'/studios/qa-synthetic-studio');record('Admin approval publishes the studio profile',response.status==200)

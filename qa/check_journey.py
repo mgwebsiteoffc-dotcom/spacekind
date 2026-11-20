@@ -3,6 +3,7 @@ import asyncio, json, os, re
 from pathlib import Path
 from datetime import datetime, timedelta
 from PIL import Image, ImageDraw
+from password_login import password_login
 from playwright.async_api import async_playwright
 
 ROOT=Path(__file__).resolve().parent
@@ -35,7 +36,7 @@ async def main():
         await page.wait_for_url('**/enquire/thanks')
         body=await page.locator('main').inner_text();reference=re.search(r'SK-\d+',body)
         record('Brief is saved and a reference returned',reference is not None,reference=reference.group() if reference else None)
-        await page.goto(BASE+'/login');await page.locator('form:has(input[name="role"][value="owner"]) button').click();await page.wait_for_url('**/workspace')
+        await page.goto(BASE+'/login');await password_login(page, 'owner');await page.wait_for_url('**/workspace')
         await page.goto(BASE+'/workspace/enquiries?q=QA%20Synthetic%20Journey')
         link=page.get_by_role('link',name=re.compile('QA Synthetic Journey')).first;href=await link.get_attribute('href');lead_id=int(href.rsplit('/',1)[-1]);await link.click()
         record('Public brief reaches the selected studio inbox',await page.locator('h1').inner_text()==name,lead_id=lead_id)
@@ -61,7 +62,7 @@ async def main():
         image_src=await card.locator('img').get_attribute('src');await card.locator('[name="is_visible"]').uncheck();await card.get_by_role('button',name='Save',exact=True).click();await page.wait_for_load_state('domcontentloaded')
         guest=await browser.new_context();guest_response=await guest.request.get(BASE+image_src);record('Hidden gallery media is not public',guest_response.status==404)
         card=page.locator('article.managed-image').filter(has=page.locator('img[alt="QA synthetic gallery concept"]'));await card.get_by_role('button',name='Remove image').click();await page.wait_for_load_state('domcontentloaded');record('Gallery image can be removed',await page.locator('img[alt="QA synthetic gallery concept"]').count()==0)
-        missing_csrf=await guest.request.post(BASE+'/demo-login',form={'role':'owner'});record('Real HTTP form without CSRF is rejected',missing_csrf.status==419,status=missing_csrf.status)
+        missing_csrf=await guest.request.post(BASE+'/login',form={});record('Real HTTP form without CSRF is rejected',missing_csrf.status==419,status=missing_csrf.status)
         token_a=await guest.request.post(BASE+'/api/v1/auth/token',data={'email':'owner@aangan.example','password':'Spacekind@2026','device_name':'qa-journey'});token_data=await token_a.json();record('Sanctum issues an expiring device token',token_a.status==201 and token_data.get('expires_in_days')==30)
         token_b=await guest.request.post(BASE+'/api/v1/auth/token',data={'email':'owner@form-grain.example','password':'Spacekind@2026','device_name':'qa-journey'});token_b_data=await token_b.json();headers={'Authorization':'Bearer '+token_b_data['token']}
         cross=await guest.request.get(BASE+f'/api/v1/leads/{lead_id}',headers=headers);cross_write=await guest.request.patch(BASE+f'/api/v1/leads/{lead_id}',headers=headers,data={'stage':'Won'})
@@ -72,7 +73,7 @@ async def main():
         for field,value in {'name':'QA Synthetic Owner','studio_name':studio_name,'email':email,'password':'SyntheticPassword123','password_confirmation':'SyntheticPassword123'}.items():await reg.locator('[name="'+field+'"]').fill(value)
         await reg.locator('[name="city"]').select_option('Noida');await reg.locator('[name="terms"]').check();await reg.get_by_role('button',name='Create my studio workspace').click();await reg.wait_for_url('**/workspace/studio')
         record('Registration creates an owner with a pending public listing','public listing is hidden' in (await reg.locator('main').inner_text()).lower())
-        admin_context=await browser.new_context(viewport={'width':1440,'height':1000});admin=await admin_context.new_page();admin.on('dialog',lambda dialog:dialog.accept());await admin.goto(BASE+'/login');await admin.locator('form:has(input[name="role"][value="admin"]) button').click();await admin.wait_for_url('**/admin')
+        admin_context=await browser.new_context(viewport={'width':1440,'height':1000});admin=await admin_context.new_page();admin.on('dialog',lambda dialog:dialog.accept());await admin.goto(BASE+'/login');await password_login(admin, 'admin');await admin.wait_for_url('**/admin')
         row=admin.locator('tr').filter(has=admin.locator('strong',has_text=studio_name));await row.locator('[name="decision"]').select_option('approved');await row.get_by_role('button',name='Save',exact=True).click();await admin.wait_for_load_state('domcontentloaded')
         published=await context.request.get(BASE+'/studios/qa-synthetic-studio');record('Super-admin approval publishes the listing',published.status==200)
         row=admin.locator('tr').filter(has=admin.locator('strong',has_text=studio_name));await row.get_by_role('button',name='Suspend workspace').click();await admin.wait_for_load_state('domcontentloaded')

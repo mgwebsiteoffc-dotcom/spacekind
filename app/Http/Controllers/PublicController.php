@@ -7,11 +7,13 @@ use App\Models\BlogPost;
 use App\Models\Business;
 use App\Models\GalleryImage;
 use App\Models\Reel;
+use App\Models\Testimonial;
 use App\Services\Discovery;
 use App\Services\LeadWorkflow;
 use App\Services\PublicEntryContext;
 use App\Support\CampaignLabels;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -20,7 +22,7 @@ class PublicController extends Controller
     public function index(Request $r)
     {
         $filters = $r->validate(['city' => ['nullable', Rule::in(config('spacekind.cities'))], 'service' => ['nullable', Rule::in(array_keys(config('spacekind.services')))], 'budget' => ['nullable', Rule::in(['10', '20', '35', '50'])], 'q' => 'nullable|string|max:80', 'sort' => ['nullable', Rule::in(['recommended', 'budget', 'name'])]]);
-        $q = Business::published()->with(['galleryImages' => fn ($q) => $q->withoutGlobalScope('business')->where('is_visible', true)->orderBy('position')->orderBy('id')]);
+        $q = Business::published()->with(['galleryImages' => fn ($q) => $q->withoutGlobalScope('business')->where('is_visible', true)->where('kind', '!=', 'inspiration')->orderBy('position')->orderBy('id')]);
         if ($r->filled('city')) {
             $q->where('city', $filters['city']);
         }
@@ -41,7 +43,7 @@ class PublicController extends Controller
             'budget' => $q->orderBy('budget_min'), 'name' => $q->orderBy('name'), default => $q->orderBy('id')
         };
 
-        return view('public.home', ['studios' => $q->paginate(12)->withQueryString(), 'filters' => $filters, 'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(), 'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(), 'schema' => app(Discovery::class)->website()]);
+        return view('public.home', ['inspiration' => DB::table('inspiration_edits')->orderBy('position')->limit(3)->get(), 'studios' => $q->paginate(12)->withQueryString(), 'filters' => $filters, 'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(), 'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(), 'schema' => app(Discovery::class)->website()]);
     }
 
     public function business()
@@ -54,11 +56,15 @@ class PublicController extends Controller
         $this->published($business);
         $gallery = GalleryImage::withoutGlobalScope('business')->where('business_id', $business->id)->where('is_visible', true)->orderBy('position')->orderBy('id')->get();
 
+        $inspirations = $gallery->where('kind', 'inspiration')->values();
+        $gallery = $gallery->where('kind', '!=', 'inspiration')->values();
+        $testimonials = Testimonial::withoutGlobalScope('business')->where('business_id', $business->id)->where('is_visible', true)->latest('id')->get();
+
         $articles = BlogPost::withoutGlobalScope('business')->where('business_id', $business->id)->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(4)->get();
         $reels = Reel::withoutGlobalScope('business')->where('business_id', $business->id)->publiclyVisible()->with('business')->orderBy('position')->limit(4)->get();
         $entryContext = app(PublicEntryContext::class)->resolve($business, request()->query('entry_context'));
 
-        return view('public.profile', compact('business', 'gallery', 'articles', 'reels', 'entryContext') + ['schema' => app(Discovery::class)->businessSchema($business)]);
+        return view('public.profile', compact('business', 'gallery', 'inspirations', 'testimonials', 'articles', 'reels', 'entryContext') + ['schema' => app(Discovery::class)->businessSchema($business)]);
     }
 
     public function enquiry(Request $r, Business $business)

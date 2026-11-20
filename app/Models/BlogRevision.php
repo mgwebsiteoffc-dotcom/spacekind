@@ -11,7 +11,7 @@ class BlogRevision extends Model
 
     protected function casts(): array
     {
-        return ['tags' => 'array', 'publish_at' => 'datetime', 'reviewed_at' => 'datetime'];
+        return ['faqs' => 'array', 'tags' => 'array', 'publish_at' => 'datetime', 'reviewed_at' => 'datetime'];
     }
 
     public function post()

@@ -11,7 +11,16 @@ class PreviewState
 
     private const V2_TABLES = ['businesses', 'users', 'subscriptions', 'leads', 'lead_activities', 'clients', 'projects', 'gallery_images', 'blog_posts', 'blog_revisions', 'reels', 'campaign_links', 'site_settings', 'tracking_versions', 'audit_events'];
 
-    private const TABLES = ['businesses', 'users', 'subscriptions', 'leads', 'lead_activities', 'clients', 'projects', 'gallery_images', 'blog_posts', 'blog_revisions', 'reels', 'campaign_links', 'site_settings', 'tracking_versions', 'billing_settings', 'catalogue_items', 'document_sequences', 'financial_documents', 'customer_payments', 'payment_allocations', 'document_shares', 'platform_billing_settings', 'platform_sequences', 'platform_invoices', 'platform_payments', 'audit_events'];
+    private const V3_TABLES = ['businesses', 'users', 'subscriptions', 'leads', 'lead_activities', 'clients', 'projects', 'gallery_images', 'blog_posts', 'blog_revisions', 'reels', 'campaign_links', 'site_settings', 'tracking_versions', 'billing_settings', 'catalogue_items', 'document_sequences', 'financial_documents', 'customer_payments', 'payment_allocations', 'document_shares', 'platform_billing_settings', 'platform_sequences', 'platform_invoices', 'platform_payments', 'audit_events'];
+
+    private const V4_TABLES = [...self::V3_TABLES, 'inspiration_edits', 'workers', 'worker_rates'];
+
+    private const V5_TABLES = [...self::V4_TABLES, 'worker_attendances'];
+
+    private const V6_TABLES = [...self::V5_TABLES, 'worker_payments'];
+
+    // Gateway credentials are never included in portable recovery files.
+    private const TABLES = [...self::V6_TABLES, 'testimonials', 'email_templates'];
 
     public function enabled(): bool
     {
@@ -46,7 +55,7 @@ class PreviewState
                     $data[$table] = DB::table($table)->orderBy('id')->get()->map(fn ($r) => (array) $r)->all();
                 }
 
-                return ['format' => 3, 'purpose' => 'Spacekind local development recovery; contains private studio records', 'saved_at' => now()->toIso8601String(), 'tables' => $data];
+                return ['format' => 7, 'purpose' => 'Spacekind local development recovery; contains private studio records', 'saved_at' => now()->toIso8601String(), 'tables' => $data];
             });
             $temporary = $path.'.'.getmypid().'.tmp';
             file_put_contents($temporary, json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), LOCK_EX);
@@ -66,19 +75,21 @@ class PreviewState
         if (! is_file($this->path())) {
             throw new \RuntimeException('No saved development state exists. Use the demo seeder instead.');
         }
-        foreach (self::TABLES as $table) {
+        foreach ([...self::TABLES, 'razorpay_credentials', 'email_delivery_settings'] as $table) {
             if (DB::table($table)->exists()) {
                 throw new \RuntimeException('Recovery requires empty application tables. It will not overwrite or merge existing data.');
             }
         }
         $state = json_decode(file_get_contents($this->path()), true, 512, JSON_THROW_ON_ERROR);
-        $legacy = ($state['format'] ?? null) === 1 && array_keys($state['tables'] ?? []) === self::LEGACY_TABLES;
-        $v2 = ($state['format'] ?? null) === 2 && array_keys($state['tables'] ?? []) === self::V2_TABLES;
-        if (! $legacy && ! $v2 && (($state['format'] ?? null) !== 3 || array_keys($state['tables'] ?? []) !== self::TABLES)) {
+        $expected = match ($state['format'] ?? null) {
+            1 => self::LEGACY_TABLES, 2 => self::V2_TABLES, 3 => self::V3_TABLES,
+            4 => self::V4_TABLES, 5 => self::V5_TABLES, 6 => self::V6_TABLES, 7 => self::TABLES, default => null,
+        };
+        if ($expected === null || array_keys($state['tables'] ?? []) !== $expected) {
             throw new \RuntimeException('Unrecognised recovery format.');
         }
 
-        if ($legacy || $v2) {
+        if ($expected !== self::TABLES) {
             $tables = [];
             foreach (self::TABLES as $table) {
                 $tables[$table] = $state['tables'][$table] ?? [];
@@ -93,6 +104,8 @@ class PreviewState
                     $count += count($rows);
                 }
             }
+
+            DB::table('users')->where('role', 'super_admin')->where('email', 'admin@spacekind.example')->update(['is_active' => false, 'remember_token' => null]);
 
             return $count;
         });

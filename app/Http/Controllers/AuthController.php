@@ -31,24 +31,12 @@ class AuthController extends Controller
     public function login(Request $r)
     {
         $data = $r->validate(['email' => 'required|email', 'password' => 'required|string']);
-        if (! Auth::attempt($data + ['is_active' => true], $r->boolean('remember'))) {
+        if (! Auth::attemptWhen($data + ['is_active' => true], fn (User $user) => ! $user->isRetiredAdmin(), $r->boolean('remember'))) {
             throw ValidationException::withMessages(['email' => 'These details do not match an active account.']);
         }
         $r->session()->regenerate();
 
         return redirect()->intended($r->user()->isAdmin() ? '/admin' : '/workspace');
-    }
-
-    public function demo(Request $r)
-    {
-        abort_unless(config('spacekind.demo'), 404);
-        $r->validate(['role' => ['required', Rule::in(['owner', 'staff', 'admin'])]]);
-        $email = ['owner' => 'owner@aangan.example', 'staff' => 'team@aangan.example', 'admin' => 'admin@spacekind.example'][$r->input('role')];
-        $user = User::where('email', $email)->where('is_active', true)->firstOrFail();
-        Auth::login($user);
-        $r->session()->regenerate();
-
-        return redirect($user->isAdmin() ? '/admin' : '/workspace');
     }
 
     public function register(Request $r)

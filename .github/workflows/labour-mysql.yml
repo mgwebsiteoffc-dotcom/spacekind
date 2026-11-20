@@ -1,0 +1,66 @@
+name: Application regression · MySQL 8
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+          MYSQL_DATABASE: spacekind_test
+          MYSQL_USER: spacekind_ci
+          MYSQL_PASSWORD: disposable-ci-only
+        ports:
+          - 3306/tcp
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-interval=5s --health-timeout=5s --health-retries=24
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_DATABASE: spacekind_test
+      DB_USERNAME: spacekind_ci
+      DB_PASSWORD: disposable-ci-only
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, mbstring, bcmath, dom, xml, curl, zip, intl, gd
+          tools: composer:v2
+          coverage: none
+      - name: Install locked dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Ensure uploaded video verification is available
+        run: command -v ffprobe || (sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg)
+      - name: Verify the disposable database and run the PHP suite
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+        run: |
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          php scripts/check-labour-test-db.php
+          vendor/bin/phpunit --fail-on-empty-test-suite --log-junit "$RUNNER_TEMP/test-results.xml"
+      - name: Annotate failed tests
+        if: failure()
+        run: |
+          python - <<'PY'
+          import os, pathlib, xml.etree.ElementTree as ET
+          path = pathlib.Path(os.environ['RUNNER_TEMP']) / 'test-results.xml'
+          if path.exists():
+              for case in ET.parse(path).iter('testcase'):
+                  for item in case:
+                      if item.tag in ('failure', 'error'):
+                          print('::error::' + case.get('name', '') + ': ' + (item.text or '').strip().splitlines()[0][:400])
+          PY

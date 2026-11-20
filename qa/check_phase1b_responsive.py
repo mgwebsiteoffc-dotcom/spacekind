@@ -3,6 +3,7 @@ import asyncio
 import json
 import os
 from pathlib import Path
+from password_login import password_login
 from playwright.async_api import async_playwright
 from check_responsive import WORKSPACE
 
@@ -35,7 +36,7 @@ async def main():
                     try:
                         if role != 'public':
                             await page.goto(BASE + '/login', wait_until='domcontentloaded')
-                            await page.locator(f'form:has(input[name="role"][value="{role}"]) button').click()
+                            await password_login(page, role)
                             await page.wait_for_url('**/admin' if role == 'admin' else '**/workspace')
                         for path in paths:
                             errors.clear()

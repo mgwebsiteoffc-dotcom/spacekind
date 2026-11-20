@@ -4,6 +4,7 @@
 ['/admin/blog','Journal & review','file',request()->is('admin/blog*')],
 ['/admin/reels','Video moderation','image',request()->is('admin/reels*')],
 ['/admin/discovery','SEO & discovery','spark',request()->is('admin/discovery*')],
+['/admin/integrations','Settings · Payments & email','grid',request()->is('admin/integrations*')],
 ['/admin/tracking','Tracking & consent','chart',request()->is('admin/tracking*')],
 ['/admin#activity','Activity log','clock',false],
 ['/','Public marketplace','arrow',false],
