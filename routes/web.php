@@ -12,6 +12,7 @@ use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReelController;
 use App\Http\Controllers\StudioController;
 use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\WorkerController;
 use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,9 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
     Route::patch('/projects/{project}', [ProjectController::class, 'update']);
     Route::get('/modules', [WorkspaceController::class, 'modules']);
     Route::middleware('owner')->group(function () {
+        Route::get('/labour', [WorkerController::class, 'index']);
+        Route::post('/labour', [WorkerController::class, 'store']);
+        Route::post('/labour/{worker}/rates', [WorkerController::class, 'rate'])->whereNumber('worker');
         Route::view('/tools', 'workspace.tools');
         Route::get('/blog', [ArticleController::class, 'index']);
         Route::get('/blog/new', [ArticleController::class, 'create']);

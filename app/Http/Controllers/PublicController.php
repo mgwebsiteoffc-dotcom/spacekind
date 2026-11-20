@@ -12,6 +12,7 @@ use App\Services\LeadWorkflow;
 use App\Services\PublicEntryContext;
 use App\Support\CampaignLabels;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -41,7 +42,7 @@ class PublicController extends Controller
             'budget' => $q->orderBy('budget_min'), 'name' => $q->orderBy('name'), default => $q->orderBy('id')
         };
 
-        return view('public.home', ['studios' => $q->paginate(12)->withQueryString(), 'filters' => $filters, 'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(), 'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(), 'schema' => app(Discovery::class)->website()]);
+        return view('public.home', ['inspiration' => DB::table('inspiration_edits')->orderBy('position')->limit(3)->get(), 'studios' => $q->paginate(12)->withQueryString(), 'filters' => $filters, 'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(), 'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(), 'schema' => app(Discovery::class)->website()]);
     }
 
     public function business()

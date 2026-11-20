@@ -28,7 +28,7 @@ class ContentDemoSeeder extends Seeder
         Auth::setUser($admin);
         try {
             $this->article(null, $admin, 'before-the-moodboard', 'Before the moodboard, a clearer project brief.', 'A useful interior brief starts with the way you live—not just a saved image. A few practical answers help a studio understand your priorities.', 'Planning & budgets', 'hero', <<<'MD'
-This is a development editorial example, not a client case study. The images are visual references.
+Start with how the room needs to work, then collect images that help explain the brief.
 
 ## What should I tell an interior studio first?
 Start with the location and approximate floor area, the kind of property, what you want to change, your budget range and the date you hope to begin. An approximate answer is more useful than a blank brief.
@@ -49,7 +49,7 @@ No. Share what you know, and mark the assumptions that still need a site visit o
 Look at their approach, confirm which images are completed work versus renders or concepts, and discuss scope, responsibilities, fees and agreements directly. A directory listing is a starting point for a conversation, not a guarantee of fit.
 MD);
             $this->article(null, $admin, 'a-source-label-is-a-clue', 'A source label is a clue. Not a customer.', 'Campaign labels help you keep context with an enquiry. They do not, on their own, prove that an advertisement produced a paying customer.', 'For studios', 'office', <<<'MD'
-This article explains how the Spacekind development tools label outcomes. It does not report the performance of a real studio or campaign.
+A campaign label travels with a link. A sale needs its own record.
 
 ## What does a UTM label tell a studio?
 It records the campaign words that were available in a link and retained with permission. A label such as `organic_social` is useful context. It is not independent verification of where a person first discovered the business.
@@ -70,7 +70,7 @@ MD);
             app(Tenant::class)->run($aangan, function () use ($aangan) {
                 $owner = $aangan->users()->where('role', 'owner')->firstOrFail();
                 $this->article($aangan, $owner, 'warm-materials-everyday-life', 'Warm materials. Room for everyday life.', 'An illustrative studio perspective on a calmer home: begin with practical routines, then choose materials and details that support them.', 'Materials & details', 'living', <<<'MD'
-Studio Aangan is a fictional studio in this development preview. This is a sample article, not a description of a completed project.
+The materials discussed here are design references, not specifications for a completed project.
 
 ## What makes a warm, minimal room work in everyday life?
 Begin with function, comfortable circulation and places for the things you actually use. A restrained palette can feel calm, but practical decisions make the room usable.
@@ -97,7 +97,7 @@ MD);
             app(Tenant::class)->run($form, function () use ($form) {
                 $owner = $form->users()->where('role', 'owner')->firstOrFail();
                 $this->article($form, $owner, 'a-kitchen-starts-with-questions', 'A practical kitchen starts with better questions.', 'An illustrative named-author studio article about routines, storage and the questions worth asking before choosing kitchen finishes.', 'Planning & budgets', 'kitchen', <<<'MD'
-Form & Grain and its team are fictional development records. This named-author example is not a real project claim or a professional certification.
+Before choosing a cabinet finish, list the tasks your kitchen needs to support.
 
 ## What should I decide before choosing a kitchen finish?
 Describe how the kitchen is used: who cooks, what needs to be stored, which appliances stay on the counter and how people move through the space. Those answers help shape a practical layout discussion.
@@ -132,7 +132,7 @@ MD, true);
         Storage::disk('local')->put($path, file_get_contents(public_path('assets/interiors/'.$cover.'.webp')));
         $post = new BlogPost(['slug' => $slug]);
         $post->forceFill(['created_by' => $actor->id, 'is_visible' => true, 'visible_from' => now()->subDays(2)])->save();
-        $post->revisions()->create(['created_by' => $actor->id, 'title' => $title, 'excerpt' => $excerpt, 'body' => $body, 'category' => $category, 'tags' => ['Development example', 'Thoughtful planning'], 'cover_path' => $path, 'cover_alt' => 'Interior visual reference for an explicitly illustrative Spacekind article.', 'byline_mode' => $named ? 'person' : 'business', 'author_id' => $named ? $actor->id : null, 'author_name' => $named ? $actor->name : ($business?->name ?? 'Spacekind editorial'), 'status' => 'approved', 'publish_at' => now()->subDays(2), 'reviewed_by' => User::where('email', 'admin@spacekind.example')->value('id'), 'reviewed_at' => now(), 'review_note' => 'Seeded illustrative development content, not customer work.']);
+        $post->revisions()->create(['created_by' => $actor->id, 'title' => $title, 'excerpt' => $excerpt, 'body' => $body, 'category' => $category, 'tags' => [$category, 'Thoughtful planning'], 'cover_path' => $path, 'cover_alt' => 'Interior visual reference for an explicitly illustrative Spacekind article.', 'byline_mode' => $named ? 'person' : 'business', 'author_id' => $named ? $actor->id : null, 'author_name' => $named ? $actor->name : ($business?->name ?? 'Spacekind editorial'), 'status' => 'approved', 'publish_at' => now()->subDays(2), 'reviewed_by' => User::where('email', 'admin@spacekind.example')->value('id'), 'reviewed_at' => now(), 'review_note' => 'Seeded illustrative development content, not customer work.']);
     }
 
     private function reel(string $title, string $file, string $cover, string $category): void
@@ -140,7 +140,7 @@ MD, true);
         if (Reel::where('title', $title)->exists()) {
             return;
         }
-        $reel = new Reel(['title' => $title, 'caption' => 'Development-only motion study made from reference imagery. Not a video of completed studio work. The associated URL is a general interior-design reference, not an image source or a claim that this video was posted there.', 'kind' => 'concept', 'category' => $category, 'associated_url' => 'https://en.wikipedia.org/wiki/Interior_design', 'position' => 1, 'status' => 'published']);
+        $reel = new Reel(['title' => $title, 'caption' => $category === 'Living' ? 'A study in low seating, warm oak and afternoon light, composed from a living-room reference image.' : 'A stone island, slim timber stools and a view into the garden. A motion study composed from a kitchen reference image.', 'kind' => 'concept', 'category' => $category, 'associated_url' => 'https://en.wikipedia.org/wiki/Interior_design', 'position' => 1, 'status' => 'published']);
         $reel->forceFill(['video_path' => 'assets/reels/'.$file, 'cover_path' => 'assets/interiors/'.$cover.'.webp', 'disk' => 'public-assets', 'mime' => 'video/mp4', 'bytes' => filesize(public_path('assets/reels/'.$file)), 'duration' => 4, 'rights_confirmed_at' => now()])->save();
     }
 }

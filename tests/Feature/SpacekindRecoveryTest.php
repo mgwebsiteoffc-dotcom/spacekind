@@ -40,7 +40,7 @@ class SpacekindRecoveryTest extends TestCase
         };
     }
 
-    public function test_format_three_round_trips_all_tables_with_foreign_keys_enabled(): void
+    public function test_format_four_round_trips_all_tables_with_foreign_keys_enabled(): void
     {
         config(['spacekind.demo' => true]);
         $this->seed(DatabaseSeeder::class);
@@ -50,8 +50,8 @@ class SpacekindRecoveryTest extends TestCase
         try {
             $service->save();
             $saved = json_decode(file_get_contents($service->path()), true, 512, JSON_THROW_ON_ERROR);
-            $this->assertSame(3, $saved['format']);
-            $this->assertCount(26, $saved['tables']);
+            $this->assertSame(4, $saved['format']);
+            $this->assertCount(29, $saved['tables']);
             $this->assertSame(0600, fileperms($service->path()) & 0777);
             foreach (['businesses', 'blog_posts', 'blog_revisions', 'reels', 'tracking_versions', 'site_settings', 'leads', 'clients', 'projects'] as $table) {
                 $this->assertNotEmpty($saved['tables'][$table]);

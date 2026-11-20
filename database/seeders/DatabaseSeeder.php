@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call(InspirationSeeder::class);
+
         if (! config('spacekind.demo')) {
             $this->command?->warn('Demo content is disabled. No accounts or studios were created.');
 
@@ -26,10 +28,10 @@ class DatabaseSeeder extends Seeder
         $studios = [
             ['Studio Aangan', 'Noida', 'Sector 104', 'home', 12, 35, 'Aa', ['Warm minimal', 'Turnkey interiors'], ['living', 'hero', 'bedroom'], 'Warm materials, thoughtful details and a little breathing room. A fictional residential practice for exploring the Spacekind workspace. All portfolio images are design references, not this studio’s completed work.'],
             ['Form & Grain', 'Gurugram', 'DLF Phase 2', 'kitchen', 5, 18, 'fg', ['Modern naturals', 'Custom cabinetry'], ['kitchen', 'kitchenLight', 'living'], 'A considered approach to the rooms you use every day. This fictional studio demonstrates functional kitchens, crafted storage and natural finishes, using reference imagery only.'],
-            ['The Quiet Studio', 'New Delhi', 'Greater Kailash', 'home', 18, 50, 'q.', ['Contemporary', 'Understated luxury'], ['classic', 'bedroom', 'hero'], 'A quieter point of view on contemporary homes. A sample practice bringing together sculptural forms, balanced proportions and restrained palettes. Portfolio imagery is for reference only.'],
+            ['The Quiet Studio', 'New Delhi', 'Greater Kailash', 'home', 18, 50, 'q.', ['Contemporary', 'Understated luxury'], ['classic', 'bedroom', 'hero'], 'A quieter point of view on contemporary homes. A fictional practice bringing together sculptural forms, balanced proportions and restrained palettes. Portfolio imagery is for reference only.'],
             ['Mitti Living', 'Noida', 'Sector 75', 'renovation', 8, 25, 'm', ['Earthy & timeless', 'Thoughtful renovation'], ['airy', 'hero', 'office'], 'New possibilities for a space you already call home. A fictional renovation specialist with an earthy, practical and personal design approach. No reference image is claimed as completed studio work.'],
-            ['Northline Spaces', 'New Delhi', 'Saket', 'commercial', 15, 60, 'N', ['Workspaces', 'Functional design'], ['office', 'classic', 'kitchenLight'], 'Spaces shaped around the way people work. This sample commercial practice shows how workspace specialists can present their approach and connect with new clients. All images are visual references.'],
-            ['Oak & Arc', 'Ghaziabad', 'Indirapuram', 'home', 10, 30, 'oa', ['Soft minimal', 'Family-first spaces'], ['soft', 'bedroom', 'kitchen'], 'A comfortable balance of everyday practicality and softer details. A fictional family-focused residential practice, using clearly labelled reference images for this development preview.'],
+            ['Northline Spaces', 'New Delhi', 'Saket', 'commercial', 15, 60, 'N', ['Workspaces', 'Functional design'], ['office', 'classic', 'kitchenLight'], 'Spaces shaped around the way people work. This fictional commercial practice shows how workspace specialists can present their approach and connect with new clients. All images are visual references.'],
+            ['Oak & Arc', 'Ghaziabad', 'Indirapuram', 'home', 10, 30, 'oa', ['Soft minimal', 'Family-first spaces'], ['soft', 'bedroom', 'kitchen'], 'A comfortable balance of everyday practicality and softer details. A fictional family-focused residential practice, using clearly labelled reference images for its material studies.'],
         ];
         $owners = [];
         foreach ($studios as $i => $s) {

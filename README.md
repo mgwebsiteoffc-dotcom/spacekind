@@ -1,5 +1,20 @@
 # Spacekind
 
+## Current branch: public films and the first labour workflow
+
+**Studio owners:** open **More → Worker register** to add a worker, their trade, daily wage and the date it takes effect. Add later rates without editing earlier ones. Attendance/site allocation, advances, wage payments, balances and statements are still pending. This register does not calculate payroll or send money.
+
+**Existing installation:** back up MySQL and uploads, then run the following against the intended installation after updating the files. Keep `.env`, `APP_KEY`, accounts and uploads. Do **not** run `migrate:fresh` or the general demo seeder.
+
+```sh
+php artisan migrate
+php artisan db:seed --class=InspirationSeeder
+```
+
+The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 4 and accepts formats 1–3; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
+
+The release, ZIP and validation counts below describe the **previous Phase 2 handoff**, not validation of this branch.
+
 **Laravel + actual MySQL · Foundation / Phase 1B + Phase 2 financial workflows · Development pilot**
 
 > We help interior-design businesses generate qualified enquiries on WhatsApp, follow up consistently, and track which ads produce customers.
