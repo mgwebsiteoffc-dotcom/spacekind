@@ -39,8 +39,9 @@ def capture_checks():
     # Fresh visitor tab state; test the desktop exit before the entry delay.
     js('sessionStorage.clear()')
     call(base + '/url', {'url': SITE + '/'})
-    assert js("document.documentElement.dispatchEvent(new MouseEvent('mouseleave', {clientY:0})); return document.querySelector('.project-dialog').open"), 'desktop exit prompt missing'
-    js("document.querySelector('.project-dialog').close(); document.documentElement.dispatchEvent(new MouseEvent('mouseleave', {clientY:0}))")
+    assert not js("document.documentElement.dispatchEvent(new PointerEvent('pointerout', {pointerType:'touch', clientY:0})); return document.querySelector('.project-dialog').open"), 'exit fired for touch'
+    assert js("document.documentElement.dispatchEvent(new PointerEvent('pointerout', {pointerType:'mouse', clientY:0})); return document.querySelector('.project-dialog').open"), 'desktop exit prompt missing'
+    js("document.querySelector('.project-dialog').close(); document.documentElement.dispatchEvent(new PointerEvent('pointerout', {pointerType:'mouse', clientY:0}))")
     assert not js("return document.querySelector('.project-dialog').open"), 'exit prompt repeated in same session'
     print('Signed-out entry, exit, dismissal and floating reopen passed')
 
