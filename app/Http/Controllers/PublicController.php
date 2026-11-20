@@ -43,12 +43,44 @@ class PublicController extends Controller
             'budget' => $q->orderBy('budget_min'), 'name' => $q->orderBy('name'), default => $q->orderBy('id')
         };
 
-        return view('public.home', ['inspiration' => DB::table('inspiration_edits')->orderBy('position')->limit(3)->get(), 'studios' => $q->paginate(12)->withQueryString(), 'filters' => $filters, 'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(), 'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(), 'schema' => app(Discovery::class)->website()]);
+        $studios = $q->paginate(12)->withQueryString();
+        $cities = Business::published()->whereIn('city', config('spacekind.cities'))->groupBy('city')->orderBy('city')->selectRaw('city, COUNT(*) as listings')->pluck('listings', 'city');
+        $guides = config('project_guides');
+        $answers = [];
+        foreach ($guides as $guide) {
+            $question = array_key_first($guide['answers']);
+            $answers[$question] = $guide['answers'][$question];
+        }
+        $discovery = app(Discovery::class);
+        $schema = $discovery->website();
+        $schema['@graph'][] = $discovery->faqSchema($answers, url('/').'#questions');
+
+        return view('public.home', compact('studios', 'cities', 'guides', 'answers', 'filters', 'schema') + [
+            'inspiration' => DB::table('inspiration_edits')->orderBy('position')->limit(3)->get(),
+            'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(),
+            'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(),
+        ]);
     }
 
-    public function business()
+    public function guide(string $slug, Discovery $discovery)
     {
-        return view('public.for-businesses');
+        $guides = config('project_guides');
+        abort_unless(isset($guides[$slug]), 404);
+        $guide = $guides[$slug];
+        $schema = ['@context' => 'https://schema.org', '@graph' => [
+            $discovery->faqSchema($guide['answers'], url('/guides/'.$slug).'#questions'),
+            $discovery->breadcrumbs(['Spacekind' => '/', $guide['title'] => '/guides/'.$slug]),
+        ]];
+
+        return view('public.guide', compact('guide', 'guides', 'slug', 'schema'));
+    }
+
+    public function business(Discovery $discovery)
+    {
+        $answers = config('studio_questions');
+        $schema = ['@context' => 'https://schema.org'] + $discovery->faqSchema($answers, url('/for-businesses').'#questions');
+
+        return view('public.for-businesses', compact('answers', 'schema'));
     }
 
     public function profile(Business $business)
@@ -125,6 +157,9 @@ class PublicController extends Controller
         $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         if ($discovery->canIndex()) {
             $urls = [url('/'), url('/for-businesses'), url('/blog'), url('/reels')];
+            foreach (array_keys(config('project_guides')) as $slug) {
+                $urls[] = url('/guides/'.$slug);
+            }
             foreach (Business::published()->get() as $b) {
                 $urls[] = url('/studios/'.$b->slug);
             }

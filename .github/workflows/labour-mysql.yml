@@ -52,6 +52,23 @@ jobs:
           export APP_KEY="base64:$(openssl rand -base64 32)"
           php scripts/check-labour-test-db.php
           vendor/bin/phpunit --fail-on-empty-test-suite --log-junit "$RUNNER_TEMP/test-results.xml"
+      - name: Check responsive public pages in Chrome
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          SPACEKIND_DEMO: 'true'
+        run: |
+          export APP_KEY="base64:$(openssl rand -base64 32)"
+          php scripts/check-labour-test-db.php
+          php artisan migrate --force
+          php artisan db:seed --force
+          php artisan serve --host=127.0.0.1 --port=8160 > "$RUNNER_TEMP/public-site.log" 2>&1 &
+          site=$!
+          chromedriver --port=9515 > "$RUNNER_TEMP/public-driver.log" 2>&1 &
+          driver=$!
+          trap 'kill "$site" "$driver" 2>/dev/null || true' EXIT
+          curl -fsS --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:9515/status >/dev/null
+          curl -fsS --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:8160/up >/dev/null
+          python3 qa/check_public_guides.py
       - name: Annotate failed tests
         if: failure()
         run: |

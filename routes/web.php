@@ -23,6 +23,7 @@ use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/guides/{slug}', [PublicController::class, 'guide'])->name('project.guide');
 Route::get('/for-businesses', [PublicController::class, 'business'])->name('for-businesses');
 Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
 Route::get('/sitemap.xml', [PublicController::class, 'sitemap']);

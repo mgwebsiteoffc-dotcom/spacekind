@@ -44,7 +44,7 @@ class Discovery
 
     public function indexable(Request $r): bool
     {
-        return $this->canIndex() && $this->pageGroup($r) !== null && ! $r->getQueryString();
+        return $this->canIndex() && ($this->pageGroup($r) !== null || $r->routeIs('project.guide')) && ! $r->getQueryString();
     }
 
     public function title(Request $r): string
@@ -65,6 +65,16 @@ class Discovery
     public function website(): array
     {
         return ['@context' => 'https://schema.org', '@graph' => [$this->organisation(), ['@type' => 'WebSite', '@id' => url('/').'#website', 'name' => 'Spacekind', 'url' => url('/'), 'publisher' => ['@id' => url('/').'#organisation']]]];
+    }
+
+    public function faqSchema(array $answers, string $id): array
+    {
+        $questions = [];
+        foreach ($answers as $question => $answer) {
+            $questions[] = ['@type' => 'Question', 'name' => $question, 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $answer]];
+        }
+
+        return ['@type' => 'FAQPage', '@id' => $id, 'mainEntity' => $questions];
     }
 
     public function breadcrumbs(array $items): array
