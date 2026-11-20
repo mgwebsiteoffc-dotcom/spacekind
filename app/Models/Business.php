@@ -10,7 +10,7 @@ class Business extends Model
 
     protected function casts(): array
     {
-        return ['services' => 'array', 'tags' => 'array', 'is_demo' => 'boolean', 'reviewed_at' => 'datetime'];
+        return ['project_highlights' => 'array', 'awards' => 'array', 'established_year' => 'integer', 'completed_project_count' => 'integer', 'services' => 'array', 'tags' => 'array', 'is_demo' => 'boolean', 'reviewed_at' => 'datetime'];
     }
 
     public function getRouteKeyName(): string

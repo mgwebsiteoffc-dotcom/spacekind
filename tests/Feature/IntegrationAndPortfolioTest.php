@@ -96,6 +96,29 @@ class IntegrationAndPortfolioTest extends TestCase
         $this->assertDatabaseCount('email_delivery_settings', 0);
     }
 
+    public function test_studio_track_record_is_optional_reviewed_and_not_inferred_from_photos(): void
+    {
+        $studio = $this->studio('courtyard');
+        $owner = $this->account('owner', $studio);
+        $data = ['name' => 'Courtyard Studio', 'city' => 'Lucknow', 'locality' => 'Gomti Nagar', 'service' => 'home', 'budget_min' => 8, 'budget_max' => 18, 'bio' => 'Residential interiors focused on daylight and family living.',
+            'established_year' => 2015, 'completed_project_count' => 24,
+            'project_highlights' => [['title' => 'Courtyard apartment', 'year' => 2022, 'scope' => 'Designed and installed custom storage.']],
+            'awards' => [['title' => 'Design mention', 'issuer' => 'Test panel', 'year' => 2023, 'url' => 'https://example.org/mention']],
+        ];
+        $this->get('/studios/courtyard')->assertOk()->assertSee('Studio experience')->assertSee('Completed projects')->assertDontSee('<small>Gallery</small>', false)->assertDontSee('Awards &amp; recognition.', false);
+        $this->actingAs($owner)->get('/workspace/studio')->assertOk()->assertSee('Total completed projects');
+        $this->patch('/workspace/studio', ['established_year' => now()->year + 1, 'awards' => [['issuer' => 'Missing award title']]] + $data)->assertSessionHasErrors(['established_year', 'awards.0.title']);
+        $this->patch('/workspace/studio', $data)->assertSessionHasNoErrors();
+        $this->get('/studios/courtyard')->assertNotFound();
+        $this->actingAs($this->account('super_admin'))->get('/admin')->assertOk()->assertSee('Courtyard apartment')->assertSee('Test panel');
+        $this->patch('/admin/studios/courtyard/review', ['decision' => 'approved'])->assertRedirect();
+        auth()->logout();
+        $this->get('/studios/courtyard')->assertOk()->assertSee('Since 2015')->assertSee('<strong>24</strong>', false)->assertSee('Designed and installed custom storage.')->assertSee('Design mention')->assertSee('https://example.org/mention');
+        $this->actingAs($owner)->patch('/workspace/studio', ['awards' => [['title' => '', 'issuer' => '', 'year' => '', 'url' => '']], 'completed_project_count' => 0, 'project_highlights' => []] + $data)->assertSessionHasNoErrors();
+        $this->assertSame([], $studio->fresh()->awards);
+        $this->assertSame(0, $studio->fresh()->completed_project_count);
+    }
+
     public function test_published_testimonials_and_inspiration_are_scoped_to_the_approved_profile(): void
     {
         Storage::fake('local');

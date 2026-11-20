@@ -21,7 +21,7 @@ try:
     for width in (1440, 768, 390, 320):
         call(base + '/goog/cdp/execute', {'cmd': 'Emulation.setDeviceMetricsOverride', 'params':
             {'width': width, 'height': 900, 'deviceScaleFactor': 1, 'mobile': False}})
-        for path, marker in [('/', '#guides'), ('/guides/compare-interior-quotes', '#checklist'), ('/reels', '.reel-card-player'), ('first-published-film', '.reel-watch-screen')]:
+        for path, marker in [('/', '#guides'), ('/guides/compare-interior-quotes', '#checklist'), ('/studios/studio-aangan', '.profile-meta'), ('/reels', '.reel-card-player'), ('first-published-film', '.reel-watch-screen')]:
             if path == 'first-published-film':
                 path = call(base + '/execute/sync', {'args': [], 'script': "return document.querySelector('.reel-card h3 a').pathname"})
             call(base + '/url', {'url': SITE + path})

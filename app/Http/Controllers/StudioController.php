@@ -22,7 +22,24 @@ class StudioController extends Controller
 
     public function update(Request $r)
     {
-        $v = $r->validate(['name' => 'required|string|max:100', 'city' => ['required', Rule::in(config('spacekind.cities'))], 'locality' => 'required|string|max:120', 'service' => ['required', Rule::in(array_keys(config('spacekind.services')))], 'budget_min' => 'required|integer|between:1,10000', 'budget_max' => 'required|integer|gte:budget_min|between:1,10000', 'bio' => 'required|string|min:30|max:2000', 'tags' => 'nullable|string|max:120', 'seo_title' => 'nullable|string|max:70', 'seo_description' => 'nullable|string|max:170']);
+        $year = 'integer|between:1800,'.now()->year;
+        $v = $r->validate(['name' => 'required|string|max:100', 'city' => ['required', Rule::in(config('spacekind.cities'))], 'locality' => 'required|string|max:120', 'service' => ['required', Rule::in(array_keys(config('spacekind.services')))], 'budget_min' => 'required|integer|between:1,10000', 'budget_max' => 'required|integer|gte:budget_min|between:1,10000', 'bio' => 'required|string|min:30|max:2000', 'tags' => 'nullable|string|max:120', 'seo_title' => 'nullable|string|max:70', 'seo_description' => 'nullable|string|max:170',
+            'established_year' => 'nullable|'.$year, 'completed_project_count' => 'nullable|integer|between:0,1000000',
+            'project_highlights' => 'sometimes|array|list|max:3', 'project_highlights.*' => 'array:title,year,scope',
+            'project_highlights.*.title' => 'nullable|required_with:project_highlights.*.year,project_highlights.*.scope|string|max:120',
+            'project_highlights.*.scope' => 'nullable|required_with:project_highlights.*.title|string|max:500',
+            'project_highlights.*.year' => 'nullable|required_with:project_highlights.*.title|'.$year,
+            'awards' => 'sometimes|array|list|max:3', 'awards.*' => 'array:title,issuer,year,url',
+            'awards.*.title' => 'nullable|required_with:awards.*.year,awards.*.issuer,awards.*.url|string|max:120',
+            'awards.*.issuer' => 'nullable|required_with:awards.*.title|string|max:120',
+            'awards.*.year' => 'nullable|required_with:awards.*.title|'.$year,
+            'awards.*.url' => 'nullable|string|url:https|max:500',
+        ]);
+        foreach (['project_highlights', 'awards'] as $key) {
+            if (isset($v[$key])) {
+                $v[$key] = array_values(array_filter($v[$key], fn ($row) => filled($row['title'] ?? null)));
+            }
+        }
         $v['tags'] = collect(explode(',', $v['tags'] ?? ''))->map(fn ($t) => trim($t))->filter()->take(4)->values()->all();
         $business = app(Tenant::class)->business();
         DB::transaction(function () use ($business, $v) {
