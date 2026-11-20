@@ -2,7 +2,9 @@
 @section('title',$post?'A fresh perspective':'Make room for a good idea')
 @section('workspace-label','Write an article')
 @section('content')
-@php($prefix=$platform?'/admin/blog':'/workspace/blog')
+@php
+    $prefix = $platform ? '/admin/blog' : '/workspace/blog';
+@endphp
 <div class="breadcrumbs"><a href="{{ $prefix }}">Journal</a><x-icon name="right"/><span>{{ $post?'New revision':'New article' }}</span></div>
 <div class="page-heading"><div><div class="eyebrow section-kicker">YOUR WORDS. A LITTLE MORE CLARITY.</div><h1>{{ $post?'A fresh perspective.':'Make room for a good idea.' }}</h1><p>{{ $platform?'Publish as Spacekind editorial or your own name. Review facts and image rights before publication.':'Your draft is private. A platform review is needed before a new revision can appear publicly.' }}</p></div>@if($post)<a class="button outline" href="{{ $prefix }}/{{ $post->id }}/preview" target="_blank" rel="noopener">Preview saved revision <x-icon name="arrow"/></a>@endif</div>
 <form class="article-editor-layout" action="{{ $prefix }}{{ $post?'/'.$post->id:'' }}" method="post" enctype="multipart/form-data">@csrf @if($post) @method('PATCH') @endif<input type="hidden" name="base_revision_id" value="{{ $revision?->id }}">

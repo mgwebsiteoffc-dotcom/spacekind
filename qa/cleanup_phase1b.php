@@ -15,7 +15,7 @@ if (! config('spacekind.demo') || ! app()->environment('local')) {
     exit(1);
 }
 $studio = DB::table('businesses')->where('slug', 'studio-aangan')->where('name', 'Studio Aangan')->first();
-$admin = DB::table('users')->where('email', 'admin@spacekind.example')->where('role', 'super_admin')->first();
+$admin = DB::table('users')->where('email', getenv('SPACEKIND_QA_ADMIN_EMAIL') ?: '')->where('role', 'super_admin')->first();
 if (! $studio || ! $admin) {
     fwrite(STDERR, "The expected fictional demo identities are missing.\n");
     exit(1);
