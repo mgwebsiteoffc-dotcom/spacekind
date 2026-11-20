@@ -1,0 +1,10 @@
+#studio-tour-launch[hidden],.studio-tour [hidden]{display:none}
+#studio-tour-launch{margin-top:.75rem}
+body:has(.studio-tour[open]){overflow:hidden}
+.studio-tour{width:min(30rem,calc(100% - 24px));height:auto;max-height:90dvh;margin:auto;padding:clamp(18px,4vw,32px);border-radius:16px}
+.studio-tour header,.studio-tour footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.studio-tour header{font-size:14px}.studio-tour button{min-height:44px}
+.studio-tour .tour-progress{display:flex;gap:5px;margin:8px 0 22px}.tour-progress i{flex:1;height:4px;background:#d7dcd3;border-radius:3px}.tour-progress .visited{background:#566b49}
+.tour-location{display:flex;align-items:center;gap:8px;color:#536347;font-size:12px;margin-bottom:18px}.tour-location svg{width:20px;height:20px}
+.studio-tour small{font-size:12px;color:#536347}.studio-tour h2{font-size:clamp(24px,4vw,34px);margin:5px 0 12px;line-height:1.12}.studio-tour p{font-size:14px;line-height:1.65;margin:0 0 14px}.studio-tour footer{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}.studio-tour button:disabled{opacity:.45}
+#studio-introduction,#studio-upload,#studio-enquiry-link{scroll-margin:6rem}

@@ -46,6 +46,27 @@ def capture_checks():
     print('Signed-out entry, exit, dismissal and floating reopen passed')
 
 
+def studio_tour_checks():
+    call(base + '/url', {'url': SITE + '/register'})
+    js("""const form = document.querySelector('form[action="/register"]');
+          const fields = {name:'Tour Owner', studio_name:'Tour QA Studio', city:'Lucknow',
+              email:`tour-${Date.now()}@example.test`, password:'TestOnly12345', password_confirmation:'TestOnly12345'};
+          for (const [key,value] of Object.entries(fields)) form.elements[key].value = value;
+          form.elements.terms.checked = true; form.requestSubmit();""")
+    assert js("return document.querySelector('#studio-tour')?.open"), 'new studio tour did not open'
+    js("document.querySelector('[data-tour-next]').click()")
+    assert js("return document.activeElement.textContent.includes('Add a project')"), 'tour next/focus failed'
+    js("document.querySelector('[data-tour-back]').click(); document.querySelector('[data-tour-skip]').click()")
+    assert not js("return document.querySelector('#studio-tour').open"), 'cannot skip tour'
+    call(base + '/refresh', {})
+    assert not js("return document.querySelector('#studio-tour').open"), 'tour repeated after signup'
+    js("document.querySelector('#studio-tour-launch').click(); document.querySelector('[data-tour-next]').click(); document.querySelector('a[href=\"#studio-upload\"]').click()")
+    assert js("return document.activeElement.id === 'studio-upload'"), 'tour did not open uploader'
+    js("document.querySelector('#studio-tour-launch').click(); for(let i=0;i<4;i++) document.querySelector('[data-tour-next]').click()")
+    assert js("return !document.querySelector('#studio-tour').open && document.activeElement.id === 'studio-introduction'"), 'cannot finish tour'
+    print('New studio signup, tour navigation, skip, replay and finish passed')
+
+
 try:
     if '--capture' in sys.argv:
         capture_checks()
@@ -110,6 +131,8 @@ try:
             if result != 'ok':
                 raise RuntimeError(f'{path} at {width}px: {result}')
         print('Public directory and planning guide:', width, 'px passed')
+    if '--capture' not in sys.argv:
+        studio_tour_checks()
 except Exception as exc:
     print(f'::error::Public browser check: {exc}', flush=True)
     raise

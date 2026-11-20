@@ -78,7 +78,7 @@ class AuthController extends Controller
         Auth::login($user);
         $r->session()->regenerate();
 
-        return redirect('/workspace/studio')->with('success', 'Your workspace is ready. Complete your profile and gallery; a platform admin must approve your public listing. No charge has been made.');
+        return redirect('/workspace/studio')->with('start_studio_tour', true)->with('success', 'Your workspace is ready. Complete your profile and gallery; a platform admin must approve your public listing. No charge has been made.');
     }
 
     public function logout(Request $r)

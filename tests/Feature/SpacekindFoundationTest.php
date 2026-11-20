@@ -270,6 +270,8 @@ class SpacekindFoundationTest extends TestCase
         $this->assertDatabaseHas('businesses', ['name' => 'Synthetic New Practice', 'approval_status' => 'pending']);
         $this->assertDatabaseHas('users', ['email' => 'synthetic-owner@example.test', 'role' => 'owner']);
         $this->assertDatabaseHas('subscriptions', ['status' => 'pilot', 'amount_paise' => 499900]);
+        $this->get('/workspace/studio')->assertOk()->assertSee('data-start-tour', false)->assertSee('Step 1 of 4');
+        $this->get('/workspace/studio')->assertOk()->assertDontSee('data-start-tour', false)->assertSee('Take the workspace tour');
     }
 
     public function test_studio_and_admin_password_logins_reach_their_own_dashboard_from_the_wrong_entry(): void
