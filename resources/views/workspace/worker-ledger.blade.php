@@ -6,7 +6,7 @@
 <section class="app-panel form-panel"><div class="eyebrow section-kicker">ALL-TIME BALANCE</div>
 <h2>{{ $balance < 0 ? 'Paid ahead' : 'Outstanding' }} · {{ \App\Support\Money::format(abs($balance)) }}</h2>
 <p>Attendance earnings: <strong>{{ \App\Support\Money::format($earned) }}</strong> · Advances: <strong>{{ \App\Support\Money::format($advances) }}</strong> · Wages paid: <strong>{{ \App\Support\Money::format($wages) }}</strong></p>
-<p class="fine-print">Each payment is deducted once. Reversed entries are excluded. A payment ahead of earnings carries forward as credit.</p></section>
+<p class="fine-print">Each payment is deducted once. Reversed entries are excluded. A payment ahead of earnings carries forward as credit.</p><a class="text-link" href="{{ route('worker.statement', $worker) }}">View statement &amp; export <x-icon name="right"/></a></section>
 <div class="detail-columns"><section class="app-panel form-panel"><h2>Record a payment</h2><p>Enter money already paid to this worker. Saving does not transfer funds.</p>
 <form method="post" action="{{ route('worker.ledger', $worker) }}">@csrf
 <input type="hidden" name="entry_key" value="{{ old('entry_key', (string) Str::uuid()) }}">

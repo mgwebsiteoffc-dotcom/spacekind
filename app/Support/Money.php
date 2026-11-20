@@ -32,7 +32,7 @@ return $result;
 
     public static function decimal(int $minor): string
     {
-        return intdiv($minor, 100).'.'.str_pad((string) ($minor % 100), 2, '0', STR_PAD_LEFT);
+        return ($minor < 0 ? '-' : '').abs(intdiv($minor, 100)).'.'.str_pad((string) abs($minor % 100), 2, '0', STR_PAD_LEFT);
     }
 
     public static function year(string $date): string

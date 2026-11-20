@@ -49,3 +49,5 @@ html{scroll-padding-top:105px}body{overflow-wrap:break-word}a,button{transition:
 @media(max-width:560px){.attendance-halves{grid-template-columns:1fr}.attendance-summary .field{max-width:100%}}
 
 .worker-payment-history{min-width:0;overflow-wrap:anywhere}
+
+.worker-statement-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));align-items:end;gap:1rem}.worker-statement-filters .field{min-width:0;margin:0}.worker-statement-filters select{max-width:100%}

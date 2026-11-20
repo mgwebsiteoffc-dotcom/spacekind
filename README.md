@@ -1,10 +1,12 @@
 # Spacekind
 
-## Current branch: public films, site attendance and worker payments
+## Current branch: public films, site attendance and worker statements
 
 **Studio owners:** open **More → Worker register** to add a worker, their trade, daily wage and the date it takes effect. Add later rates without editing earlier ones. Select **Mark attendance**, open the work date, then choose the project worked in each half of the day. One half earns half the daily rate (rounded to the nearest paise, half up); two halves earn the full rate. Two projects can share one day, not claim two wages. An explicit absence earns zero; an untouched worker is not absent. The first worked entry freezes the applicable rate. Save each page before navigating; corrections retain a before/after audit and stale edits are rejected.
 
-Open **Payments & balance** beside a worker to enter actual wage payments or advances. Project attribution is optional. Outstanding = attendance earnings − recorded advances − recorded wages (across all dates and projects); a negative result appears as **Paid ahead**. Correct a mistake by reversing with a reason and, if needed, recording a replacement. Reversals are retained, not refunds. Repeating the same form submission does not create another payment; always check the history before recording a separately entered transaction. These entries never move funds or create customer receipts. Project/date-range statements and exports remain pending.
+Open **Payments & balance** beside a worker to enter actual wage payments or advances. Project attribution is optional. Outstanding = attendance earnings − recorded advances − recorded wages (across all dates and projects); a negative result appears as **Paid ahead**. Correct a mistake by reversing with a reason and, if needed, recording a replacement. Reversals are retained, not refunds. Repeating the same form submission does not create another payment; always check the history before recording a separately entered transaction. These entries never move funds or create customer receipts.
+
+Use **View statement & export** in that ledger to select an inclusive date range (up to 366 days) and all projects, a single project, or unassigned payments. Opening balance includes activity before the selected dates; daily earnings minus advances and wage payments carry forward into closing balance. Reports use current corrected attendance and non-reversed payments, not an immutable historical snapshot. A split day contributes its first half rounded up to the first site and the remainder to the second; an unsplit day or single half belongs entirely to its site. Unassigned payments are never silently charged to a project. **Download this statement (CSV)** exports those same daily figures in INR. The statement update needs no new migration or seed on installations already using worker payments.
 
 **Already on the worker-register update?** Back up MySQL and uploads, update the files and run `php artisan migrate`. New labour records start empty; no seeder is needed for this step.
 
@@ -16,6 +18,8 @@ php artisan db:seed --class=InspirationSeeder
 ```
 
 The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 6 and accepts formats 1–5; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
+
+**Next acceptance check:** run the worker register, attendance, ledger, statement and recovery feature tests on an isolated MySQL 8 test database before deploying the labour module.
 
 The release, ZIP and validation counts below describe the **previous Phase 2 handoff**, not validation of this branch.
 
