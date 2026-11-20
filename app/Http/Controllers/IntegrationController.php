@@ -6,6 +6,7 @@ use App\Models\EmailTemplate;
 use App\Models\RazorpayCredential;
 use App\Support\Audit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class IntegrationController extends Controller
@@ -25,16 +26,18 @@ class IntegrationController extends Controller
             'key_id' => ['required', 'string', "regex:/^rzp_{$mode}_[A-Za-z0-9]{6,64}$/D"],
             'key_secret' => ['nullable', 'string', 'min:8', 'max:256', 'regex:/^\S+$/D'],
         ]);
-        $record = RazorpayCredential::firstOrNew(['mode' => $mode]);
-        if ($record->key_id !== $data['key_id'] && empty($data['key_secret'])) {
-            throw ValidationException::withMessages(['key_secret' => 'Supply the matching secret when setting or changing the key ID.']);
-        }
-        $record->key_id = $data['key_id'];
-        if (! empty($data['key_secret'])) {
-            $record->key_secret = $data['key_secret'];
-        }
-        $record->save();
-        Audit::record('admin.razorpay_saved', $record, ['mode' => $mode]);
+        DB::transaction(function () use ($data, $mode) {
+            $record = RazorpayCredential::lockForUpdate()->firstOrNew(['mode' => $mode]);
+            if ($record->key_id !== $data['key_id'] && empty($data['key_secret'])) {
+                throw ValidationException::withMessages(['key_secret' => 'Supply the matching secret when setting or changing the key ID.']);
+            }
+            $record->key_id = $data['key_id'];
+            if (! empty($data['key_secret'])) {
+                $record->key_secret = $data['key_secret'];
+            }
+            $record->save();
+            Audit::record('admin.razorpay_saved', $record, ['mode' => $mode]);
+        }, 3);
 
         return back()->with('success', 'Razorpay details saved. Checkout is not enabled.');
     }

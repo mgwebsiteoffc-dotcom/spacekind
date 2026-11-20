@@ -8,7 +8,7 @@ Super admins: **Integrations & email** stores separate Razorpay test/live key pa
 
 Studio owners: **More → Works & inspiration** uploads rights-confirmed images and manages captions, visibility, ordering and removal. Inspiration is a separate collection on the approved studio profile, never a portfolio cover. **More → Client testimonials** manages permission-confirmed feedback and attribution; new entries are hidden unless explicitly made public. No testimonials or provider settings are seeded.
 
-After updating files, back up the installation and run `php artisan migrate` to add the configuration and testimonial tables. No reset or general seeder is required.
+Back up the installation first, update the files, then run `php artisan migrate` to add the configuration and testimonial tables. No reset or general seeder is required.
 
 ## Current branch: public films, site attendance and worker statements
 
