@@ -19,7 +19,7 @@ php artisan db:seed --class=InspirationSeeder
 
 The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 6 and accepts formats 1–5; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
 
-**Next acceptance check:** run the worker register, attendance, ledger, statement and recovery feature tests on an isolated MySQL 8 test database before deploying the labour module.
+**MySQL acceptance:** the 14 worker register, attendance, ledger, statement and recovery tests [passed on an isolated MySQL 8.4 service](https://github.com/mgwebsiteoffc-dotcom/spacekind/actions/runs/44694298591). The [CI workflow](.github/workflows/labour-mysql.yml) repeats the check on pushes. It creates a disposable `spacekind_test` database, checks that it is empty with foreign keys enabled, and runs only these suites. Never point the test suite at an installed database. This is not a production deployment or a full-platform regression run.
 
 The release, ZIP and validation counts below describe the **previous Phase 2 handoff**, not validation of this branch.
 

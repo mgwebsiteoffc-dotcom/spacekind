@@ -1,11 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 // Read-only preflight for CI. Never migrate or empty a database to pass this check.
 require __DIR__.'/../vendor/autoload.php';
 $app = require __DIR__.'/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
-
-use Illuminate\Support\Facades\DB;
 
 if (! $app->environment('testing') || DB::getDefaultConnection() !== 'mysql' || DB::connection()->getDatabaseName() !== 'spacekind_test') {
     throw new RuntimeException('Use a new, isolated MySQL spacekind_test database with APP_ENV=testing.');
