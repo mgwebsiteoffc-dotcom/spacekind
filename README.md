@@ -1,10 +1,12 @@
 # Spacekind
 
-## Current branch: public films, worker register and site attendance
+## Current branch: public films, site attendance and worker payments
 
-**Studio owners:** open **More → Worker register** to add a worker, their trade, daily wage and the date it takes effect. Add later rates without editing earlier ones. Select **Mark attendance**, open the work date, then choose the project worked in each half of the day. One half earns half the daily rate (rounded to the nearest paise, half up); two halves earn the full rate. Two projects can share one day, not claim two wages. An explicit absence earns zero; an untouched worker is not absent. The first worked entry freezes the applicable rate. Save each page before navigating; corrections retain a before/after audit and stale edits are rejected. Advances, wage payments, outstanding balances and statements are still pending. This register does not calculate payroll or send money.
+**Studio owners:** open **More → Worker register** to add a worker, their trade, daily wage and the date it takes effect. Add later rates without editing earlier ones. Select **Mark attendance**, open the work date, then choose the project worked in each half of the day. One half earns half the daily rate (rounded to the nearest paise, half up); two halves earn the full rate. Two projects can share one day, not claim two wages. An explicit absence earns zero; an untouched worker is not absent. The first worked entry freezes the applicable rate. Save each page before navigating; corrections retain a before/after audit and stale edits are rejected.
 
-**Already on the worker-register update?** Back up MySQL and uploads, update the files and run `php artisan migrate`. Attendance starts empty; no seeder is needed for this step.
+Open **Payments & balance** beside a worker to enter actual wage payments or advances. Project attribution is optional. Outstanding = attendance earnings − recorded advances − recorded wages (across all dates and projects); a negative result appears as **Paid ahead**. Correct a mistake by reversing with a reason and, if needed, recording a replacement. Reversals are retained, not refunds. Repeating the same form submission does not create another payment; always check the history before recording a separately entered transaction. These entries never move funds or create customer receipts. Project/date-range statements and exports remain pending.
+
+**Already on the worker-register update?** Back up MySQL and uploads, update the files and run `php artisan migrate`. New labour records start empty; no seeder is needed for this step.
 
 **Updating from Phase 2:** back up MySQL and uploads, then run the following against the intended installation after updating the files. Keep `.env`, `APP_KEY`, accounts and uploads. Do **not** run `migrate:fresh` or the general demo seeder.
 
@@ -13,7 +15,7 @@ php artisan migrate
 php artisan db:seed --class=InspirationSeeder
 ```
 
-The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 5 and accepts formats 1–4; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
+The dedicated seeder inserts three missing editorial inspiration records; rerunning it preserves existing entries. It does not create studios, leads, accounts or financial records. The directory, journal and film cards use eligible published records, not invented activity. A site with no published videos will not show a fabricated film on its homepage. Replace the bundled design references with licensed material before commercial use (see [asset notes](docs/assets.md)). Local recovery now writes format 6 and accepts formats 1–5; when restoring an old snapshot into an empty migrated database, restore **before** running the editorial seeder.
 
 The release, ZIP and validation counts below describe the **previous Phase 2 handoff**, not validation of this branch.
 

@@ -14,6 +14,7 @@ use App\Http\Controllers\ReelController;
 use App\Http\Controllers\StudioController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\WorkerController;
+use App\Http\Controllers\WorkerLedgerController;
 use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,9 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
         Route::post('/labour/attendance', [AttendanceController::class, 'store']);
         Route::post('/labour', [WorkerController::class, 'store']);
         Route::post('/labour/{worker}/rates', [WorkerController::class, 'rate'])->whereNumber('worker');
+        Route::get('/labour/{worker}/ledger', [WorkerLedgerController::class, 'show'])->whereNumber('worker')->name('worker.ledger');
+        Route::post('/labour/{worker}/ledger', [WorkerLedgerController::class, 'store'])->whereNumber('worker');
+        Route::post('/labour/{worker}/ledger/{payment}/reverse', [WorkerLedgerController::class, 'reverse'])->whereNumber(['worker', 'payment'])->name('worker.ledger.reverse');
         Route::view('/tools', 'workspace.tools');
         Route::get('/blog', [ArticleController::class, 'index']);
         Route::get('/blog/new', [ArticleController::class, 'create']);

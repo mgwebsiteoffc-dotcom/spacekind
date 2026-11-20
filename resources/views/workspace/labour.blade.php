@@ -15,6 +15,7 @@
 <article><h3>{{ $worker->name }}</h3><p>{{ $worker->trade }}</p>
 @php($current = $worker->rates->firstWhere('effective_from', '<=', today()->toDateString()))
 <p>{{ $current ? \App\Support\Money::format($current->daily_paise).' / day' : 'No rate effective yet' }}</p>
+<p><a class="text-link" href="{{ route('worker.ledger', $worker) }}">Payments &amp; balance <x-icon name="right"/></a></p>
 <details><summary>Rate history & new rate</summary><ul>@foreach($worker->rates as $rate)<li>{{ $rate->effective_from }} · {{ \App\Support\Money::format($rate->daily_paise) }} / day</li>@endforeach</ul>
 <form action="/workspace/labour/{{ $worker->id }}/rates" method="post">@csrf
 @include('workspace.worker-rate-fields',['initial'=>false])
