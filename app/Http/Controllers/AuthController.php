@@ -36,7 +36,23 @@ class AuthController extends Controller
         }
         $r->session()->regenerate();
 
-        return redirect()->intended($r->user()->isAdmin() ? '/admin' : '/workspace');
+        $user = $r->user();
+        $home = $user->isAdmin() ? '/admin' : '/workspace';
+        $intended = $r->session()->pull('url.intended');
+        // Only return to a page in this account's own area on this installation.
+        if (is_string($intended)) {
+            $page = Str::before($intended, '?');
+            $areas = $user->isAdmin() || $user->isOwner()
+                ? [$home]
+                : ['/workspace/enquiries', '/workspace/clients', '/workspace/projects', '/workspace/modules'];
+            foreach ($areas as $area) {
+                if ($page === url($area) || str_starts_with($page, url($area).'/')) {
+                    return redirect()->to($intended);
+                }
+            }
+        }
+
+        return redirect($home);
     }
 
     public function register(Request $r)

@@ -257,6 +257,33 @@ class SpacekindFoundationTest extends TestCase
         $this->assertDatabaseHas('subscriptions', ['status' => 'pilot', 'amount_paise' => 499900]);
     }
 
+    public function test_studio_and_admin_password_logins_reach_their_own_dashboard_from_the_wrong_entry(): void
+    {
+        [, $owner] = $this->studio();
+        $admin = $this->admin();
+        foreach ([[$owner, '/admin', '/workspace'], [$admin, '/workspace', '/admin']] as [$account, $wrong, $home]) {
+            $password = bin2hex(random_bytes(16));
+            $account->forceFill(['password' => $password])->save();
+            $this->get($wrong)->assertRedirect('/login');
+            $this->get('/login')->assertOk()->assertSee('name="password"', false);
+            $this->post('/login', ['email' => $account->email, 'password' => $password])->assertRedirect($home);
+            $this->get($home)->assertOk();
+            $this->get($wrong)->assertForbidden();
+            $this->post('/logout')->assertRedirect('/');
+            $this->assertGuest();
+        }
+    }
+
+    public function test_studio_sign_in_preserves_an_authorized_enquiry_list_link(): void
+    {
+        [, $owner] = $this->studio();
+        $password = bin2hex(random_bytes(16));
+        $owner->forceFill(['password' => $password])->save();
+        $this->get('/workspace/enquiries?due=1')->assertRedirect('/login');
+        $this->post('/login', ['email' => $owner->email, 'password' => $password])->assertRedirect('/workspace/enquiries?due=1');
+        $this->get('/workspace/enquiries?due=1')->assertOk();
+    }
+
     public function test_demo_login_is_unavailable_when_demo_mode_is_disabled(): void
     {
         config(['spacekind.demo' => false]);
