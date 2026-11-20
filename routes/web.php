@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CampaignLinkController;
 use App\Http\Controllers\DiscoveryController;
+use App\Http\Controllers\FirstAdminController;
 use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\LeadController;
@@ -39,6 +40,8 @@ Route::get('/studios/{business}/enquire/thanks', [PublicController::class, 'than
 Route::get('/studios/{business}', [PublicController::class, 'profile'])->name('studio');
 Route::get('/media/{image}', [PublicController::class, 'media'])->whereNumber('image');
 Route::middleware('guest')->group(function () {
+    Route::get('/admin/setup', [FirstAdminController::class, 'show']);
+    Route::post('/admin/setup', [FirstAdminController::class, 'store'])->middleware('throttle:5,1');
     Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
     Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
