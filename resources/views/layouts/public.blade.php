@@ -10,6 +10,7 @@ $preferencesAvailable=$discovery->pageGroup(request())!==null||request()->routeI
 @if(!$discovery->indexable(request()))<meta name="robots" content="noindex, nofollow">@endif
 <link rel="icon" href="/assets/brand.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/fonts.css"><link rel="stylesheet" href="/assets/base.css"><link rel="stylesheet" href="/assets/app.css"><link rel="stylesheet" href="/assets/content.css?v=portrait-1"><script src="/assets/app.js" defer></script><script src="/assets/content.js" defer></script>
 @if(request()->routeIs('home','project.guide'))<link rel="stylesheet" href="/assets/project-guides.css?v=finder-1">@endif
+@if(request()->routeIs('for-businesses'))<link rel="stylesheet" href="/assets/studio-business.css">@endif
 @isset($schema)<script type="application/ld+json">{!! json_encode($schema,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT) !!}</script>@endisset
 @yield('structured-data')
 <link rel="stylesheet" href="/assets/public-edit.css">

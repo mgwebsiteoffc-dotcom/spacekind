@@ -21,7 +21,7 @@ try:
     for width in (1440, 768, 390, 320):
         call(base + '/goog/cdp/execute', {'cmd': 'Emulation.setDeviceMetricsOverride', 'params':
             {'width': width, 'height': 900, 'deviceScaleFactor': 1, 'mobile': False}})
-        for path, marker in [('/', '#guides'), ('/guides/compare-interior-quotes', '#checklist'), ('/studios/studio-aangan', '.profile-meta'), ('/inspiration', '#motion'), ('/reels', '.reel-card-player'), ('first-published-film', '.reel-watch-screen')]:
+        for path, marker in [('/', '#guides'), ('/for-businesses', '#compare'), ('/guides/compare-interior-quotes', '#checklist'), ('/studios/studio-aangan', '.profile-meta'), ('/inspiration', '#motion'), ('/reels', '.reel-card-player'), ('first-published-film', '.reel-watch-screen')]:
             if path == 'first-published-film':
                 path = call(base + '/execute/sync', {'args': [], 'script': "return document.querySelector('.reel-card h3 a').pathname"})
             call(base + '/url', {'url': SITE + path})
@@ -31,6 +31,12 @@ try:
               const marker = document.querySelector(arguments[0]);
               if (!heading || !marker || marker.getBoundingClientRect().width === 0) return 'missing content';
               if (doc.scrollWidth > doc.clientWidth + 1) return 'horizontal overflow: ' + doc.scrollWidth + ' at ' + [...document.querySelectorAll('main *')].filter(el=>el.getBoundingClientRect().right > doc.clientWidth + 1 && !el.closest('.reel-collection, .categories')).slice(0,5).map(el=>el.className).join(', ');
+              if (location.pathname === '/for-businesses') {
+                const detail = document.querySelectorAll('#why-spacekind details')[1];
+                detail.querySelector('summary').click();
+                if (!detail.open || !detail.querySelector('p').getBoundingClientRect().height) return 'studio decision guide does not expand';
+                if (document.querySelector('#compare .compare-next a')?.pathname !== '/register') return 'missing comparison signup';
+              }
               const film = document.querySelector('.reel-card-player video, .reel-watch-screen video');
               if (location.pathname === '/' || location.pathname.startsWith('/reels')) {
                 if (!film) return 'missing public film';
