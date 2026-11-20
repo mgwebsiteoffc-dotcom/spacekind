@@ -10,6 +10,6 @@ class SiteSetting extends Model
 
     protected function casts(): array
     {
-        return ['seo' => 'array'];
+        return ['seo' => 'array', 'capture' => 'array'];
     }
 }

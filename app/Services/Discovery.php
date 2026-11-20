@@ -44,7 +44,7 @@ class Discovery
 
     public function indexable(Request $r): bool
     {
-        return $this->canIndex() && ($this->pageGroup($r) !== null || $r->routeIs('project.guide')) && ! $r->getQueryString();
+        return $this->canIndex() && ($this->pageGroup($r) !== null || $r->routeIs('project.guide', 'inspiration')) && ! $r->getQueryString();
     }
 
     public function title(Request $r): string

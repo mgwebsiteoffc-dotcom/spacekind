@@ -13,6 +13,7 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PublicContentController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\ProjectCaptureController;
 use App\Http\Controllers\ReelController;
 use App\Http\Controllers\StudioController;
 use App\Http\Controllers\TrackingController;
@@ -23,6 +24,9 @@ use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/inspiration', [PublicController::class, 'inspiration'])->name('inspiration');
+Route::get('/project-brief', [ProjectCaptureController::class, 'form']);
+Route::post('/project-brief', [ProjectCaptureController::class, 'store'])->middleware('throttle:enquiries');
 Route::get('/guides/{slug}', [PublicController::class, 'guide'])->name('project.guide');
 Route::get('/for-businesses', [PublicController::class, 'business'])->name('for-businesses');
 Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
@@ -108,6 +112,9 @@ Route::prefix('workspace')->middleware(['auth', 'business'])->group(function () 
     });
 });
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/project-capture', [ProjectCaptureController::class, 'admin']);
+    Route::put('/project-capture', [ProjectCaptureController::class, 'settings']);
+    Route::delete('/project-capture/{brief}', [ProjectCaptureController::class, 'destroy'])->whereNumber('brief');
     Route::get('/integrations', [IntegrationController::class, 'index']);
     Route::put('/integrations/razorpay/{mode}', [IntegrationController::class, 'gateway'])->whereIn('mode', ['test', 'live']);
     Route::delete('/integrations/razorpay/{mode}', [IntegrationController::class, 'removeGateway'])->whereIn('mode', ['test', 'live']);

@@ -41,7 +41,7 @@ return $this->published;
         $group = app(Discovery::class)->pageGroup($r);
         $base = ['version' => 'public-consent-v1-'.($version?->id ?? 0), 'active' => false, 'tags' => [], 'canonical' => url($r->path() === '/' ? '/' : '/'.$r->path()), 'group' => $group];
         // No tags for authenticated visitors, form/private routes, arbitrary query strings or preview/draft pages.
-        if (! $group || $r->user() || $r->getQueryString() || ! $this->deploymentAllowed() || empty($s['enabled']) || ! in_array($group, $s['scopes'] ?? [], true)) {
+        if (! $group || app(ProjectCapture::class)->widget($r) || $r->user() || $r->getQueryString() || ! $this->deploymentAllowed() || empty($s['enabled']) || ! in_array($group, $s['scopes'] ?? [], true)) {
             return $base;
         }
         $tags = [];

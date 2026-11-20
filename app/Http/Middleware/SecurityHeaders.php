@@ -24,7 +24,7 @@ class SecurityHeaders
         if ($response->getStatusCode() >= 400 || ! app(Discovery::class)->indexable($r)) {
             $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
         }
-        if ($r->user() || $r->is('workspace*', 'admin*', 'api/*', 'login', 'register', 'studios/*/enquire*', 'article-media/*', 'reel-media/*', 'media/*')) {
+        if ($r->user() || $r->is('workspace*', 'admin*', 'api/*', 'login', 'register', 'project-brief', 'studios/*/enquire*', 'article-media/*', 'reel-media/*', 'media/*')) {
             $response->headers->set('Cache-Control', 'no-store, private');
         }
 

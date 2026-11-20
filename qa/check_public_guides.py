@@ -21,7 +21,7 @@ try:
     for width in (1440, 768, 390, 320):
         call(base + '/goog/cdp/execute', {'cmd': 'Emulation.setDeviceMetricsOverride', 'params':
             {'width': width, 'height': 900, 'deviceScaleFactor': 1, 'mobile': False}})
-        for path, marker in [('/', '#guides'), ('/guides/compare-interior-quotes', '#checklist'), ('/studios/studio-aangan', '.profile-meta'), ('/reels', '.reel-card-player'), ('first-published-film', '.reel-watch-screen')]:
+        for path, marker in [('/', '#guides'), ('/guides/compare-interior-quotes', '#checklist'), ('/studios/studio-aangan', '.profile-meta'), ('/inspiration', '#motion'), ('/reels', '.reel-card-player'), ('first-published-film', '.reel-watch-screen')]:
             if path == 'first-published-film':
                 path = call(base + '/execute/sync', {'args': [], 'script': "return document.querySelector('.reel-card h3 a').pathname"})
             call(base + '/url', {'url': SITE + path})
@@ -40,6 +40,12 @@ try:
                 if (getComputedStyle(film).objectFit !== 'cover') return 'letterbox with controls';
               }
               if (location.pathname === '/' && document.querySelector('#city')?.value !== 'Lucknow') return 'unexpected finder default';
+              const rail = document.querySelector('#home-reels');
+              if (rail) {
+                const heading = document.querySelector('.home-films .section-top').getBoundingClientRect();
+                if (heading.bottom > rail.getBoundingClientRect().top + 1) return 'reels should sit below the heading';
+                if (doc.clientWidth < 400 && rail.scrollWidth <= rail.clientWidth) return 'mobile reel shelf cannot scroll';
+              }
               const box = document.querySelector('#checklist input');
               if (box) { box.click(); if (!box.checked) return 'checklist failed'; }
               return 'ok';'''})

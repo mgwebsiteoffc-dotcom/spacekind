@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->scoped(Tenant::class, fn () => new Tenant);
         $this->app->scoped(Discovery::class);
+        $this->app->scoped(\App\Services\ProjectCapture::class);
         $this->app->scoped(PublicTracking::class);
     }
 

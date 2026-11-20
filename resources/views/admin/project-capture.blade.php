@@ -1,0 +1,11 @@
+@extends('layouts.admin')
+@section('title','Popups & project leads')
+@section('content')
+<div class="page-heading"><div><div class="eyebrow">CUSTOMER ENQUIRIES</div><h1>Popups &amp; project leads.</h1><p>Collect platform briefs separately from enquiries sent directly to studios.</p></div></div>
+<section class="app-panel form-panel"><h2>Website capture settings</h2><p>Shown to signed-out visitors on the homepage, inspiration and reel collection. Automatic prompts appear at most once per browser tab session. Optional tracking tags are disabled on pages showing the form.</p>
+<form method="post" action="/admin/project-capture">@csrf @method('PUT')
+@foreach(['entry'=>'Entry popup after a delay','exit'=>'Exit intent when the desktop pointer leaves the top edge','floating'=>'Floating project enquiry button'] as $key=>$label)<label class="consent"><input type="checkbox" name="{{ $key }}" value="1" @checked($s[$key])><span>{{ $label }}</span></label>@endforeach
+<div class="form-grid"><label class="field"><span>Popup heading</span><input required name="heading" maxlength="80" value="{{ old('heading',$s['heading']) }}"></label><label class="field"><span>Floating button label</span><input required name="button" maxlength="32" value="{{ old('button',$s['button']) }}"></label></div>
+<label class="field"><span>Entry delay (seconds)</span><input type="number" name="delay" min="3" max="120" required value="{{ old('delay',$s['delay']) }}"></label><button class="button dark">Save capture settings</button></form></section>
+<section class="app-panel form-panel"><h2>Project briefs ({{ $briefs->total() }})</h2><p>Contact permission applies to the submitted project, not marketing. Remove briefs when follow-up is complete.</p>@forelse($briefs as $brief)<details class="studio-proof-editor"><summary>{{ $brief->city }} · {{ $brief->scope }} · {{ $brief->name }}</summary><p>{{ $brief->floor_area }} sq ft · {{ $brief->budget }}</p><p>Phone: {{ $brief->phone }} · Permission recorded: {{ $brief->consented_at }}</p><form action="/admin/project-capture/{{ $brief->id }}" method="post" data-confirm="Permanently delete this project enquiry?">@csrf @method('DELETE')<button class="button outline">Delete enquiry</button></form></details>@empty<p>No platform briefs yet.</p>@endforelse<x-pagination :items="$briefs"/></section>
+@endsection

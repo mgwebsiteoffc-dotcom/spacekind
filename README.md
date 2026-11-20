@@ -1,5 +1,9 @@
 # Spacekind
 
+## Project concierge and public collections
+
+After migrating, **Admin → Popups & project leads** independently enables delayed entry, desktop exit intent, or a floating button for signed-out visitors to the homepage, `/inspiration`, and `/reels`. All are off by default. Consented briefs are stored in a separate private platform inbox, not sent to studios or WhatsApp. Admins can delete them. Platform briefs are excluded from local portable recovery snapshots. Optional tracking is suppressed on pages rendering the qualification form. The inspiration library includes editorial images and only published studio moodboards and reference films. Homepage client voices require separate homepage permission and a published studio; no reviews are generated automatically.
+
 ## Administrator access, article editing and email settings
 
 There is no public role picker or passwordless sign-in. The historical shared administrator identity is retired; new and restored sessions for it cannot access admin routes. After backing up the installation, update the files and run `php artisan migrate`. Existing private administrators can continue signing in at `/login`. If you relied on the shared administrator, run `php artisan spacekind:create-admin <your-private-email>` **from a trusted server terminal** and enter a new password at the hidden prompts. The command refuses existing addresses rather than promoting a studio account. Never share private administrator credentials. Historical local browser QA requiring an administrator now uses `SPACEKIND_QA_ADMIN_EMAIL` and `SPACEKIND_QA_ADMIN_PASSWORD` for a dedicated disposable QA account.

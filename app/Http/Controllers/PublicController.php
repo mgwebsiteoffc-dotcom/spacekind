@@ -61,7 +61,17 @@ class PublicController extends Controller
                 ->with('business:id,name,city,slug')->latest('id')->limit(3)->get(),
             'inspiration' => DB::table('inspiration_edits')->orderBy('position')->limit(3)->get(),
             'journalPosts' => BlogPost::withoutGlobalScope('business')->publiclyVisible()->with(['publicRevision', 'business'])->latest('visible_from')->limit(3)->get(),
-            'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->limit(3)->get(),
+            'featuredReels' => Reel::withoutGlobalScope('business')->publiclyVisible()->with('business')->orderBy('position')->orderByDesc('id')->limit(12)->get(),
+        ]);
+    }
+
+    public function inspiration(Discovery $discovery)
+    {
+        return view('public.inspiration', [
+            'edits' => DB::table('inspiration_edits')->orderByDesc('id')->get(),
+            'images' => GalleryImage::withoutGlobalScope('business')->where('kind', 'inspiration')->where('is_visible', true)->whereNotNull('rights_confirmed_at')->whereHas('business', fn ($q) => $q->published())->with('business')->latest('id')->paginate(12, ['*'], 'images')->withQueryString(),
+            'films' => Reel::withoutGlobalScope('business')->publiclyVisible()->whereIn('kind', ['concept','render'])->with('business')->latest('id')->paginate(6, ['*'], 'films')->withQueryString(),
+            'schema' => ['@context' => 'https://schema.org'] + $discovery->breadcrumbs(['Spacekind' => '/', 'Inspiration' => '/inspiration']),
         ]);
     }
 
@@ -159,7 +169,7 @@ class PublicController extends Controller
     {
         $xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         if ($discovery->canIndex()) {
-            $urls = [url('/'), url('/for-businesses'), url('/blog'), url('/reels')];
+            $urls = [url('/'), url('/for-businesses'), url('/inspiration'), url('/blog'), url('/reels')];
             foreach (array_keys(config('project_guides')) as $slug) {
                 $urls[] = url('/guides/'.$slug);
             }
